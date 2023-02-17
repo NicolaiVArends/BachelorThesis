@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from scipy.optimize import minimize
 
 def portfolio_return(weights: pd.DataFrame, returns: pd.DataFrame):
     """
@@ -36,7 +37,7 @@ def portfolio_minimize_risk(portfolio_covariance, x0, linear_constraint, bounds,
     :param:
     :param:
     :param:
-    :returns: A
+    :returns: 
     """
 
     return
