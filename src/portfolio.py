@@ -31,9 +31,9 @@ def portfolio_risk(weights: pd.DataFrame, portfolio_covariance):
 def portfolio_sharp_ratio(portfolio_returns, weights, portfolio_covariance):
     """
     Function that computes the sharp ratio by using the portfolio returns, weights and covariance from the functions portfolio_return() and portfolio_risk()
-    :param: A dataframe containing
-    :param: 
-    :param: A dataframe containing
+    :param: A dataframe containing the portfolio return
+    :param: A dataframe or array containing the weighting of the portfolio
+    :param: A dataframe containing the portfolio covariance
     :returns: A float of the sharp ratio for the given portfolio return, weight and covariance matrix
     """
     return portfolio_return(weights=weights, returns=portfolio_returns) / portfolio_risk(weights=weights, portfolio_covariance=portfolio_covariance)
