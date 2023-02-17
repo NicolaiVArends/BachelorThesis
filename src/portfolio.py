@@ -28,19 +28,19 @@ def portfolio_risk(weights: pd.DataFrame, portfolio_covariance):
     """
     return np.sqrt(np.dot(weights, np.dot(weights, portfolio_covariance)))
 
-def portfolio_minimize_risk_esg(portfolio_covariance, esg_score, x0, linear_constraint, bounds, options = None):
+def portfolio_minimize_risk_esg(portfolio_covariance, esg_scores, x0, linear_constraint, bounds, options = None):
     """
-    Function that will take different inputs including esg_score and compute the minimum risk of different portfolios u
-    :param:
-    :param:
-    :param:
-    :param:
-    :param:
-    :param:
+    Function that will take different inputs including esg score data and compute the minimum risk of different portfolios 
+    :param: A dataframe of the portfolio covariance matrix
+    :param: A dataframe of esg scores of the different assets in portfolio
+    :param: x0 argument that is the initial guess for the minimizer
+    :param: Linear constraints for the minimizer
+    :param: Bounds for the minimizer
+    :param: Options for the minimizer
     :returns: A dataframe containing portfolio weight choice for minimumizing portfolio risk using esg scores
     """
     function = lambda weight: portfolio_risk(weights=weight, portfolio_covariance=portfolio_covariance)
-    constraint_esg = {'type': 'eq', 'fun': lambda weight: np.dot(weight, esg_score)}
+    constraint_esg = {'type': 'eq', 'fun': lambda weight: np.dot(weight, esg_scores)}
     result = minimize(function, x0, method='Nelder-Mead', bounds=bounds, constraints=[linear_constraint, constraint_esg], options=options)
 
     return result.x
