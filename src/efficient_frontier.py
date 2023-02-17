@@ -17,7 +17,7 @@ def efficient_frontier(portfolio_return, portfolio_cov):
 
 
 
-def plot_ef(optimal_portfolio_return, optimal_portfolio_risk, ):
+def plot_efficient_frontier(optimal_portfolio_return, optimal_portfolio_risk, ):
     """
     
     :param:
