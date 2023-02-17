@@ -57,8 +57,8 @@ def portfolio_minimize_risk_esg(portfolio_covariance, esg_scores, x0, linear_con
 
 def portfolio_max_sharp_ratio(portfolio_return, portfolio_covariance, esg_scores, x0, linear_constraint, bounds, options):
     """
-    
-    :param:
+    Function that calculates the maximum sharp ratio using the portfolio sharp ratio function and doing a 
+    :param: 
     :param:
     :param:
     :param: 
