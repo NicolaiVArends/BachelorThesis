@@ -28,6 +28,15 @@ def portfolio_risk(weights: pd.DataFrame, portfolio_covariance):
     """
     return np.sqrt(np.dot(weights, np.dot(weights, portfolio_covariance)))
 
+def portfolio_sharp_ratio(portfolio_returns, weights, portfolio_covariance):
+    """
+
+    :param:
+    :param: 
+    :returns: 
+    """
+    return portfolio_return(weights=weights, returns=portfolio_returns) / portfolio_risk(weights=weights, portfolio_covariance=portfolio_covariance)
+
 def portfolio_minimize_risk_esg(portfolio_covariance, esg_scores, x0, linear_constraint, bounds, options = None):
     """
     Function that will take different inputs including esg score data and compute the minimum risk of different portfolios 
@@ -45,7 +54,7 @@ def portfolio_minimize_risk_esg(portfolio_covariance, esg_scores, x0, linear_con
 
     return result.x
 
-def portfolio_max_sharp_ratio(portfolio_return, portfolio_covariance, x0, linear_constraint, bounds, options):
+def portfolio_max_sharp_ratio(portfolio_return, portfolio_covariance, esg_scores, x0, linear_constraint, bounds, options):
     """
     
     :param:
@@ -56,7 +65,9 @@ def portfolio_max_sharp_ratio(portfolio_return, portfolio_covariance, x0, linear
     :param: 
     :returns: 
     """
- 
+    function = lambda weight: portfolio_sharp_ratio(portfolio_returns=portfolio_return, weights=weight, portfolio_covariance=portfolio_covariance)
+    constraint_esg = {'type': 'eq', 'fun': lambda weight: np.dot(weight, esg_scores)}
+    result = minimize(function, x0, method='Nelder-Mead', bounds=bounds, constraints=[linear_constraint, constraint_esg], options=options)
 
-    return
+    return result.x
 
