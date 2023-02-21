@@ -11,6 +11,7 @@ def portfolio_return(returns: pd.DataFrame, weights: pd.DataFrame, ):
     :param: A dataframe or numpy array with the portfolio weights
     :returns: A float of the computed portfolio risk
     """
+    
     return np.dot(returns, weights)
 
 def portfolio_covariance(returns: pd.DataFrame):
@@ -19,16 +20,19 @@ def portfolio_covariance(returns: pd.DataFrame):
     :param: A dataframe containing the returns of assets in portfolio
     :returns: A dataframe of the portfolio covariance matrix
     """
+    
     return returns.cov()
 
-def portfolio_risk(portfolio_covariance, weights: pd.DataFrame,):
+def portfolio_risk(returns, weights: pd.DataFrame,):
     """
     Function that takes portfolio weigths and covariance matrix and computes the portfolio risk
     :param: A dataframe or numpy array with the portfolio weights
     :param: A dataframe of the portfolio covariance matrix
     :returns: A float of the computed portfolio risk
     """
-    return np.sqrt(np.dot(weights, np.dot(weights, portfolio_covariance)))
+    
+    cov = portfolio_covariance(returns)
+    return np.sqrt(np.dot(weights, np.dot(weights, cov)))
 
 def portfolio_sharp_ratio(portfolio_returns, weights, portfolio_covariance):
     """
@@ -38,9 +42,10 @@ def portfolio_sharp_ratio(portfolio_returns, weights, portfolio_covariance):
     :param: A dataframe containing the portfolio covariance
     :returns: A float of the sharp ratio for the given portfolio return, weight and covariance matrix
     """
+    
     return portfolio_return(weights=weights, returns=portfolio_returns) / portfolio_risk(weights=weights, portfolio_covariance=portfolio_covariance)
 
-def portfolio_minimize_risk_esg(portfolio_covariance, esg_data, x0, linear_constraint, bounds, minimum_esg_score = 0, options = None):
+def portfolio_minimize_risk_esg(returns, portfolio_covariance, esg_data, x0, linear_constraint, bounds, minimum_esg_score = 0, options = None):
     """
     Function that will take different inputs including esg score data and compute the minimum risk of different portfolios 
     :param: A dataframe of the portfolio covariance matrix
@@ -52,6 +57,12 @@ def portfolio_minimize_risk_esg(portfolio_covariance, esg_data, x0, linear_const
     :param: Options for the minimizer
     :returns: A dataframe containing portfolio weight choice for minimizing portfolio risk using esg scores
     """
+    
+    results = {'esg_val':[],
+               'weights':[],
+               'risk':[],
+               'return':[]}
+    
     function = lambda weight: portfolio_risk(weights=weight, portfolio_covariance=portfolio_covariance)
     constraint_esg = {'type': 'eq', 'fun': lambda weight: np.dot(weight, esg_data) - minimum_esg_score}
     result = minimize(function, 
@@ -60,8 +71,15 @@ def portfolio_minimize_risk_esg(portfolio_covariance, esg_data, x0, linear_const
                       bounds=bounds, 
                       constraints=[linear_constraint, constraint_esg], 
                       options=options)
+   
+    weights = list(result['x'])
+    esg_val= np.dot(weights, esg_data)
+    results['esg_val'].append(esg_val)
+    results['weights'].append(weights)
+    results['risk'].append(result['fun'])
+    results['return'].append(np.dot(weights,returns.sum()))
 
-    return result.x
+    return results
 
 def portfolio_max_sharp_ratio(portfolio_return, portfolio_covariance, esg_data, x0, linear_constraint, bounds, minimum_esg_score = 0, options = None):
     """
@@ -75,6 +93,7 @@ def portfolio_max_sharp_ratio(portfolio_return, portfolio_covariance, esg_data, 
     :param: Options for the minimizer
     :returns: 
     """
+    
     function = lambda weight: portfolio_sharp_ratio(portfolio_returns=portfolio_return, weights=weight, portfolio_covariance=portfolio_covariance)
     constraint_esg = {'type': 'eq', 'fun': lambda weight: np.dot(weight, esg_data) - minimum_esg_score}
     result = minimize(function, 
