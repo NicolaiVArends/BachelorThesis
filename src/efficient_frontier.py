@@ -105,10 +105,15 @@ def plot_efficient_frontier_3D(max_sr_return,
     :returns: 
     """
 
-    plt.figure()
-    plt.title(title)
-    plt.axes(projection ='3d')
-    #plt.plot(frontier_x_axis, frontier_y_axis, esg_data, cmap ='viridis', edgecolor ='green')
+    mpl.style.use(mpl_style)
+    fig = plt.figure(figsize = (10,10))
+    ax = plt.axes(projection='3d')
+    ax.set_title(title)
+    ax.set_xlabel('Portfolio risk')
+    ax.set_ylabel('Portfolio returns')
+    ax.set_zlabel('ESG')
+    ax.scatter(frontier_x_axis, frontier_y_axis, esg, cmap ='viridis')
+    ax.grid()
     plt.legend()
     plt.show()
 
