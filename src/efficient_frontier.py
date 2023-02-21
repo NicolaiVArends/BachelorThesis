@@ -21,17 +21,17 @@ def calculate_efficient_frontier_esg(returns, covariance, esg_data):
     options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
 
     # compute the optimal return and risk for risk aversion
-    minimum_weights_esg = portfolio_minimize_risk_esg(returns, covariance, esg_data, x0, linear_constraint, bounds, options)
-    min_risk_return = portfolio_return(returns, minimum_weights_esg)
-    min_risk_risk = portfolio_risk(covariance, minimum_weights_esg)
+    results_risk = portfolio_minimize_risk_esg(returns, covariance, esg_data, x0, linear_constraint, bounds, options)
+    min_risk_return = portfolio_return(returns, results_risk['weights'])
+    min_risk_risk = portfolio_risk(covariance, results_risk['weights'])
 
     # compute the maximum sharp ratio for risk and return
-    max_sr_weights_esg = portfolio_max_sharp_ratio(returns, covariance, esg_data, x0, linear_constraint, bounds,options)
-    max_sr_return = portfolio_return(returns, max_sr_weights_esg)
-    max_sr_risk = portfolio_risk(covariance, max_sr_weights_esg)
+    results_sr = portfolio_max_sharp_ratio(returns, covariance, esg_data, x0, linear_constraint, bounds, options)
+    max_sr_return = portfolio_return(returns, results_sr['weights'])
+    max_sr_risk = portfolio_risk(covariance, results_sr['weights'])
 
     frontier_x_axis = []
-    frontier_y_axis = []#np.linspace(-0.3, *3, 50)
+    frontier_y_axis = []
     
     return min_risk_return, min_risk_risk, max_sr_return, max_sr_risk, frontier_x_axis, frontier_y_axis
 
