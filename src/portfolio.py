@@ -115,7 +115,7 @@ def portfolio_max_sharp_ratio(portfolio_return, portfolio_covariance, esg_data, 
     results['risk'].append(result['fun'])
     results['return'].append(np.dot(weights, portfolio_return.sum()))
 
-    return result.x
+    return results
 
 def plot_portfolio_returns():
 
