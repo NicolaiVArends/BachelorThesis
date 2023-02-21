@@ -21,7 +21,7 @@ def calculate_efficient_frontier_esg(returns, covariance, esg_data):
     options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
 
     # compute the optimal return and risk for risk aversion
-    minimum_weights_esg = portfolio_minimize_risk_esg(covariance, esg_data, x0, linear_constraint, bounds, options)
+    minimum_weights_esg = portfolio_minimize_risk_esg(returns, covariance, esg_data, x0, linear_constraint, bounds, options)
     min_risk_return = portfolio_return(returns, minimum_weights_esg)
     min_risk_risk = portfolio_risk(covariance, minimum_weights_esg)
 
@@ -106,9 +106,10 @@ def plot_efficient_frontier_3D(max_sr_return,
     """
 
     plt.figure()
+    plt.title(title)
     plt.axes(projection ='3d')
-    #plt.plot(x, y, z, cmap ='viridis', edgecolor ='green')
-    plt.title('Surface plot geeks for geeks')
+    #plt.plot(frontier_x_axis, frontier_y_axis, esg_data, cmap ='viridis', edgecolor ='green')
+    plt.legend()
     plt.show()
 
     return None
