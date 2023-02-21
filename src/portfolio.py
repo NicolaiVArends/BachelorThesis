@@ -117,10 +117,21 @@ def portfolio_max_sharp_ratio(portfolio_return, portfolio_covariance, esg_data, 
 
     return results
 
-def plot_portfolio_returns():
+def plot_cummulative_portfolio_returns(portfolio_return,
+                           mpl_style='default',
+                           title='Portfolio cummulative returns'):
+    """
 
+    :param: 
+    :returns: 
+    """
 
+    mpl.style.use(mpl_style)
+    plt.plot()
+    plt.title(title)
+    plt.ylabel("Returns")
+    plt.xlabel("Time")
+    plt.legend()
+    plt.show()
 
-    plt.show();
-
-    return
+    return None
