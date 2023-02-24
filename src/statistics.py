@@ -26,7 +26,9 @@ def calculate_cvar():
 
     return
 
-def plot_var(mpl_style = 'default',
+def plot_var(value_at_risk,
+             num_days,
+             mpl_style = 'default',
              title='Value at Risk'):
     """
     Function that 
@@ -34,8 +36,12 @@ def plot_var(mpl_style = 'default',
     :returns: 
     """
 
+    var_array = []
+    for x in range(1, num_days+1):    
+        var_array.append(np.round(value_at_risk * np.sqrt(x), 2))
+
     mpl.style.use(mpl_style)
-    plt.plot()
+    plt.plot(var_array)
     plt.title(title)
     plt.ylabel("VaR")
     plt.xlabel("Time")
