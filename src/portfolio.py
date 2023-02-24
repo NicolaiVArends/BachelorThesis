@@ -16,6 +16,7 @@ def portfolio_return(returns: pd.DataFrame, weights: pd.DataFrame):
 
 def portfolio_mean(returns: pd.DataFrame):
     """
+    Function that uses portfolio
     :param:
     :returns: 
     """
@@ -78,7 +79,7 @@ def portfolio_minimize_risk_esg(port_return,
                'risk':[],
                'return':[]}
     
-    function = lambda weight: portfolio_risk(weights=weight, portfolio_covariance=port_covariance)
+    function = lambda weight: portfolio_std(weights=weight, portfolio_covariance=port_covariance)
     constraint_esg = {'type': 'eq', 'fun': lambda weight: np.dot(weight, esg_data)}
     result = minimize(function, 
                       x0, 
@@ -87,12 +88,12 @@ def portfolio_minimize_risk_esg(port_return,
                       constraints=[linear_constraint, constraint_esg], 
                       options=options)
    
-    weights = list(result['x'])
-    optimal_esg = np.dot(weights, esg_data)
+    optimal_weights = list(result['x'])
+    optimal_esg = np.dot(optimal_weights, esg_data)
     results['esg'].append(optimal_esg)
-    results['weights'].append(weights)
+    results['weights'].append(optimal_weights)
     results['risk'].append(result['fun'])
-    results['return'].append(np.dot(weights, port_return.sum()))
+    results['return'].append(np.dot(optimal_weights, port_return.sum()))
 
     return results
 
@@ -129,12 +130,12 @@ def portfolio_max_sharp_ratio(port_return,
                       constraints=[linear_constraint, constraint_esg], 
                       options=options)
     
-    weights = list(result['x'])
-    optimal_esg = np.dot(weights, esg_data)
+    optimal_weights = list(result['x'])
+    optimal_esg = np.dot(optimal_weights, esg_data)
     results['esg'].append(optimal_esg)
-    results['weights'].append(weights)
+    results['weights'].append(optimal_weights)
     results['risk'].append(result['fun'])
-    results['return'].append(np.dot(weights, port_return.sum()))
+    results['return'].append(np.dot(optimal_weights, port_return.sum()))
 
     return results
 
