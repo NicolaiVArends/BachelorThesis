@@ -55,7 +55,7 @@ def portfolio_sharp_ratio(portfolio_returns, weights, portfolio_covariance):
                             returns=portfolio_returns) / portfolio_std(weights=weights, 
                                                                         portfolio_covariance=portfolio_covariance)
 
-def portfolio_minimize_risk_esg(port_return, 
+def portfolio_minimize_risk(port_return, 
                                 port_covariance, 
                                 esg_data, 
                                 x0,
@@ -97,7 +97,7 @@ def portfolio_minimize_risk_esg(port_return,
 
     return results
 
-def portfolio_max_sharp_ratio_esg(port_return, 
+def portfolio_max_sharp_ratio(port_return, 
                               port_covariance, 
                               esg_data, 
                               x0, 
