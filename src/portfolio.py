@@ -116,17 +116,22 @@ def portfolio_max_sharp_ratio(port_return, port_covariance, esg_data, x0, linear
 
     return results
 
-def plot_cummulative_portfolio_returns(portfolio_return,
+def plot_cummulative_portfolio_returns(returns: pd.DataFrame,
                            mpl_style='default',
                            title='Portfolio cummulative returns'):
     """
-
+    
+    :param: 
+    :param: 
     :param: 
     :returns: 
     """
 
+    returns_pct_cumm = returns.pct_change().dropna().cumsum()
+
     mpl.style.use(mpl_style)
-    plt.plot()
+    for asset in returns_pct_cumm.columns:
+        plt.plot(asset)
     plt.title(title)
     plt.ylabel("Returns")
     plt.xlabel("Time")
