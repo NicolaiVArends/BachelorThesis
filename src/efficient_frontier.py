@@ -35,6 +35,7 @@ def calculate_efficient_frontier_esg(returns, covariance, esg_data):
     min_risk_opt_esg = results_risk['esg']
     min_risk_esg = results_risk['risk']
 
+    # compute the axis
     frontier_x_axis = np.linspace(-0.3, max_sr_risk*3, 50)
     frontier_y_axis = np.linspace(-0.3, max_sr_return*3, 50)
 
