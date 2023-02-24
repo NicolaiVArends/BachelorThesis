@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from src.portfolio import portfolio_mean, portfolio_std
 from scipy.stats import norm
 
 def calculate_var(port_mean, port_std, initial_investment = 100000, confidence_level = 0.05):
@@ -50,7 +51,8 @@ def plot_var(value_at_risk,
 
     return None
 
-def plot_cvar(mpl_style = 'default',
+def plot_cvar(conditional_value_at_risk,
+              mpl_style = 'default',
               title='Value at Risk'):
     """
     Function that 
