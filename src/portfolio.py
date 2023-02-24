@@ -42,9 +42,17 @@ def portfolio_sharp_ratio(portfolio_returns, weights, portfolio_covariance):
     :returns: A float of the sharp ratio for the given portfolio return, weight and covariance matrix
     """
     
-    return portfolio_return(weights=weights, returns=portfolio_returns) / portfolio_risk(weights=weights, portfolio_covariance=portfolio_covariance)
+    return portfolio_return(weights=weights, 
+                            returns=portfolio_returns) / portfolio_risk(weights=weights, 
+                                                                        portfolio_covariance=portfolio_covariance)
 
-def portfolio_minimize_risk_esg(port_return, port_covariance, esg_data, x0, linear_constraint, bounds, options = None):
+def portfolio_minimize_risk_esg(port_return, 
+                                port_covariance, 
+                                esg_data, 
+                                x0,
+                                linear_constraint, 
+                                bounds, 
+                                options = None):
     """
     Function that will take different inputs including esg score data and compute the minimum risk of different portfolios 
     :param: A dataframe of the portfolio covariance matrix
@@ -80,7 +88,13 @@ def portfolio_minimize_risk_esg(port_return, port_covariance, esg_data, x0, line
 
     return results
 
-def portfolio_max_sharp_ratio(port_return, port_covariance, esg_data, x0, linear_constraint, bounds, options = None):
+def portfolio_max_sharp_ratio(port_return, 
+                              port_covariance, 
+                              esg_data, 
+                              x0, 
+                              linear_constraint, 
+                              bounds, 
+                              options = None):
     """
     Function that calculates the maximum sharp ratio using the portfolio sharp ratio function and doing a 
     :param: A dataframe of the portfolio covariance matrix
