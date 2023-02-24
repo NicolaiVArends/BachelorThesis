@@ -31,12 +31,12 @@ def portfolio_covariance(returns: pd.DataFrame):
     
     return returns.cov()
 
-def portfolio_risk(port_cov, weights: pd.DataFrame):
+def portfolio_std(port_cov, weights: pd.DataFrame):
     """
-    Function that takes portfolio weigths and covariance matrix and computes the portfolio risk
+    Function that takes portfolio weigths and covariance matrix and computes the portfolio standard deviation (risk)
     :param: A dataframe or numpy array with the portfolio weights
     :param: A dataframe of the portfolio covariance matrix
-    :returns: A float of the computed portfolio risk
+    :returns: A float of the computed portfolio standard deviation (risk)
     """
     
     return np.sqrt(np.dot(weights, np.dot(weights, port_cov)))
