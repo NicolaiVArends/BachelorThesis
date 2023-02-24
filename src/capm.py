@@ -13,13 +13,26 @@ def calculate_capital_asset_price_model():
     """
     beta = []
 
-    for 
+    for asset in data:
         x = 
         y = 
         endog_var =
         exog_var =
 
-        model = stat.OLS()
+        model = stat.OLS(endog= , exog= )
         result = model.fit()
 
+    
+
     return result
+
+def significance_test():
+    """
+    
+    :param:
+    :param:
+    :returns: 
+    """
+
+
+    return
