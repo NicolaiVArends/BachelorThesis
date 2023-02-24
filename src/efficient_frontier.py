@@ -4,7 +4,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from scipy.optimize import Bounds, LinearConstraint
 from mpl_toolkits import mplot3d
-from src.portfolio import portfolio_return, portfolio_covariance, portfolio_std, portfolio_minimize_risk_esg, portfolio_max_sharp_ratio
+from src.portfolio import portfolio_return, portfolio_covariance, portfolio_std, portfolio_minimize_risk_esg, portfolio_max_sharp_ratio_esg
 
 def calculate_efficient_frontier_esg(returns, covariance, esg_data):
     """
@@ -26,7 +26,7 @@ def calculate_efficient_frontier_esg(returns, covariance, esg_data):
     min_risk_risk = portfolio_std(covariance, results_risk['weights'])
 
     # compute the maximum sharp ratio for risk and return
-    results_sr = portfolio_max_sharp_ratio(returns, covariance, esg_data, x0, linear_constraint, bounds, options)
+    results_sr = portfolio_max_sharp_ratio_esg(returns, covariance, esg_data, x0, linear_constraint, bounds, options)
     max_sr_return = portfolio_return(returns, results_sr['weights'])
     max_sr_risk = portfolio_std(covariance, results_sr['weights'])
 
