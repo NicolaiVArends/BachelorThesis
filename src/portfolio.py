@@ -135,7 +135,7 @@ def plot_cummulative_portfolio_returns(returns: pd.DataFrame,
     plt.title(title)
     plt.ylabel("Returns")
     plt.xlabel("Time")
-    plt.legend()
+    plt.legend(returns_pct_cumm)
     plt.show()
 
     return None
@@ -159,7 +159,7 @@ def plot_cummulative_portfolio_esg(esg_data: pd.DataFrame,
     plt.title(title)
     plt.ylabel("ESG Score")
     plt.xlabel("Time")
-    plt.legend()
+    plt.legend(esg_pct_cumm)
     plt.show()
 
     return None
