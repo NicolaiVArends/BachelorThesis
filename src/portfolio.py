@@ -14,6 +14,14 @@ def portfolio_return(returns: pd.DataFrame, weights: pd.DataFrame):
     
     return np.dot(returns, weights)
 
+def portfolio_mean(returns: pd.DataFrame):
+    """
+    :param:
+    :returns: 
+    """
+
+    return returns.mean()
+
 def portfolio_covariance(returns: pd.DataFrame):
     """
     Function that takes the returns of the different assets in a portfolio and computes the covariance matrix of it
