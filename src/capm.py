@@ -23,7 +23,6 @@ def calculate_capital_asset_price_model():
         result = model.fit()
 
     
-
     return result
 
 def significance_test():
@@ -36,3 +35,4 @@ def significance_test():
 
 
     return
+

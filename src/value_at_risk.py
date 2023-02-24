@@ -5,7 +5,10 @@ import matplotlib.pyplot as plt
 from src.portfolio import portfolio_mean, portfolio_std
 from scipy.stats import norm
 
-def calculate_var(port_mean, port_std, initial_investment = 100000, confidence_level = 0.05):
+def calculate_var(port_mean, 
+                  port_std, 
+                  initial_investment = 100000, 
+                  confidence_level = 0.05):
     """
     Function that 
     :param: 
