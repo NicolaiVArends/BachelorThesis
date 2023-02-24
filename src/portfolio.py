@@ -142,7 +142,7 @@ def plot_cummulative_portfolio_returns(returns: pd.DataFrame,
 
 def plot_cummulative_portfolio_esg(esg_data: pd.DataFrame,
                            mpl_style='default',
-                           title='Portfolio cummulative returns'):
+                           title='Portfolio cummulative ESG Score'):
     """
     Function that uses return data to plot portfolio esg performance
     :param: 
