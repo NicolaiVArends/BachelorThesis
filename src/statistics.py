@@ -1,0 +1,69 @@
+import pandas as pd
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+
+def calculate_var(port_mean, port_std, initial_investment = 100000, confidence_level = 0.05):
+    """
+    Function that 
+    :param: 
+    :returns: 
+    """
+
+    cut_off = norm.ppf(confidence_level, port_mean, port_std)
+    value_at_risk = initial_investment - cut_off
+
+    return value_at_risk
+
+def calculate_cvar():
+    """
+    Function that 
+    :param: 
+    :returns: 
+    """
+
+
+    return
+
+def plot_var(mpl_style = 'default',
+             title='Value at Risk'):
+    """
+    Function that 
+    :param: 
+    :returns: 
+    """
+
+    mpl.style.use(mpl_style)
+    plt.plot()
+    plt.title(title)
+    plt.ylabel("VaR")
+    plt.xlabel("Time")
+    plt.legend()
+    plt.show()
+
+    return None
+
+def plot_cvar(mpl_style = 'default',
+              title='Value at Risk'):
+    """
+    Function that 
+    :param: 
+    :returns: 
+    """
+
+    mpl.style.use(mpl_style)
+    plt.plot()
+    plt.title(title)
+    plt.ylabel("VaR")
+    plt.xlabel("Time")
+    plt.legend()
+    plt.show()
+
+
+
+
+    return None
+
+
+
