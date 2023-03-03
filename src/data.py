@@ -37,13 +37,13 @@ def filter_universe_esg(esg_score, esg_data: pd.DataFrame):
 
     return filtered_df
 
-def simulate_random_data_esg(n = 10000):
+def simulate_random_data_esg(n_rows = 10000):
     """
 
     :param n: 
     :returns: 
     """
-    data = np.random.randint(0, 100, size=n)
+    data = np.random.randint(0, 100, size=n_rows)
     result = {'ESG' : data}
     df = pd.DataFrame(result)
     return df
