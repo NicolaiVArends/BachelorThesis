@@ -41,7 +41,7 @@ def simulate_data_esg(n_simulations = 10000):
     #np.random.seed(10)
     result = []
 
-    for i in range(i, n_simulations):
+    for i in range(n_simulations):
         result.append(random.randint(0, 100))
 
     df = pd.DataFrame(result)
