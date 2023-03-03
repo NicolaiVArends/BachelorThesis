@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import itertools as it
+import random
 
 def get_financial_data(start_date, end_date, stocks):
     """
@@ -35,4 +37,13 @@ def filter_universe_esg(esg_score, esg_data: pd.DataFrame):
 
     return filtered_df
 
+def simulate_data_esg(n_simulations = 10000):
+    #np.random.seed(10)
+    result = []
+
+    for i in range(i, n_simulations):
+        result.append(random.randint(0, 100))
+
+    df = pd.DataFrame(result)
+    return df
 
