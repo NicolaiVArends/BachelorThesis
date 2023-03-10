@@ -1,1 +1,1 @@
-from . import filter_assets
+from . import data
