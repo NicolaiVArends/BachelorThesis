@@ -1,10 +1,12 @@
 import unittest
 
+def someFunction(x):
+    return x
 
 class Test(unittest.TestCase):
 
     def test1(self):
-        result = 0
+        result = someFunction(0)
         self.assertEqual(result, 0)
 
 
