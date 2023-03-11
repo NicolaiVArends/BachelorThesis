@@ -165,27 +165,4 @@ def plot_cummulative_portfolio_returns(returns: pd.DataFrame,
 
     return None
 
-def plot_cummulative_portfolio_esg(esg_data: pd.DataFrame,
-                           mpl_style='default',
-                           title='Portfolio cummulative ESG Score'):
-    """
-    Function that uses return data to plot portfolio esg performance
-    :param: 
-    :param: 
-    :param: 
-    :returns: 
-    """
-
-    esg_pct_cumm = esg_data.pct_change().dropna().cumsum()
-
-    mpl.style.use(mpl_style)
-    for asset in esg_pct_cumm.columns:
-        plt.plot(asset)
-    plt.title(title)
-    plt.ylabel("ESG Score")
-    plt.xlabel("Time")
-    plt.legend(esg_pct_cumm)
-    plt.show()
-
-    return None
 
