@@ -78,8 +78,8 @@ def portfolio_sharp_ratio(portfolio_returns, weights, portfolio_covariance):
     """
     
     return portfolio_return(weights=weights, 
-                            returns=portfolio_returns) / portfolio_std(weights=weights, 
-                                                                        portfolio_covariance=portfolio_covariance)
+                            returns=portfolio_returns) / portfolio_std(port_cov=portfolio_covariance,
+                                                                       weights=weights)
 
 def portfolio_minimize_risk(port_return, 
                                 port_covariance, 
@@ -105,16 +105,17 @@ def portfolio_minimize_risk(port_return,
                'risk':[],
                'return':[]}
     
-    function = lambda weight: portfolio_std(weights=weight, portfolio_covariance=port_covariance)
+    function = lambda weight: portfolio_std(port_cov=port_covariance, weights=weight)
     constraint_esg = {'type': 'eq', 'fun': lambda weight: np.dot(weight, esg_data)}
     result = minimize(function, 
                       x0, 
-                      method='Nelder-Mead', 
+                      method='trust-constr', 
                       bounds=bounds, 
                       constraints=[linear_constraint, constraint_esg], 
                       options=options)
    
     optimal_weights = list(result['x'])
+    print(optimal_weights)
     optimal_esg = np.dot(optimal_weights, esg_data)
     results['esg'].append(optimal_esg)
     results['weights'].append(optimal_weights)
