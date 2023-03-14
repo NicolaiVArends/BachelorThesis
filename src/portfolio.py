@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from scipy.optimize import minimize
+from scipy.optimize import minimize, LinearConstraint, Bounds
 
 def plot_cummulative_portfolio_returns(returns: pd.DataFrame,
                            mpl_style='default',
@@ -29,6 +29,63 @@ def plot_cummulative_portfolio_returns(returns: pd.DataFrame,
     plt.show()
 
     return None
+
+def rate_of_return(beginning_price, end_price):
+    """
+    
+    :param:
+    :returns: 
+    """
+    return (end_price-beginning_price)/beginning_price
+
+def annual_return(beginning_price, end_price, years_held):
+    """
+   
+    :param: 
+    :param: 
+    :returns: 
+    """
+    rate = end_price/beginning_price
+    return (((rate+1)**(1/years_held))-1)
+
+def historical_return(returns, frequency=12):
+    """
+   
+    :param: 
+    :param: 
+    :returns: 
+    """
+    returns_pct_change = returns.pct_change()
+    return (1 + returns_pct_change).prod() ** (frequency / returns_pct_change.count()) - 1
+
+def _is_positive_semidefinite(matrix):
+    """
+   
+    :param: 
+    :param: 
+    :returns: 
+    """
+    # Significantly more efficient than checking eigenvalues (stackoverflow.com/questions/16266720)
+    try:
+        # Significantly more efficient than checking eigenvalues (stackoverflow.com/questions/16266720)
+        np.linalg.cholesky(matrix + 1e-16 * np.eye(len(matrix)))
+        return True
+    except np.linalg.LinAlgError:
+        return False
+
+def sample_cov(prices, frequency=12, **kwargs):
+    """
+   
+    :param: 
+    :param: 
+    :returns: 
+    """
+    returns = returns.pct_change()
+    matrix = returns.cov() * frequency
+    if _is_positive_semidefinite(matrix):
+        return matrix
+    else:
+        raise Exception("AssertionError the matrix is not positive semidefinite")
 
 def portfolio_return(returns: pd.DataFrame, weights: pd.DataFrame):
     """
@@ -115,7 +172,6 @@ def portfolio_minimize_risk(port_return,
                       options=options)
    
     optimal_weights = list(result['x'])
-    print(optimal_weights)
     optimal_esg = np.dot(optimal_weights, esg_data)
     results['esg'].append(optimal_esg)
     results['weights'].append(optimal_weights)
@@ -152,7 +208,7 @@ def portfolio_max_sharp_ratio(port_return,
     constraint_esg = {'type': 'eq', 'fun': lambda weight: np.dot(weight, esg_data)}
     result = minimize(function, 
                       x0, 
-                      method='Nelder-Mead', 
+                      method='trust-constr', 
                       bounds=bounds, 
                       constraints=[linear_constraint, constraint_esg], 
                       options=options)
