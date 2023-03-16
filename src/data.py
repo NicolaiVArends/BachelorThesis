@@ -2,15 +2,66 @@ import pandas as pd
 import numpy as np
 import itertools as it
 import random
+import yfinance as yf
 from forex_python.converter import CurrencyRates
+
+def esg_score_weight(data: pd.DataFrame, weights: np.array):
+    """
+    
+    :param: 
+    :param:
+    :param: 
+    :returns:
+    """
+    if np.sum(weights) != 1:
+        return("Weights must sum to 1")
+    else:
+        data["weighted_score"] = (data["environment_score"] * (3*weights[0])) + \
+                           (data["governance_score"] * (3*weights[1])) + \
+                           (data["social_score"] * (3*weights[2]))
+        for index, row in data.iterrows():
+            if row['CurrencyCode'] == 'SEK':
+                data.at[index, 'stock_symbol'] += '.ST'
+            elif row['CurrencyCode'] == 'NOK':
+                data.at[index, 'stock_symbol'] += '.OL'
+            elif row['CurrencyCode'] == 'DKK':
+                data.at[index, 'stock_symbol'] += '.CO'
+        return data
+    
+def prices_monthly_close(esg_data: pd.DataFrame, dates: tuple):
+    """
+    
+    :param: 
+    :param:
+    :param: 
+    :returns:
+    """
+    symbols = esg_data['stock_symbol'].unique()
+
+    # create a new dataframe to store the monthly closing data
+    monthly_close_df = pd.DataFrame()
+    for symbol in symbols:
+    # retrieve data from yfinance
+        stock_data = yf.download(symbol, start=dates[0], end=dates[1], interval='1mo', progress=False)
+        
+        # extract the 'Close' column and rename it with the stock symbol
+        stock_data = stock_data[['Close']].rename(columns={'Close': symbol})
+        
+        # add the weighted score for the stock
+        weighted_score = esg_data.loc[esg_data['stock_symbol']==symbol, 'weighted_score'].iloc[0]
+        stock_data[symbol + '_weighted'] = weighted_score
+        
+        # append the stock data to the monthly_close_df
+        monthly_close_df = pd.concat([monthly_close_df, stock_data], axis=1)
+    return(monthly_close_df.dropna(axis=1,how='all'))    
 
 def currency_rates(prices):
     """
     
-    :param start_date: The start date for the stock
-    :param end_date:
-    :param stocks: 
-    :returns: A dataframe containing financial returns stock data
+    :param: 
+    :param:
+    :param: 
+    :returns:
     """
 
     # convert currency in dataframe to USD from forex currency converter
@@ -35,25 +86,14 @@ def currency_rates(prices):
                 prices[asset][month] = prices[asset][month]/(exchange_rate_dict[dates[month]]["DKK"])
         
     return prices
-
-def get_financial_data(start_date, end_date, stocks):
+        
+def financial_benchmark_data(start_date, end_date, stocks):
     """
     
-    :param start_date: The start date for the stock
-    :param end_date:
-    :param stocks: 
-    :returns: A dataframe containing financial returns stock data
-    """
-
-    return 
-
-def get_financial_benchmark_data(start_date, end_date, stocks):
-    """
-    
-    :param start_date: The start date for the stock
-    :param end_date:
-    :param stocks: 
-    :returns: A dataframe containing financial returns stock data
+    :param:
+    :param:
+    :param: 
+    :returns:
     """
 
     return
