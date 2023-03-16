@@ -58,7 +58,7 @@ def minimize_risk(port_return,
 
     return results
 
-def max_sharp_ratio(port_return, 
+def maximize_sharp_ratio(port_return, 
                     port_covariance, 
                     esg_data, 
                     x0, 
@@ -113,13 +113,13 @@ def ef1(ret_port, cov_port):
     options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
  
     #These are the weights of the assets in the portfolio with the lowest level of risk possible.
-    w_minr = min_risk(cov_port, x0, linear_constraint, bounds)
+    w_minr = minimize_risk(cov_port, x0, linear_constraint, bounds)
     opt_risk_ret = portfolio_return(ret_port,w_minr)
     opt_risk_vol = portfolio_std(cov_port, w_minr)
     print(f'Min. Risk = {opt_risk_vol*100:.3f}% => Return: {(opt_risk_ret*100):.3f}%  Sharpe Ratio = {opt_risk_ret/opt_risk_vol:.2f}')
 
     #These are the weights of the assets in the portfolio with the highest Sharpe ratio.
-    w_sr_top = max_sr(ret_port,cov_port, x0, linear_constraint, bounds, options)
+    w_sr_top = maximize_sharp_ratio(ret_port,cov_port, x0, linear_constraint, bounds, options)
     opt_sr_ret = portfolio_return(ret_port, w_sr_top)
     opt_sr_vol = portfolio_std(cov_port, w_sr_top)
     print(f'Max. Sharpe Ratio = {opt_sr_ret/opt_sr_vol:.2f} => Return: {(opt_sr_ret*100):.2f}%  Risk: {opt_sr_vol*100:.3f}%')
