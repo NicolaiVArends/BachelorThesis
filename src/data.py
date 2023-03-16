@@ -28,7 +28,7 @@ def esg_score_weight(data: pd.DataFrame, weights: np.array):
                 data.at[index, 'stock_symbol'] += '.CO'
         return data
     
-def prices_monthly_close(esg_data: pd.DataFrame, dates: tuple):
+def stock_monthly_close(esg_data: pd.DataFrame, dates: tuple):
     """
     
     :param: 
