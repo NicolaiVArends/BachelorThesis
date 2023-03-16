@@ -2,6 +2,39 @@ import pandas as pd
 import numpy as np
 import itertools as it
 import random
+from forex_python.converter import CurrencyRates
+
+def currency_rates(prices):
+    """
+    
+    :param start_date: The start date for the stock
+    :param end_date:
+    :param stocks: 
+    :returns: A dataframe containing financial returns stock data
+    """
+
+    # convert currency in dataframe from one domestic currency (USD) from forex currency converter
+    cr = CurrencyRates()
+    exchange_rate_dict = {}
+
+    for date in range(0, len(prices.index)):
+        exchange_rate_dict.update({prices.index[date] : cr.get_rates("USD", prices.index[date])})
+
+    for asset in prices:
+        if asset.endswith('.ST'):
+            dates = list(prices.index)
+            for month in range(len(prices[asset])):
+                prices[asset][month] = prices[asset][month]/(exchange_rate_dict[dates[month]]["SEK"])
+        if asset.endswith('.OL'):
+            dates = list(prices.index)
+            for month in range(len(prices[asset])):
+                prices[asset][month] = prices[asset][month]/(exchange_rate_dict[dates[month]]["NOK"])
+        if asset.endswith('.CO'):
+            dates = list(prices.index)
+            for month in range(len(prices[asset])):
+                prices[asset][month] = prices[asset][month]/(exchange_rate_dict[dates[month]]["DKK"])
+        
+    return prices
 
 def get_financial_data(start_date, end_date, stocks):
     """
