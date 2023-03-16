@@ -39,7 +39,7 @@ def stock_monthly_close(esg_data: pd.DataFrame, dates: tuple):
     symbols = esg_data['stock_symbol'].unique()
 
     # create a new dataframe to store the monthly closing data
-    monthly_close_df = pd.DataFrame()
+    full_data = pd.DataFrame()
     for symbol in symbols:
     # retrieve data from yfinance
         stock_data = yf.download(symbol, start=dates[0], end=dates[1], interval='1mo', progress=False)
@@ -51,9 +51,10 @@ def stock_monthly_close(esg_data: pd.DataFrame, dates: tuple):
         weighted_score = esg_data.loc[esg_data['stock_symbol']==symbol, 'weighted_score'].iloc[0]
         stock_data[symbol + '_weighted'] = weighted_score
         
-        # append the stock data to the monthly_close_df
-        monthly_close_df = pd.concat([monthly_close_df, stock_data], axis=1)
-    return(monthly_close_df.dropna(axis=1,how='all'))    
+        # append the stock data to the full_data
+        full_data = pd.concat([full_data, stock_data], axis=1)
+        full_data = full_data.dropna(axis=1,how='any')
+    return full_data
 
 def seperate_full_data(full_data):
     """
@@ -70,7 +71,7 @@ def seperate_full_data(full_data):
     esg = full_data[weighted_cols]
 
     # create a new DataFrame with the remaining columns
-    prices = (full_data.drop(weighted_cols, axis=1).set_index('Date'))
+    prices = full_data.drop(weighted_cols, axis=1)
     prices.index = pd.to_datetime(prices.index)
     return prices, esg
 
