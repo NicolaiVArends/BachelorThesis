@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime as dt
-from scipy.optimize import minimize, LinearConstraint, Bounds
 
 def estimate_rolling_window(prices, window_size = 10):
     """
