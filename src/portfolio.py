@@ -50,7 +50,8 @@ def annual_return(beginning_price, end_price, years_held):
     :param: 
     :returns: 
     """
-    rate = end_price/beginning_price
+    #rate = end_price/beginning_price
+    rate = rate_of_return(beginning_price, end_price)
     return (((rate+1)**(1/years_held))-1)
 
 def historical_return(returns, frequency=12):
