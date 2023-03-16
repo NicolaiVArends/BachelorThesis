@@ -106,7 +106,18 @@ def currency_rates(prices):
                 prices[asset][month] = prices[asset][month]/(exchange_rate_dict[dates[month]]["DKK"])
         
     return prices
-        
+
+def filter_prices(prices, from_asset, to_asset):
+    """
+    
+    :param:
+    :param:
+    :returns: 
+    """
+    prices_filtered = prices.iloc[:,from_asset:to_asset]
+    return prices_filtered
+
+
 def financial_benchmark_data(start_date, end_date, stocks):
     """
     
