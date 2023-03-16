@@ -1,12 +1,9 @@
 import pandas as pd
 import numpy as np
-import matplotlib as mpl
-import matplotlib.pyplot as plt
+from datetime import datetime as dt
 from scipy.optimize import minimize, LinearConstraint, Bounds
 
-def plot_cummulative_portfolio_returns(returns: pd.DataFrame,
-                           mpl_style='default',
-                           title='Portfolio cummulative returns'):
+def estimate_rolling_window(prices, window_size = 10):
     """
     Function that uses return data to plot portfolio returns performance
     :param: 
@@ -15,20 +12,29 @@ def plot_cummulative_portfolio_returns(returns: pd.DataFrame,
     :returns: 
     """
 
-    returns_pct_cumm = returns.pct_change().dropna().cumsum()
-    returns_pct_cumm['PortfolioMean'] = returns_pct_cumm.mean(numeric_only=True, axis=1)
+    # make different lists to append data in every window
+    expected_return = []
+    expected_year = []
 
-    mpl.style.use(mpl_style)
-    for asset in returns_pct_cumm:
-        plt.plot(returns_pct_cumm[asset], alpha=0.4)
-    plt.plot(returns_pct_cumm['PortfolioMean'], color='black')
-    plt.title(title)
-    plt.ylabel("Returns")
-    plt.xlabel("Time")
-    plt.legend(returns_pct_cumm)
-    plt.show()
+    # setup af loop to iterate through window and make calculations
+    for i in range(0, window_size + 1):
 
-    return None
+        # define the rolling window
+        rolling_window = prices[i*12:i*12+(12*window_size)]
+
+        # calculate the expected return as a dataframe
+        window_annual_return = annual_return(rolling_window.iloc[0], rolling_window.iloc[-1], window_size)
+
+        # append the results of expected return and the years to list
+        expected_return.append(window_annual_return)
+
+    # make list of expected return into a dataframe
+    for x in range(2013, 2024):
+        expected_year.append(dt(x,1,1))
+  
+    expected_return = pd.DataFrame(expected_return, index=expected_year)
+
+    return expected_return
 
 def rate_of_return(beginning_price, end_price):
     """
