@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime as dt
 
-def estimate_rolling_window(prices, window_size = 10):
+def estimate_rolling_window(prices, start_year = 2003, end_year = 2023, window_size = 10):
     """
     Function that uses return data to plot portfolio returns performance
     :param: 
@@ -28,7 +28,7 @@ def estimate_rolling_window(prices, window_size = 10):
         expected_return.append(window_annual_return)
 
     # make list of expected return into a dataframe
-    for x in range(2013, 2024):
+    for x in range(start_year+10, end_year+1):
         expected_year.append(dt(x,1,1))
   
     expected_return = pd.DataFrame(expected_return, index=expected_year)
