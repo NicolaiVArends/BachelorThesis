@@ -55,6 +55,25 @@ def stock_monthly_close(esg_data: pd.DataFrame, dates: tuple):
         monthly_close_df = pd.concat([monthly_close_df, stock_data], axis=1)
     return(monthly_close_df.dropna(axis=1,how='all'))    
 
+def seperate_full_data(full_data):
+    """
+    
+    :param: 
+    :param:
+    :param: 
+    :returns:
+    """
+    # select columns ending with '_weighted'
+    weighted_cols = full_data.columns[full_data.columns.str.endswith('_weighted')]
+
+    # create a new DataFrame with only the weighted columns
+    esg = full_data[weighted_cols]
+
+    # create a new DataFrame with the remaining columns
+    prices = (full_data.drop(weighted_cols, axis=1).set_index('Date'))
+    prices.index = pd.to_datetime(prices.index)
+    return prices, esg
+
 def currency_rates(prices):
     """
     
