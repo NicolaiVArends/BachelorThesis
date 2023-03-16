@@ -12,7 +12,6 @@ def get_financial_data(start_date, end_date, stocks):
     :returns: A dataframe containing financial returns stock data
     """
 
-
     return 
 
 def get_financial_benchmark_data(start_date, end_date, stocks):
