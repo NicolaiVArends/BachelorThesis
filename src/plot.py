@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
 
 def plot_cummulative_portfolio_returns(returns: pd.DataFrame,
                            mpl_style='default',
