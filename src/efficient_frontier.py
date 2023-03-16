@@ -1,9 +1,6 @@
 import pandas as pd
 import numpy as np
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-from scipy.optimize import Bounds, LinearConstraint
-from mpl_toolkits import mplot3d
+from scipy.optimize import Bounds, LinearConstraint, minimize
 from src.portfolio import *
 
 def sharp_ratio(portfolio_returns, weights, portfolio_covariance):
@@ -104,7 +101,49 @@ def max_sharp_ratio(port_return,
     return results
 
 
+def ef1(ret_port, cov_port):
+    bounds = Bounds(-2, 5)
 
+    #Create x0, the first guess at the values of each asset's weight.
+    w0 = np.linspace(start=1, stop=0, num=cov_port.shape[1])
+    x0 = w0/np.sum(w0)
+    # All weights between 0 and 1
+    # The second boundary is the sum of weights.
+    linear_constraint = LinearConstraint(np.ones((cov_port.shape[1],), dtype=int),1,1)
+    options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
+ 
+    #These are the weights of the assets in the portfolio with the lowest level of risk possible.
+    w_minr = min_risk(cov_port, x0, linear_constraint, bounds)
+    opt_risk_ret = portfolio_return(ret_port,w_minr)
+    opt_risk_vol = portfolio_std(cov_port, w_minr)
+    print(f'Min. Risk = {opt_risk_vol*100:.3f}% => Return: {(opt_risk_ret*100):.3f}%  Sharpe Ratio = {opt_risk_ret/opt_risk_vol:.2f}')
+
+    #These are the weights of the assets in the portfolio with the highest Sharpe ratio.
+    w_sr_top = max_sr(ret_port,cov_port, x0, linear_constraint, bounds, options)
+    opt_sr_ret = portfolio_return(ret_port, w_sr_top)
+    opt_sr_vol = portfolio_std(cov_port, w_sr_top)
+    print(f'Max. Sharpe Ratio = {opt_sr_ret/opt_sr_vol:.2f} => Return: {(opt_sr_ret*100):.2f}%  Risk: {opt_sr_vol*100:.3f}%')
+
+    frontier_y = np.linspace(-0.3, opt_sr_ret*3, 50)
+    frontier_x = []
+
+    x0 = w_sr_top
+    for possible_return in frontier_y:
+        cons = ({'type':'eq', 'fun': check_sum},
+                {'type':'eq', 'fun': lambda w: portfolio_return(ret_port, w) - possible_return})
+
+        #Define a function to calculate volatility
+        fun = lambda w: np.sqrt(np.dot(w,np.dot(w,cov_port)))
+        result = minimize(fun,x0,method='SLSQP', bounds=bounds, constraints=cons, callback=callbackF)
+        frontier_x.append(result['fun'])
+
+    frontier_x = np.array(frontier_x)
+    dt_plot = pd.DataFrame(sr_opt_set, columns=['vol', 'ret'])
+    vol_opt = dt_plot['vol'].values
+    ret_opt = dt_plot['ret'].values
+    sharpe_opt = ret_opt/vol_opt
+
+    return opt_sr_vol, opt_sr_ret, opt_risk_vol,  opt_risk_ret, frontier_x, frontier_y, w_sr_top
 
 def calculate_efficient_frontier_esg(returns, port_covariance, esg_data):
     """
@@ -154,145 +193,3 @@ def capital_market_line(max_sr_return, max_sr_risk):
     cml_y_axis = slope*cml_x_axis+0.01
 
     return slope, cml_x_axis, cml_y_axis
-
-def plot_efficient_frontier_return(max_sr_return, 
-                               max_sr_risk, 
-                               frontier_x_axis, 
-                               frontier_y_axis,
-                               cml_x_axis,
-                               cml_y_axis, 
-                               mpl_style='default',
-                               title='Efficient Frontier'):
-    """
-    Function that plot and shows a 2D graph for 
-    :param: 
-    :param:
-    :param:
-    :param: 
-    :param:
-    :param: 
-    :param:
-    :param: 
-    :returns: 
-    """
-    
-    mpl.style.use(mpl_style)
-    plt.title(title)
-    #plt.xlabel('Portfolio Risk')
-    #plt.ylabel('Portfolio Return')
-    plt.xlim([min(frontier_x_axis), max(frontier_x_axis)])
-    plt.ylim([min(frontier_y_axis), max(frontier_y_axis)])
-    plt.plot(frontier_x_axis, frontier_y_axis)
-    plt.plot(max_sr_risk, max_sr_return, marker='o')
-    plt.plot(cml_x_axis, cml_y_axis, label=f'CML')
-    plt.legend()
-    plt.show()
-
-    return None
-
-def plot_efficient_frontier_return_3D(max_sr_return, 
-                               max_sr_risk,
-                               frontier_x_axis, 
-                               frontier_y_axis,
-                               cml_x_axis,
-                               cml_y_axis, 
-                               mpl_style='default',
-                               title='Efficient Frontier 3D'):
-    """
-    
-    :param:
-    :param:
-    :param:
-    :param: 
-    :param:
-    :param: 
-    :param:
-    :param: 
-    :returns: 
-    """
-
-    mpl.style.use(mpl_style)
-    fig = plt.figure(figsize = (10,10))
-    ax = plt.axes(projection='3d')
-    ax.set_title(title)
-    #ax.set_xlabel('Portfolio risk')
-    #ax.set_ylabel('Portfolio returns')
-    #ax.set_zlabel('ESG')
-    ax.scatter(frontier_x_axis, frontier_y_axis, esg, cmap ='viridis')
-    ax.grid()
-    plt.legend()
-    plt.show()
-
-    return None
-
-
-def plot_efficient_frontier_esg_2D(max_sr_return, 
-                               max_sr_risk, 
-                               frontier_x_axis, 
-                               frontier_y_axis,
-                               cml_x_axis,
-                               cml_y_axis, 
-                               mpl_style='default',
-                               title='Efficient Frontier'):
-    """
-    Function that plot and shows a 2D graph for 
-    :param: 
-    :param:
-    :param:
-    :param: 
-    :param:
-    :param: 
-    :param:
-    :param: 
-    :returns: 
-    """
-    
-    mpl.style.use(mpl_style)
-    plt.title(title)
-    #plt.xlabel('Portfolio Risk')
-    #plt.ylabel('Portfolio Return')
-    plt.xlim([min(frontier_x_axis), max(frontier_x_axis)])
-    plt.ylim([min(frontier_y_axis), max(frontier_y_axis)])
-    plt.plot(frontier_x_axis, frontier_y_axis)
-    plt.plot(max_sr_risk, max_sr_return, marker='o')
-    plt.plot(cml_x_axis, cml_y_axis, label=f'CML')
-    plt.legend()
-    plt.show()
-
-    return None
-
-def plot_efficient_frontier_esg_3D(max_sr_return, 
-                               max_sr_risk,
-                               frontier_x_axis, 
-                               frontier_y_axis,
-                               cml_x_axis,
-                               cml_y_axis, 
-                               mpl_style='default',
-                               title='Efficient Frontier 3D'):
-    """
-    
-    :param:
-    :param:
-    :param:
-    :param: 
-    :param:
-    :param: 
-    :param:
-    :param: 
-    :returns: 
-    """
-
-    mpl.style.use(mpl_style)
-    fig = plt.figure(figsize = (10,10))
-    ax = plt.axes(projection='3d')
-    ax.set_title(title)
-    #ax.set_xlabel('Portfolio risk')
-    #ax.set_ylabel('Portfolio returns')
-    #ax.set_zlabel('ESG')
-    ax.scatter(frontier_x_axis, frontier_y_axis, esg, cmap ='viridis')
-    ax.grid()
-    plt.legend()
-    plt.show()
-
-    return None
-
