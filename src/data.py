@@ -13,7 +13,7 @@ def currency_rates(prices):
     :returns: A dataframe containing financial returns stock data
     """
 
-    # convert currency in dataframe from one domestic currency (USD) from forex currency converter
+    # convert currency in dataframe to USD from forex currency converter
     cr = CurrencyRates()
     exchange_rate_dict = {}
 
