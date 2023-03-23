@@ -165,7 +165,7 @@ def calculate_efficient_frontier_esg(returns, port_covariance, esg_data):
     min_risk_risk = results_risk['risk']
 
     # compute the maximum sharp ratio for risk and return
-    results_sr = max_sharp_ratio(returns, port_covariance, esg_data, x0, linear_constraint, bounds, options)
+    results_sr = maximize_sharp_ratio(returns, port_covariance, esg_data, x0, linear_constraint, bounds, options)
     max_sr_return = results_sr['returns']
     max_sr_risk = results_sr['risk']
 
