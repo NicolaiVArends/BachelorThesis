@@ -35,8 +35,7 @@ def minimize_risk(port_return,
     """
     function = lambda weight: portfolio_std(port_cov=port_covariance, weights=weight)
     bounds = Bounds(-2, 5)
-    constraint = ({'type':'eq', 'fun': check_sum},
-                 {'type': 'eq', 'fun': lambda weight: portfolio_std(port_cov=port_covariance, weights=weight)})
+    constraint = LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int),1,1)
     options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
     result = minimize(function, 
                       x0,
@@ -48,12 +47,11 @@ def minimize_risk(port_return,
     return result.x
 
 def maximize_sharp_ratio(port_return, 
-                    port_covariance,
-                    x0):
-    function = lambda weight: sharp_ratio(port_cov=port_covariance, weights=weight)
+                         port_covariance,
+                         x0):
+    function = lambda weight: np.sqrt(np.dot(weight,np.dot(weight,port_covariance)))/port_return.dot(weight)
     bounds = Bounds(-2, 5)
-    constraint = ({'type':'eq', 'fun': check_sum},
-                 {'type': 'eq', 'fun': lambda weight: portfolio_std(port_cov=port_covariance, weights=weight)})
+    constraint = LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int),1,1)
     options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
     result = minimize(function, 
                       x0,
@@ -64,27 +62,23 @@ def maximize_sharp_ratio(port_return,
    
     return result.x
 
-
-
 def ef1(ret_port, cov_port):
-    
+
+    bounds = Bounds(-2, 5)
+    sr_opt_set = set()
 
     #Create x0, the first guess at the values of each asset's weight.
     w0 = np.linspace(start=1, stop=0, num=cov_port.shape[1])
     x0 = w0/np.sum(w0)
-    # All weights between 0 and 1
-    # The second boundary is the sum of weights.
-    linear_constraint = LinearConstraint(np.ones((cov_port.shape[1],), dtype=int),1,1)
-    #options = 
  
     #These are the weights of the assets in the portfolio with the lowest level of risk possible.
-    w_minr = minimize_risk(cov_port, x0, linear_constraint, bounds)
-    opt_risk_ret = portfolio_return(ret_port,w_minr)
+    w_minr = minimize_risk(ret_port, cov_port, x0)
+    opt_risk_ret = portfolio_return(ret_port, w_minr)
     opt_risk_vol = portfolio_std(cov_port, w_minr)
     print(f'Min. Risk = {opt_risk_vol*100:.3f}% => Return: {(opt_risk_ret*100):.3f}%  Sharpe Ratio = {opt_risk_ret/opt_risk_vol:.2f}')
 
     #These are the weights of the assets in the portfolio with the highest Sharpe ratio.
-    w_sr_top = maximize_sharp_ratio(ret_port,cov_port, x0, linear_constraint, bounds, options)
+    w_sr_top = maximize_sharp_ratio(ret_port,cov_port, x0)
     opt_sr_ret = portfolio_return(ret_port, w_sr_top)
     opt_sr_vol = portfolio_std(cov_port, w_sr_top)
     print(f'Max. Sharpe Ratio = {opt_sr_ret/opt_sr_vol:.2f} => Return: {(opt_sr_ret*100):.2f}%  Risk: {opt_sr_vol*100:.3f}%')
@@ -98,8 +92,12 @@ def ef1(ret_port, cov_port):
                 {'type':'eq', 'fun': lambda w: portfolio_return(ret_port, w) - possible_return})
 
         #Define a function to calculate volatility
-        fun = lambda w: np.sqrt(np.dot(w,np.dot(w,cov_port)))
-        result = minimize(fun,x0,method='SLSQP', bounds=bounds, constraints=cons, callback=callbackF)
+        fun = lambda weights: portfolio_std(cov_port, weights)
+        result = minimize(fun,
+                          x0, 
+                          method='SLSQP', 
+                          bounds=bounds, 
+                          constraints=cons)
         frontier_x.append(result['fun'])
 
     frontier_x = np.array(frontier_x)

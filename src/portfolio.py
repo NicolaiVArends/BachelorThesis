@@ -54,7 +54,7 @@ def covariance_matrix_annual(returns, frequency=12):
     :param: 
     :returns: 
     """
-    covmatrix_annual = returns.cov() * frequency
+    covmatrix_annual = returns.cov() #* frequency
     return covmatrix_annual
 
 def portfolio_return(returns: pd.DataFrame, weights: pd.DataFrame):
