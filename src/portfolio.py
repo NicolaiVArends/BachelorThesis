@@ -57,42 +57,6 @@ def covariance_matrix_annual(returns, frequency=12):
     covmatrix_annual = returns.cov() * frequency
     return covmatrix_annual
 
-def historical_return(returns, frequency=12):
-    """
-   
-    :param: 
-    :param: 
-    :returns: 
-    """
-    returns_pct_change = returns.pct_change()
-    return (1 + returns_pct_change).prod() ** (frequency / returns_pct_change.count()) - 1
-
-def _is_positive_semidefinite(matrix):
-    """
-   
-    :param: 
-    :param: 
-    :returns: 
-    """
-    # Significantly more efficient than checking eigenvalues (stackoverflow.com/questions/16266720)
-    try:
-        # Significantly more efficient than checking eigenvalues (stackoverflow.com/questions/16266720)
-        np.linalg.cholesky(matrix + 1e-16 * np.eye(len(matrix)))
-        return True
-    except np.linalg.LinAlgError:
-        return False
-
-def sample_cov(prices, frequency=12, **kwargs):
-    """
-   
-    :param: 
-    :param: 
-    :returns: 
-    """
-    returns = returns.pct_change()
-    matrix = returns.cov() * frequency
-    return matrix
-
 def portfolio_return(returns: pd.DataFrame, weights: pd.DataFrame):
     """
     Function that uses portfolio returns and weights to compute the portfolio return by doing dot product between returns and weights
