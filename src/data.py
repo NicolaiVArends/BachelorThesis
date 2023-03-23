@@ -119,6 +119,15 @@ def filter_prices(prices, from_asset, to_asset):
     prices_filtered = prices.iloc[:,from_asset:to_asset]
     return prices_filtered
 
+def returns_from_prices(prices):
+    """
+    
+    :param:
+    :param:
+    :returns: 
+    """
+    returns_pct_change = prices.pct_change().dropna()
+    return returns_pct_change
 
 def financial_benchmark_data(start_date, end_date, stocks):
     """
