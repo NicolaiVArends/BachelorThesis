@@ -22,10 +22,10 @@ def estimate_rolling_window(prices, start_year = 2003, end_year = 2023, window_s
         rolling_window = prices[i*12:i*12+(12*window_size)]
 
         # calculate the expected return as a dataframe
-        window_annual_return = annual_return(rolling_window.iloc[0], rolling_window.iloc[-1], window_size)
+        expected_annual_returns = expected_return_annual(rolling_window)
 
         # append the results of expected return and the years to list
-        expected_return.append(window_annual_return)
+        expected_return.append(expected_annual_returns)
 
     # make list of expected return into a dataframe
     for x in range(start_year+10, end_year+1):
@@ -35,24 +35,18 @@ def estimate_rolling_window(prices, start_year = 2003, end_year = 2023, window_s
 
     return expected_return
 
-def rate_of_return(beginning_price, end_price):
+def expected_return_annual(rolling_window):
     """
-    
-    :param:
-    :returns: 
-    """
-    return (end_price-beginning_price)/beginning_price
 
-def annual_return(beginning_price, end_price, years_held):
-    """
-   
+    :param: 
     :param: 
     :param: 
     :returns: 
     """
-    #rate = end_price/beginning_price
-    rate = rate_of_return(beginning_price, end_price)
-    return (((rate+1)**(1/years_held))-1)
+
+    expected_annual_returns = rolling_window.mean() * 12
+    print(expected_annual_returns)
+    return expected_annual_returns
 
 def historical_return(returns, frequency=12):
     """
