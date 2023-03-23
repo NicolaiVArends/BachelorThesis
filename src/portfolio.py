@@ -4,7 +4,7 @@ from datetime import datetime as dt
 
 def estimate_rolling_window(prices, start_year = 2003, end_year = 2023, window_size = 10):
     """
-    Function that uses return data to plot portfolio returns performance
+
     :param: 
     :param: 
     :param: 
@@ -22,7 +22,7 @@ def estimate_rolling_window(prices, start_year = 2003, end_year = 2023, window_s
         rolling_window = prices[i*12:i*12+(12*window_size)]
 
         # calculate the expected return as a dataframe
-        expected_annual_returns = expected_return_annual(rolling_window)
+        expected_annual_returns = mean_return_annual(rolling_window)
 
         # append the results of expected return and the years to list
         expected_return.append(expected_annual_returns)
@@ -35,7 +35,7 @@ def estimate_rolling_window(prices, start_year = 2003, end_year = 2023, window_s
 
     return expected_return
 
-def expected_return_annual(rolling_window):
+def mean_return_annual(returns, frequency=12):
     """
 
     :param: 
@@ -44,8 +44,18 @@ def expected_return_annual(rolling_window):
     :returns: 
     """
 
-    expected_annual_returns = rolling_window.mean() * 12
+    expected_annual_returns = returns.mean() * frequency
     return expected_annual_returns
+
+def covariance_matrix_annual(returns, frequency=12):
+    """
+   
+    :param: 
+    :param: 
+    :returns: 
+    """
+    covmatrix_annual = returns.cov() * frequency
+    return covmatrix_annual
 
 def historical_return(returns, frequency=12):
     """
@@ -81,10 +91,7 @@ def sample_cov(prices, frequency=12, **kwargs):
     """
     returns = returns.pct_change()
     matrix = returns.cov() * frequency
-    if _is_positive_semidefinite(matrix):
-        return matrix
-    else:
-        raise Exception("AssertionError the matrix is not positive semidefinite")
+    return matrix
 
 def portfolio_return(returns: pd.DataFrame, weights: pd.DataFrame):
     """

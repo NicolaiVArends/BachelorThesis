@@ -119,7 +119,7 @@ def filter_prices(prices, from_asset, to_asset):
     prices_filtered = prices.iloc[:,from_asset:to_asset]
     return prices_filtered
 
-def returns_from_prices(prices):
+def pct_returns_from_prices(prices):
     """
     
     :param:

@@ -16,13 +16,12 @@ def sharp_ratio(portfolio_returns, weights, portfolio_covariance):
                             returns=portfolio_returns) / portfolio_std(port_cov=portfolio_covariance,
                                                                        weights=weights)
 
+def check_sum(weight):
+    return np.sum(weight)-1
+
 def minimize_risk(port_return, 
-                    port_covariance, 
-                    esg_data, 
-                    x0,
-                    linear_constraint, 
-                    bounds, 
-                    options = None):
+                  port_covariance,
+                  x0):
     """
     Function that will take different inputs including esg score data and compute the minimum risk of different portfolios 
     :param: A dataframe of the portfolio covariance matrix
@@ -34,75 +33,41 @@ def minimize_risk(port_return,
     :param: Options for the minimizer
     :returns: A dataframe containing portfolio weight choice for minimizing portfolio risk using esg scores
     """
-    
-    results = {'esg':[],
-               'weights':[],
-               'risk':[],
-               'return':[]}
-    
     function = lambda weight: portfolio_std(port_cov=port_covariance, weights=weight)
-    constraint_esg = {'type': 'eq', 'fun': lambda weight: np.dot(weight, esg_data)}
+    bounds = Bounds(-2, 5)
+    constraint = ({'type':'eq', 'fun': check_sum},
+                 {'type': 'eq', 'fun': lambda weight: portfolio_std(port_cov=port_covariance, weights=weight)})
+    options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
     result = minimize(function, 
-                      x0, 
-                      method='trust-constr', 
+                      x0,
+                      method='SLSQP', 
                       bounds=bounds, 
-                      constraints=[linear_constraint, constraint_esg], 
+                      constraints=constraint, 
                       options=options)
    
-    optimal_weights = list(result['x'])
-    optimal_esg = np.dot(optimal_weights, esg_data)
-    results['esg'].append(optimal_esg)
-    results['weights'].append(optimal_weights)
-    results['risk'].append(result['fun'])
-    results['return'].append(np.dot(optimal_weights, port_return.sum()))
-
-    return results
+    return result.x
 
 def maximize_sharp_ratio(port_return, 
-                    port_covariance, 
-                    esg_data, 
-                    x0, 
-                    linear_constraint, 
-                    bounds, 
-                    options = None):
-    """
-    Function that calculates the maximum sharp ratio using the portfolio sharp ratio function and doing a 
-    :param: A dataframe of the portfolio covariance matrix
-    :param: A dataframe of esg scores of the different assets in portfolio
-    :param: x0 argument that is the initial guess for the minimizer
-    :param: Linear constraints for the minimizer
-    :param: Bounds for the minimizer
-    :param: 
-    :param: Options for the minimizer
-    :returns: 
-    """
-    
-    results = {'esg':[],
-               'weights':[],
-               'risk':[],
-               'return':[]}
-    
-    function = lambda weight: sharp_ratio(portfolio_returns=port_return, weights=weight, portfolio_covariance=port_covariance)
-    constraint_esg = {'type': 'eq', 'fun': lambda weight: np.dot(weight, esg_data)}
+                    port_covariance,
+                    x0):
+    function = lambda weight: sharp_ratio(port_cov=port_covariance, weights=weight)
+    bounds = Bounds(-2, 5)
+    constraint = ({'type':'eq', 'fun': check_sum},
+                 {'type': 'eq', 'fun': lambda weight: portfolio_std(port_cov=port_covariance, weights=weight)})
+    options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
     result = minimize(function, 
-                      x0, 
-                      method='trust-constr', 
+                      x0,
+                      method='SLSQP', 
                       bounds=bounds, 
-                      constraints=[linear_constraint, constraint_esg], 
+                      constraints=constraint, 
                       options=options)
-    
-    optimal_weights = list(result['x'])
-    optimal_esg = np.dot(optimal_weights, esg_data)
-    results['esg'].append(optimal_esg)
-    results['weights'].append(optimal_weights)
-    results['risk'].append(result['fun'])
-    results['return'].append(np.dot(optimal_weights, port_return.sum()))
+   
+    return result.x
 
-    return results
 
 
 def ef1(ret_port, cov_port):
-    bounds = Bounds(-2, 5)
+    
 
     #Create x0, the first guess at the values of each asset's weight.
     w0 = np.linspace(start=1, stop=0, num=cov_port.shape[1])
@@ -110,7 +75,7 @@ def ef1(ret_port, cov_port):
     # All weights between 0 and 1
     # The second boundary is the sum of weights.
     linear_constraint = LinearConstraint(np.ones((cov_port.shape[1],), dtype=int),1,1)
-    options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
+    #options = 
  
     #These are the weights of the assets in the portfolio with the lowest level of risk possible.
     w_minr = minimize_risk(cov_port, x0, linear_constraint, bounds)
