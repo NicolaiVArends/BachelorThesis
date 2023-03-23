@@ -45,7 +45,6 @@ def expected_return_annual(rolling_window):
     """
 
     expected_annual_returns = rolling_window.mean() * 12
-    print(expected_annual_returns)
     return expected_annual_returns
 
 def historical_return(returns, frequency=12):
