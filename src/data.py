@@ -18,9 +18,9 @@ def esg_score_weight(data: pd.DataFrame, weights: np.array, min_esg_score: float
     else:
 
 
-        data["weighted_score"] = (data["environment_score"] * (weights[0]/1)) + \
-                           (data["governance_score"] * (weights[1]/1)) + \
-                           (data["social_score"] * (weights[2]/1))
+        data["weighted_score"] = ((data["environment_score"] * (weights[0])) + \
+                           (data["governance_score"] * (weights[1])) + \
+                           (data["social_score"] * (weights[2])))*3
         for index, row in data.iterrows():
             if row['CurrencyCode'] == 'SEK':
                 data.at[index, 'stock_symbol'] += '.ST'
