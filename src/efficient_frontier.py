@@ -19,8 +19,7 @@ def sharp_ratio(portfolio_returns, weights, portfolio_covariance):
 def check_sum(weight):
     return np.sum(weight)-1
 
-def minimize_risk(port_return, 
-                  port_covariance,
+def minimize_risk(port_covariance,
                   x0):
     """
     Function that will take different inputs including esg score data and compute the minimum risk of different portfolios 
@@ -33,7 +32,7 @@ def minimize_risk(port_return,
     :param: Options for the minimizer
     :returns: A dataframe containing portfolio weight choice for minimizing portfolio risk using esg scores
     """
-    function = lambda weight: portfolio_std(port_cov=port_covariance, weights=weight)
+    function = lambda weight: portfolio_std(port_covariance, weights=weight)
     bounds = Bounds(-2, 5)
     constraint = LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int),1,1)
     options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
