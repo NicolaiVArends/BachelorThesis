@@ -62,7 +62,7 @@ def maximize_sharp_ratio(port_return,
    
     return result.x
 
-def ef1(ret_port, cov_port):
+def efficient_frontier(ret_port, cov_port):
 
     bounds = Bounds(-2, 5)
     sr_opt_set = set()
@@ -107,41 +107,6 @@ def ef1(ret_port, cov_port):
     sharpe_opt = ret_opt/vol_opt
 
     return opt_sr_vol, opt_sr_ret, opt_risk_vol,  opt_risk_ret, frontier_x, frontier_y, w_sr_top
-
-def calculate_efficient_frontier_esg(returns, port_covariance, esg_data):
-    """
-    
-    :param:
-    :param: 
-    :returns: 
-    """
-
-    w0 = np.linspace(start=1, stop=0, num=port_covariance.shape[1])
-    x0 = w0/np.sum(w0)
-    linear_constraint = LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int),1,1)
-    bounds = Bounds(-2, 5)
-    options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
-
-    # compute the optimal return and risk for risk aversion
-    results_risk = minimize_risk(returns, port_covariance, esg_data, x0, linear_constraint, bounds, options)
-    min_risk_return = results_risk['returns']
-    min_risk_risk = results_risk['risk']
-
-    # compute the maximum sharp ratio for risk and return
-    results_sr = maximize_sharp_ratio(returns, port_covariance, esg_data, x0, linear_constraint, bounds, options)
-    max_sr_return = results_sr['returns']
-    max_sr_risk = results_sr['risk']
-
-    # compute efficient frontier for esg score
-    results_risk = minimize_risk(returns, port_covariance, esg_data, x0, linear_constraint, bounds, options)
-    min_risk_opt_esg = results_risk['esg']
-    min_risk_esg = results_risk['risk']
-
-    # compute the axis
-    frontier_x_axis = np.linspace(-0.3, max_sr_risk*3, 50)
-    frontier_y_axis = np.linspace(-0.3, max_sr_return*3, 50)
-
-    return min_risk_return, min_risk_risk, max_sr_return, max_sr_risk, min_risk_opt_esg, min_risk_esg, frontier_x_axis, frontier_y_axis
 
 def capital_market_line(max_sr_return, max_sr_risk):
     """

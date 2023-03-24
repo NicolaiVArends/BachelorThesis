@@ -29,14 +29,10 @@ def plot_cummulative_portfolio_returns(returns: pd.DataFrame,
 
     return None
 
-def plot_efficient_frontier_return(max_sr_return, 
-                               max_sr_risk, 
-                               frontier_x_axis, 
-                               frontier_y_axis,
-                               cml_x_axis,
-                               cml_y_axis, 
-                               mpl_style='default',
-                               title='Efficient Frontier'):
+def plot_efficient_frontier(parameters, 
+                            plot_max_sharp = True,
+                            mpl_style='default',
+                            title='Efficient Frontier'):
     """
     Function that plot and shows a 2D graph for 
     :param: 
@@ -51,14 +47,21 @@ def plot_efficient_frontier_return(max_sr_return,
     """
     
     mpl.style.use(mpl_style)
-    plt.title(title)
-    #plt.xlabel('Portfolio Risk')
-    #plt.ylabel('Portfolio Return')
-    plt.xlim([min(frontier_x_axis), max(frontier_x_axis)])
-    plt.ylim([min(frontier_y_axis), max(frontier_y_axis)])
-    plt.plot(frontier_x_axis, frontier_y_axis)
-    plt.plot(max_sr_risk, max_sr_return, marker='o')
-    plt.plot(cml_x_axis, cml_y_axis, label=f'CML')
+    plt.xlabel('Risk/Volatility')
+    plt.ylabel('Expected Return')
+    colors = ['r','b','k','m','g','c', 'lightslategrey', "darkcyan", "purple", "orange", "olive"]
+    for i, x in enumerate(parameters):
+        opt_sr_vol, opt_sr_ret, opt_risk_vol,  opt_risk_ret, frontier_x, frontier_y, _ = x
+        if plot_max_sharp:
+            plt.title('Efficient Frontier with Max Sharp')
+            plt.plot(opt_sr_vol,  opt_sr_ret, marker='o', color = f'{colors[i]}', markersize=8, label=f'20{3+i:02d}-20{13+i:02d} Max Sharp Ratio') # red dot
+        else:
+            plt.title('Efficient Frontier with Minimum Risk')
+            plt.plot(opt_risk_vol,  opt_risk_ret, marker='o', color = f'{colors[i]}', markersize=8, label=f'20{3+i:02d}-20{13+i:02d} Minimum Risk') # red dot
+        plt.plot(frontier_x, frontier_y, linestyle='--', color = f'{colors[i]}', linewidth=2, label=f'20{3+i:02d}-20{13+i:02d} Efficient Frontier') # red dashed line
+  
+    plt.xlim([0.0,0.4])
+    plt.ylim([-0.2,1])
     plt.legend()
     plt.show()
 
