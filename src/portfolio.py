@@ -1,8 +1,9 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime as dt
+from efficient_frontier import *
 
-def estimate_rolling_window(prices, start_year = 2003, end_year = 2023, window_size = 10):
+def rolling_window_expected_return(returns, start_year = 2003, end_year = 2023, window_size = 10):
     """
 
     :param: 
@@ -19,7 +20,7 @@ def estimate_rolling_window(prices, start_year = 2003, end_year = 2023, window_s
     for i in range(0, window_size + 1):
 
         # define the rolling window
-        rolling_window = prices[i*12:i*12+(12*window_size)]
+        rolling_window = returns[i*12:i*12+(12*window_size)]
 
         # calculate the expected return as a dataframe
         expected_annual_returns = mean_return_annual(rolling_window)
@@ -34,6 +35,23 @@ def estimate_rolling_window(prices, start_year = 2003, end_year = 2023, window_s
     expected_return = pd.DataFrame(expected_return, index=expected_year)
 
     return expected_return
+
+
+def rolling_window_efficient_frontier(returns, window_size = 10):
+    """
+
+    :param: 
+    :param: 
+    :param: 
+    :returns: 
+    """
+    parameters = []
+    for i in range(0, window_size + 1):
+        sample_rolling_window = returns[i*12:i*12+(12*10)]
+        ret_port = mean_return_annual(sample_rolling_window)
+        cov_port = covariance_matrix_annual(sample_rolling_window)
+        parameters.append(efficient_frontier(ret_port, cov_port))
+    return parameters
 
 def mean_return_annual(returns, frequency=12):
     """
@@ -54,7 +72,7 @@ def covariance_matrix_annual(returns, frequency=12):
     :param: 
     :returns: 
     """
-    covmatrix_annual = returns.cov() #* frequency
+    covmatrix_annual = returns.cov() * frequency
     return covmatrix_annual
 
 def portfolio_return(returns: pd.DataFrame, weights: pd.DataFrame):
