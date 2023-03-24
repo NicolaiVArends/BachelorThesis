@@ -62,9 +62,12 @@ def plot_efficient_frontier(parameters,
             plt.plot(frontier_x, frontier_y, linestyle='--', color = f'{colors[i]}', linewidth=2, label=f'20{3+i:02d}-20{13+i:02d} Efficient Frontier') 
         else:
             plt.title('Efficient Frontier with Minimum Risk')
-            plt.xlim([0.0,0.4])
-            plt.ylim([-0.2,1])
-            plt.plot(opt_risk_vol,  opt_risk_ret, marker='o', color = f'{colors[i]}', markersize=8, label=f'20{3+i:02d}-20{13+i:02d} Minimum Risk') 
+            plt.xlim([0.1,0.2])
+            plt.ylim([-0.2,0.4])
+            if i % 3 != 0:
+                continue
+            plt.plot(opt_risk_vol,  opt_risk_ret, marker='o', color = f'{colors[i]}', markersize=8, label=f'20{3+i:02d}-20{13+i:02d} Minimum Risk')
+            plt.plot(frontier_x, frontier_y, linestyle='--', color = f'{colors[i]}', linewidth=2, label=f'20{3+i:02d}-20{13+i:02d} Efficient Frontier') 
         #plt.plot(frontier_x, frontier_y, linestyle='--', color = f'{colors[i]}', linewidth=2, label=f'20{3+i:02d}-20{13+i:02d} Efficient Frontier') 
     plt.legend()
     plt.show()
