@@ -62,7 +62,7 @@ def maximize_sharp_ratio(port_return,
    
     return result.x
 
-def ef1(ret_port, cov_port):
+def efficient_frontier(ret_port, cov_port):
 
     bounds = Bounds(-2, 5)
     sr_opt_set = set()
