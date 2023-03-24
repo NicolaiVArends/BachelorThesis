@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime as dt
 from src.efficient_frontier import *
+from src.portfolio import *
 
 def rolling_window_expected_return(returns, start_year = 2003, end_year = 2023, window_size = 10):
     """
