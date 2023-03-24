@@ -50,7 +50,7 @@ def rolling_window_efficient_frontier(returns, window_size = 10):
         sample_rolling_window = returns[i*12:i*12+(12*10)]
         ret_port = mean_return_annual(sample_rolling_window)
         cov_port = covariance_matrix_annual(sample_rolling_window)
-        parameters.append(efficient_frontier(ret_port, cov_port))
+        parameters.append(calculate_efficient_frontier(ret_port, cov_port))
     return parameters
 
 def mean_return_annual(returns, frequency=12):
