@@ -71,7 +71,7 @@ def calculate_efficient_frontier(ret_port, cov_port):
     x0 = w0/np.sum(w0)
  
     #These are the weights of the assets in the portfolio with the lowest level of risk possible.
-    w_minr = minimize_risk(ret_port, cov_port, x0)
+    w_minr = minimize_risk(cov_port, x0)
     opt_risk_ret = portfolio_return(ret_port, w_minr)
     opt_risk_vol = portfolio_std(cov_port, w_minr)
     print(f'Min. Risk = {opt_risk_vol*100:.3f}% => Return: {(opt_risk_ret*100):.3f}%  Sharpe Ratio = {opt_risk_ret/opt_risk_vol:.2f}')

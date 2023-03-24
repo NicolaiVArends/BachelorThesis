@@ -37,7 +37,6 @@ def rolling_window_expected_return(returns, start_year = 2003, end_year = 2023, 
 
     return expected_return
 
-
 def rolling_window_efficient_frontier(returns, window_size = 10):
     """
 
