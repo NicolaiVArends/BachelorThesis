@@ -49,7 +49,7 @@ def maximize_sharp_ratio(port_return,
                          port_covariance,
                          x0):
     function = lambda weight: np.sqrt(np.dot(weight,np.dot(weight,port_covariance)))/port_return.dot(weight)
-    bounds = Bounds(-2, 5)
+    bounds = Bounds(-2.0, 5.0)
     constraint = LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int),1,1)
     options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
     result = minimize(function, 
@@ -63,7 +63,7 @@ def maximize_sharp_ratio(port_return,
 
 def calculate_efficient_frontier(ret_port, cov_port):
 
-    bounds = Bounds(-2, 5)
+    bounds = Bounds(-2.0, 5.0)
     sr_opt_set = set()
 
     #Create x0, the first guess at the values of each asset's weight.
