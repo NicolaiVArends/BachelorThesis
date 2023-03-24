@@ -33,7 +33,7 @@ def minimize_risk(port_covariance,
     :returns: A dataframe containing portfolio weight choice for minimizing portfolio risk using esg scores
     """
     function = lambda weight: portfolio_std(port_covariance, weights=weight)
-    bounds = Bounds(-2, 5)
+    bounds = Bounds(-2.0, 5.0)
     constraint = LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int),1,1)
     options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
     result = minimize(function, 
