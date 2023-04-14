@@ -28,6 +28,8 @@ def esg_score_weight(data: pd.DataFrame, weights: np.array, min_esg_score: float
                 data.at[index, 'stock_symbol'] += '.OL'
             elif row['CurrencyCode'] == 'DKK':
                 data.at[index, 'stock_symbol'] += '.CO'
+            else:
+                pass
         result = data.loc[data["weighted_score"] >= min_esg_score]
         return result
     
