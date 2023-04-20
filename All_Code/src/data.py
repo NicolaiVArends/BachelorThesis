@@ -18,9 +18,9 @@ def esg_score_weight(data: pd.DataFrame, weights: np.array, min_esg_score: float
     else:
 
 
-        data["weighted_score"] = ((data["environment_score"] * (weights[0])) + \
+        data["weighted_score"] = (((data["environment_score"] * (weights[0])) + \
                            (data["governance_score"] * (weights[1])) + \
-                           (data["social_score"] * (weights[2])))*3
+                           (data["social_score"] * (weights[2])))*3)
         for index, row in data.iterrows():
             if row['CurrencyCode'] == 'SEK':
                 data.at[index, 'stock_symbol'] += '.ST'
@@ -30,7 +30,9 @@ def esg_score_weight(data: pd.DataFrame, weights: np.array, min_esg_score: float
                 data.at[index, 'stock_symbol'] += '.CO'
             else:
                 pass
-        result = data.loc[data["weighted_score"] >= min_esg_score]
+        result = data[data["weighted_score"] >= min_esg_score]
+        
+        
         return result
     
 def stock_monthly_close(esg_data: pd.DataFrame, dates: tuple):
