@@ -46,7 +46,7 @@ def minimize_risk(port_covariance,
    
     return result.x
 
-def maximize_sharp_ratio(port_return, 
+def maximize_sharp_ratio_wanted_returns(port_return, 
                          port_covariance,
                          x0,
                          bounds,
@@ -69,7 +69,35 @@ def maximize_sharp_ratio(port_return,
    
     return result.x
 
-def calculate_efficient_frontier(ret_port, cov_port,bounds,wanted_return):
+def maximize_sharp_ratio_wanted_risk(port_return, 
+                         port_covariance,
+                         x0,
+                         bounds,
+                         max_risk: float):
+    function = lambda weight: np.sqrt(np.dot(weight,np.dot(weight,port_covariance)))/port_return.dot(weight)
+    bounds = bounds
+    constraints = (LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int),1,1),
+                   {'type': 'eq',
+                     'fun': lambda weight: max_risk - np.sqrt(np.dot(weight, np.dot(weight, port_covariance)))})
+    
+                    #{'type': 'eq', 'fun': lambda weight: np.sqrt(np.dot(weight, np.dot(weight, port_covariance)))}) #Second restraint lets us define how high a return we want
+                                                                    
+    options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
+    result = minimize(function, 
+                      x0,
+                      method='SLSQP', 
+                      bounds=bounds, 
+                      constraints=constraints, 
+                      options=options)
+   
+    return result.x
+
+
+
+
+
+
+def calculate_efficient_frontier(ret_port, cov_port,bounds,Sharpe_Type,wanted_return = None, max_risk = None):
 
     
     sr_opt_set = set()
@@ -85,7 +113,16 @@ def calculate_efficient_frontier(ret_port, cov_port,bounds,wanted_return):
     print(f'Min. Risk = {opt_risk_vol*100:.3f}% => Return: {(opt_risk_ret*100):.3f}%  Sharpe Ratio = {opt_risk_ret/opt_risk_vol:.2f}')
 
     #These are the weights of the assets in the portfolio with the highest Sharpe ratio.
-    w_sr_top = maximize_sharp_ratio(ret_port,cov_port, x0,bounds, wanted_return)
+    #Here we chose whether we want to use risk or return as an ectra constraint
+
+    if Sharpe_Type == "Maximum_risk":    
+        w_sr_top = maximize_sharp_ratio_wanted_risk(ret_port,cov_port, x0,bounds, max_risk)
+    elif Sharpe_Type == "Wanted_return":
+        w_sr_top = maximize_sharp_ratio_wanted_returns(ret_port,cov_port, x0,bounds, wanted_return)
+    elif Sharpe_Type == "Maximum_risk" or "Wanted_return ":
+        print("wrong constraint name")  
+        return False
+
     opt_sr_ret = portfolio.portfolio_return(ret_port, w_sr_top)
     opt_sr_vol = portfolio_std(cov_port, w_sr_top)
     print(f'Max. Sharpe Ratio = {opt_sr_ret/opt_sr_vol:.2f} => Return: {(opt_sr_ret*100):.2f}%  Risk: {opt_sr_vol*100:.3f}%')

@@ -40,7 +40,7 @@ def rolling_window_expected_return(returns, start_year = 2003, end_year = 2023, 
 
     return expected_return
 
-def rolling_window_efficient_frontier(returns, bounds, wanted_return = None , maximum_risk = None, window_size = 10,variance_period=10):
+def rolling_window_efficient_frontier(returns, bounds, Sharpe_Type, wanted_return = None , maximum_risk = None, window_size = 10,variance_period=10):
 
     """
 
@@ -54,7 +54,7 @@ def rolling_window_efficient_frontier(returns, bounds, wanted_return = None , ma
         sample_rolling_window = returns[i*12:i*12+(12*variance_period)] #10 is ten years
         ret_port = mean_return_annual(sample_rolling_window)
         cov_port = covariance_matrix_annual(sample_rolling_window)
-        parameters.append(efficient_frontier.calculate_efficient_frontier(ret_port, cov_port,bounds,wanted_return))
+        parameters.append(efficient_frontier.calculate_efficient_frontier(ret_port, cov_port,bounds,Sharpe_Type,wanted_return, maximum_risk))
     return parameters
 
 def mean_return_annual(returns, frequency=12):
