@@ -20,7 +20,8 @@ def check_sum(weight):
     return np.sum(weight)-1
 
 def minimize_risk(port_covariance,
-                  x0):
+                  x0,
+                  bounds):
     """
     Function that will take different inputs including esg score data and compute the minimum risk of different portfolios 
     :param: A dataframe of the portfolio covariance matrix
@@ -33,7 +34,7 @@ def minimize_risk(port_covariance,
     :returns: A dataframe containing portfolio weight choice for minimizing portfolio risk using esg scores
     """
     function = lambda weight: portfolio_std(port_covariance, weights=weight)
-    bounds = Bounds(-2.0, 5.0)
+    
     constraint = LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int),1,1)
     options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
     result = minimize(function, 
@@ -47,37 +48,44 @@ def minimize_risk(port_covariance,
 
 def maximize_sharp_ratio(port_return, 
                          port_covariance,
-                         x0):
+                         x0,
+                         bounds,
+                         wanted_return: float):
     function = lambda weight: np.sqrt(np.dot(weight,np.dot(weight,port_covariance)))/port_return.dot(weight)
-    bounds = Bounds(-2.0, 5.0)
-    constraint = LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int),1,1)
+    bounds = bounds
+    constraints = (LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int),1,1),
+                   {'type': 'eq',
+                    'fun': lambda weight: wanted_return - weight@port_return})
+    
+                    #{'type': 'eq', 'fun': lambda weight: np.sqrt(np.dot(weight, np.dot(weight, port_covariance)))}) #Second restraint lets us define how high a return we want
+                                                                    
     options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
     result = minimize(function, 
                       x0,
                       method='SLSQP', 
                       bounds=bounds, 
-                      constraints=constraint, 
+                      constraints=constraints, 
                       options=options)
    
     return result.x
 
-def calculate_efficient_frontier(ret_port, cov_port):
+def calculate_efficient_frontier(ret_port, cov_port,bounds,wanted_return):
 
-    bounds = Bounds(-2.0, 5.0)
+    
     sr_opt_set = set()
 
     #Create x0, the first guess at the values of each asset's weight.
     w0 = np.linspace(start=1, stop=0, num=cov_port.shape[1])
     x0 = w0/np.sum(w0)
  
-    #These are the weights of the assets in the portfolio with the lowest level of risk possible.
-    w_minr = minimize_risk(cov_port, x0)
+    #These are the weights of the assets in the portfolio with the lowest level of risk possible. taken from https://towardsdatascience.com/portfolio-optimization-with-scipy-aa9c02e6b937
+    w_minr = minimize_risk(cov_port, x0, bounds)
     opt_risk_ret = portfolio.portfolio_return(ret_port, w_minr)
     opt_risk_vol = portfolio_std(cov_port, w_minr)
     print(f'Min. Risk = {opt_risk_vol*100:.3f}% => Return: {(opt_risk_ret*100):.3f}%  Sharpe Ratio = {opt_risk_ret/opt_risk_vol:.2f}')
 
     #These are the weights of the assets in the portfolio with the highest Sharpe ratio.
-    w_sr_top = maximize_sharp_ratio(ret_port,cov_port, x0)
+    w_sr_top = maximize_sharp_ratio(ret_port,cov_port, x0,bounds, wanted_return)
     opt_sr_ret = portfolio.portfolio_return(ret_port, w_sr_top)
     opt_sr_vol = portfolio_std(cov_port, w_sr_top)
     print(f'Max. Sharpe Ratio = {opt_sr_ret/opt_sr_vol:.2f} => Return: {(opt_sr_ret*100):.2f}%  Risk: {opt_sr_vol*100:.3f}%')

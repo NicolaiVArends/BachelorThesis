@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime as dt
 from src import efficient_frontier
+from scipy.optimize import Bounds, LinearConstraint, minimize
 
 
 
@@ -39,7 +40,8 @@ def rolling_window_expected_return(returns, start_year = 2003, end_year = 2023, 
 
     return expected_return
 
-def rolling_window_efficient_frontier(returns, window_size = 10):
+def rolling_window_efficient_frontier(returns, bounds, wanted_return = None , maximum_risk = None, window_size = 10,variance_period=10):
+
     """
 
     :param: 
@@ -49,10 +51,10 @@ def rolling_window_efficient_frontier(returns, window_size = 10):
     """
     parameters = []
     for i in range(0, window_size + 1):
-        sample_rolling_window = returns[i*12:i*12+(12*10)]
+        sample_rolling_window = returns[i*12:i*12+(12*variance_period)] #10 is ten years
         ret_port = mean_return_annual(sample_rolling_window)
         cov_port = covariance_matrix_annual(sample_rolling_window)
-        parameters.append(efficient_frontier.calculate_efficient_frontier(ret_port, cov_port))
+        parameters.append(efficient_frontier.calculate_efficient_frontier(ret_port, cov_port,bounds,wanted_return))
     return parameters
 
 def mean_return_annual(returns, frequency=12):
