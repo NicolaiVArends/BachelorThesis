@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from scipy.optimize import Bounds, LinearConstraint, minimize
-from src.portfolio import *
+from src import portfolio
 
 def sharp_ratio(portfolio_returns, weights, portfolio_covariance):
     """
@@ -12,7 +12,7 @@ def sharp_ratio(portfolio_returns, weights, portfolio_covariance):
     :returns: A float of the sharp ratio for the given portfolio return, weight and covariance matrix
     """
     
-    return portfolio_return(weights=weights, 
+    return portfolio.portfolio_return(weights=weights, 
                             returns=portfolio_returns) / portfolio_std(port_cov=portfolio_covariance,
                                                                        weights=weights)
 
@@ -72,13 +72,13 @@ def calculate_efficient_frontier(ret_port, cov_port):
  
     #These are the weights of the assets in the portfolio with the lowest level of risk possible.
     w_minr = minimize_risk(cov_port, x0)
-    opt_risk_ret = portfolio_return(ret_port, w_minr)
+    opt_risk_ret = portfolio.portfolio_return(ret_port, w_minr)
     opt_risk_vol = portfolio_std(cov_port, w_minr)
     print(f'Min. Risk = {opt_risk_vol*100:.3f}% => Return: {(opt_risk_ret*100):.3f}%  Sharpe Ratio = {opt_risk_ret/opt_risk_vol:.2f}')
 
     #These are the weights of the assets in the portfolio with the highest Sharpe ratio.
     w_sr_top = maximize_sharp_ratio(ret_port,cov_port, x0)
-    opt_sr_ret = portfolio_return(ret_port, w_sr_top)
+    opt_sr_ret = portfolio.portfolio_return(ret_port, w_sr_top)
     opt_sr_vol = portfolio_std(cov_port, w_sr_top)
     print(f'Max. Sharpe Ratio = {opt_sr_ret/opt_sr_vol:.2f} => Return: {(opt_sr_ret*100):.2f}%  Risk: {opt_sr_vol*100:.3f}%')
 
@@ -88,7 +88,7 @@ def calculate_efficient_frontier(ret_port, cov_port):
     x0 = w_sr_top
     for possible_return in frontier_y:
         cons = ({'type':'eq', 'fun': check_sum},
-                {'type':'eq', 'fun': lambda w: portfolio_return(ret_port, w) - possible_return})
+                {'type':'eq', 'fun': lambda w: portfolio.portfolio_return(ret_port, w) - possible_return})
 
         #Define a function to calculate volatility
         fun = lambda weights: portfolio_std(cov_port, weights)

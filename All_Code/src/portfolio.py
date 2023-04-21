@@ -1,8 +1,10 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime as dt
-from src.efficient_frontier import *
-from src.portfolio import *
+from src import efficient_frontier
+
+
+
 
 def rolling_window_expected_return(returns, start_year = 2003, end_year = 2023, window_size = 10):
     """
@@ -50,7 +52,7 @@ def rolling_window_efficient_frontier(returns, window_size = 10):
         sample_rolling_window = returns[i*12:i*12+(12*10)]
         ret_port = mean_return_annual(sample_rolling_window)
         cov_port = covariance_matrix_annual(sample_rolling_window)
-        parameters.append(calculate_efficient_frontier(ret_port, cov_port))
+        parameters.append(efficient_frontier.calculate_efficient_frontier(ret_port, cov_port))
     return parameters
 
 def mean_return_annual(returns, frequency=12):
