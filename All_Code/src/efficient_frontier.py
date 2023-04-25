@@ -194,7 +194,7 @@ def capital_market_line(max_sr_return, max_sr_risk):
 
     return slope, cml_x_axis, cml_y_axis
 
-def weights_of_portfolio(stocks: pd.DataFrame, parameters: np.array):
+def weights_of_portfolio(stocks: pd.DataFrame, parameters: np.array): #Function that gives us the weight of each stock in the portfolio in a dataframe
     weight_array = []
     column_names = stocks.columns.values
 
@@ -204,7 +204,9 @@ def weights_of_portfolio(stocks: pd.DataFrame, parameters: np.array):
     df = pd.DataFrame(data =  weight_array, columns = column_names)
     
     return(df)
-    
+
+
+
     
 
     

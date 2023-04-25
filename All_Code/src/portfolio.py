@@ -69,6 +69,9 @@ def mean_return_annual(returns, frequency=12):
     expected_annual_returns = returns.mean() * frequency
     return expected_annual_returns
 
+
+
+
 def covariance_matrix_annual(returns, frequency=12):
     """
    
@@ -117,3 +120,30 @@ def portfolio_std(port_cov, weights: pd.DataFrame):
     
     return np.sqrt(np.dot(weights, np.dot(weights, port_cov)))
 
+def esg_score_of_portfolio(weights_of_portfolio: pd.DataFrame, ESG_score: pd.DataFrame): #This calculates the esg_score of our portfolios
+    row_sums = (ESG_score.values * weights_of_portfolio).sum(axis = 1)
+    result = pd.DataFrame({'ESG_score_of_portfolio': row_sums}, index = weights_of_portfolio.index)
+    return(result)
+
+#This function calculates the capital market-line return based on an accepted risk for our portfolio and a risk free rate
+def capital_mark_line_returns(parameters: np.array,risk_free_rate: float, accepted_risk: float ): 
+    prt_exp_return_array = []
+    prt_risk_array =  []
+    rf_allocations = []
+    returns = []
+    risk = []
+    cmle = []
+
+    for i in range(len(parameters)):
+        prt_exp_return_array.append(parameters[i][1])
+        prt_risk_array.append(parameters[i][0])
+    
+    for i in range(len(parameters)):
+        cmle.append(risk_free_rate + accepted_risk*((prt_exp_return_array[i]-risk_free_rate)/prt_risk_array[i]))
+    return(cmle)
+
+
+
+
+    
+    
