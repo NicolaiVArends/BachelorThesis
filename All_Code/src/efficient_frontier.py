@@ -78,7 +78,9 @@ def maximize_sharp_ratio_wanted_risk(port_return,
     bounds = bounds
     constraints = (LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int),1,1),
                    {'type': 'eq',
-                     'fun': lambda weight: max_risk - np.sqrt(np.dot(weight, np.dot(weight, port_covariance)))})
+                     'fun': lambda weight:  max_risk - np.sqrt(np.dot(weight, np.dot(weight, port_covariance)))},
+                     {'type': 'ineq', 'fun': lambda weight: np.sqrt(np.dot(weight, np.dot(weight, port_covariance))) - max_risk})
+                     
     
                     #{'type': 'eq', 'fun': lambda weight: np.sqrt(np.dot(weight, np.dot(weight, port_covariance)))}) #Second restraint lets us define how high a return we want
                                                                     
@@ -92,6 +94,30 @@ def maximize_sharp_ratio_wanted_risk(port_return,
    
     return result.x
 
+
+
+
+def maximize_sharp_ratio_no_spec(port_return, 
+                         port_covariance,
+                         x0,
+                         bounds,
+                         max_risk: float):
+    function = lambda weight: np.sqrt(np.dot(weight,np.dot(weight,port_covariance)))/port_return.dot(weight)
+    bounds = bounds
+    constraints = (LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int),1,1))
+                     
+    
+                    #{'type': 'eq', 'fun': lambda weight: np.sqrt(np.dot(weight, np.dot(weight, port_covariance)))}) #Second restraint lets us define how high a return we want
+                                                                    
+    options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
+    result = minimize(function, 
+                      x0,
+                      method='SLSQP', 
+                      bounds=bounds, 
+                      constraints=constraints, 
+                      options=options)
+   
+    return result.x
 
 
 
@@ -119,8 +145,10 @@ def calculate_efficient_frontier(ret_port, cov_port,bounds,Sharpe_Type,wanted_re
         w_sr_top = maximize_sharp_ratio_wanted_risk(ret_port,cov_port, x0,bounds, max_risk)
     elif Sharpe_Type == "Wanted_return":
         w_sr_top = maximize_sharp_ratio_wanted_returns(ret_port,cov_port, x0,bounds, wanted_return)
-    elif Sharpe_Type == "Maximum_risk" or "Wanted_return ":
-        print("wrong constraint name")  
+    elif Sharpe_Type == "No_extra_constraint":
+        w_sr_top = maximize_sharp_ratio_no_spec(ret_port,cov_port, x0,bounds, wanted_return)
+    else:
+        print("wrong constraint type")
         return False
 
     opt_sr_ret = portfolio.portfolio_return(ret_port, w_sr_top)
@@ -165,6 +193,22 @@ def capital_market_line(max_sr_return, max_sr_risk):
     cml_y_axis = slope*cml_x_axis+0.01
 
     return slope, cml_x_axis, cml_y_axis
+
+def weights_of_portfolio(stocks: pd.DataFrame, parameters: np.array):
+    weight_array = []
+    column_names = stocks.columns.values
+
+
+    for i in range(len(parameters)):
+        weight_array.append(parameters[i][6])
+    df = pd.DataFrame(data =  weight_array, columns = column_names)
+    
+    return(df)
+    
+    
+
+    
+
 
 
 def portfolio_std(port_cov, weights: pd.DataFrame):
