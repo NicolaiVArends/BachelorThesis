@@ -129,7 +129,7 @@ def esg_score_of_portfolio(weights_of_portfolio: pd.DataFrame, ESG_score: pd.Dat
 def capital_mark_line_returns(parameters: np.array,risk_free_rate: float, accepted_risk: float ): 
     prt_exp_return_array = []
     prt_risk_array =  []
-    rf_allocations = []
+    portfolio_allocations = []
     returns = []
     risk = []
     cmle = []
@@ -140,7 +140,8 @@ def capital_mark_line_returns(parameters: np.array,risk_free_rate: float, accept
     
     for i in range(len(parameters)):
         cmle.append(risk_free_rate + accepted_risk*((prt_exp_return_array[i]-risk_free_rate)/prt_risk_array[i]))
-    return(cmle)
+        portfolio_allocations.append((cmle[i]-risk_free_rate)/(prt_exp_return_array[i]-risk_free_rate)) #Portfolio allocations
+    return(cmle,portfolio_allocations)
 
 
 
