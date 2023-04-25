@@ -40,7 +40,7 @@ def rolling_window_expected_return(returns, start_year = 2003, end_year = 2023, 
 
     return expected_return
 
-def rolling_window_efficient_frontier(returns, bounds, Sharpe_Type, wanted_return = None , maximum_risk = None, window_size = 10,variance_period=10):
+def rolling_window_efficient_frontier(returns, bounds, Sharpe_Type, wanted_return = None , maximum_risk = None, window_size = 10,start_year=2003):
 
     """
 
@@ -51,7 +51,7 @@ def rolling_window_efficient_frontier(returns, bounds, Sharpe_Type, wanted_retur
     """
     parameters = []
     for i in range(0, window_size + 1):
-        sample_rolling_window = returns[i*12:i*12+(12*variance_period)] #10 is ten years
+        sample_rolling_window = returns.loc['{}-02-01'.format(str(2003+i)):'{}-03-01'.format(str(2003+i+window_size))] #10 is ten years
         ret_port = mean_return_annual(sample_rolling_window)
         cov_port = covariance_matrix_annual(sample_rolling_window)
         parameters.append(efficient_frontier.calculate_efficient_frontier(ret_port, cov_port,bounds,Sharpe_Type,wanted_return, maximum_risk))
@@ -135,7 +135,7 @@ def capital_mark_line_returns(parameters: np.array,risk_free_rate: float, accept
     cmle = []
 
     for i in range(len(parameters)):
-        prt_exp_return_array.append(parameters[i][1])
+        prt_exp_return_array.append(parameters[i][1]) 
         prt_risk_array.append(parameters[i][0])
     
     for i in range(len(parameters)):
