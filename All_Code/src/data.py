@@ -5,7 +5,7 @@ import random
 import yfinance as yf
 from forex_python.converter import CurrencyRates
 
-def esg_score_weight(data: pd.DataFrame, weights: np.array, min_esg_score: float):
+def esg_score_weight(data: pd.DataFrame, weights: np.array, min_esg_score: float, max_esg_score = 2000):
     """
     
     :param: 
@@ -30,9 +30,9 @@ def esg_score_weight(data: pd.DataFrame, weights: np.array, min_esg_score: float
                 data.at[index, 'stock_symbol'] += '.CO'
             else:
                 pass
-        result = data[data["weighted_score"] >= min_esg_score]
+        result = data[(data["weighted_score"] >= min_esg_score) & (data["weighted_score"] <= max_esg_score)]
         
-        
+        #data["weighted_score"] <= max_esg_score
         return result
     
 def stock_monthly_close(esg_data: pd.DataFrame, dates: tuple):
