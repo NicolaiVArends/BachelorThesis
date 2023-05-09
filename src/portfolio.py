@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime as dt
-from src import efficient_frontier
+import efficient_frontier
 from scipy.optimize import Bounds, LinearConstraint, minimize
 
 
