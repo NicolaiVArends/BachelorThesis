@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from scipy.optimize import Bounds, LinearConstraint, minimize
-import portfolio
+from src import portfolio
 
 def sharp_ratio(portfolio_returns, weights, portfolio_covariance):
     """

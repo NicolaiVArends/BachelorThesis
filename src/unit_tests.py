@@ -27,41 +27,41 @@ class monthly_returns_test(unittest.TestCase):
         expected = np.array([0.026750,0.031154,0.009160])
         npt.assert_almost_equal(expected,data.pct_returns_from_prices(testcase).mean().to_numpy(),decimal = 5)
     def test_of_weights_no_short_selling(self):
-        testcase = pd.read_csv(r'C:\Users\toros\OneDrive\Dokumenter\GitHub\BachelorThesis\data\test\test_prices.csv',index_col=['Date'])
+        testcase = pd.read_csv(r'C:\Users\Tor Osted\OneDrive\Dokumenter\GitHub\BachelorThesis\data\test\test_prices.csv',index_col=['Date'])
         
         expected = np.array([[1., 0., 0.]])
         npt.assert_almost_equal(expected,efficient_frontier.weights_of_portfolio(testcase,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(0,1), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1)))
     def test_of_expected_returns_no_short_selling(self):
         expected = 0.0268
-        testcase = pd.read_csv(r'C:\Users\toros\OneDrive\Dokumenter\GitHub\BachelorThesis\data\test\test_prices.csv',index_col=['Date'])
+        testcase = pd.read_csv(r'C:\Users\Tor Osted\OneDrive\Dokumenter\GitHub\BachelorThesis\data\test\test_prices.csv',index_col=['Date'])
         self.assertAlmostEqual(expected,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(0,1), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1)[0][1], places=4, msg=None, delta=None)
 
     def test_of_expected_risk_no_short_selling(self):
         expected = 0.0517
-        testcase = pd.read_csv(r'C:\Users\toros\OneDrive\Dokumenter\GitHub\BachelorThesis\data\test\test_prices.csv',index_col=['Date'])
+        testcase = pd.read_csv(r'C:\Users\Tor Osted\OneDrive\Dokumenter\GitHub\BachelorThesis\data\test\test_prices.csv',index_col=['Date'])
         self.assertAlmostEqual(expected,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(0,1), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1)[0][0], places=4, msg=None, delta=None)
 
     def test_of_sharpe_ratio_no_short_selling(self):
         expected =  0.517347 
-        testcase = pd.read_csv(r'C:\Users\toros\OneDrive\Dokumenter\GitHub\BachelorThesis\data\test\test_prices.csv',index_col=['Date'])
+        testcase = pd.read_csv(r'C:\Users\Tor Osted\OneDrive\Dokumenter\GitHub\BachelorThesis\data\test\test_prices.csv',index_col=['Date'])
         self.assertAlmostEqual(expected,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(0,1), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1)[0][1]/portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(0,1), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1)[0][0], places=5, msg=None, delta=None)
     
     def test_of_expected_returns_with_short_selling(self):
         expected = 0.041845
 
-        testcase = pd.read_csv(r'C:\Users\toros\OneDrive\Dokumenter\GitHub\BachelorThesis\data\test\test_prices.csv',index_col=['Date'])
+        testcase = pd.read_csv(r'C:\Users\Tor Osted\OneDrive\Dokumenter\GitHub\BachelorThesis\data\test\test_prices.csv',index_col=['Date'])
         self.assertAlmostEqual(expected,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(-1,2), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1)[0][1], places=4, msg=None, delta=None)
 
     def test_of_expected_risk_with_short_selling(self):
         expected = 0.068691
 
-        testcase = pd.read_csv(r'C:\Users\toros\OneDrive\Dokumenter\GitHub\BachelorThesis\data\test\test_prices.csv',index_col=['Date'])
+        testcase = pd.read_csv(r'C:\Users\Tor Osted\OneDrive\Dokumenter\GitHub\BachelorThesis\data\test\test_prices.csv',index_col=['Date'])
         self.assertAlmostEqual(expected,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(-1,2), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1)[0][0], places=4, msg=None, delta=None)
 
     def test_of_sharpe_ratio_with_short_selling(self):
         expected =   0.6091821 
 
-        testcase = pd.read_csv(r'C:\Users\toros\OneDrive\Dokumenter\GitHub\BachelorThesis\data\test\test_prices.csv',index_col=['Date'])
+        testcase = pd.read_csv(r'C:\Users\Tor Osted\OneDrive\Dokumenter\GitHub\BachelorThesis\data\test\test_prices.csv',index_col=['Date'])
         self.assertAlmostEqual(expected,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(-1,2), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1)[0][1]/portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(-1,2), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1)[0][0], places=5, msg=None, delta=None)
 
 unittest.main()

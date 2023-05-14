@@ -3,6 +3,7 @@ import numpy as np
 import itertools as it
 import random
 import yfinance as yf
+import statsmodels.api as smf
 from forex_python.converter import CurrencyRates
 
 def esg_score_weight(data: pd.DataFrame, weights: np.array, min_esg_score: float, max_esg_score = 2000):
@@ -81,6 +82,26 @@ def seperate_full_data(full_data):
     prices = full_data.drop(weighted_cols, axis=1)
     prices.index = pd.to_datetime(prices.index)
     return prices, esg
+
+def data_for_beta(symbols,dates):
+    """
+    
+    :param: 
+    :param:
+    :param: 
+    :returns:
+    """
+
+    # create a new dataframe to store the monthly closing data
+    stock_data1 = pd.DataFrame()
+    for i in range(len(symbols)):
+        stock_data = yf.download(symbols[i], start=dates[0], end=dates[1], interval='1mo', progress=False)
+        #print(stock_data)
+        stock_data = stock_data[['Close']].rename(columns={'Close': symbols[i]})
+       # print(stock_data)
+    # retrieve data from yfinance
+        stock_data1 = pd.concat([stock_data1,stock_data], axis = 1)
+    return stock_data1
 
 def currency_rates(prices):
     """
