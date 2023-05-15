@@ -57,7 +57,7 @@ def rolling_window_efficient_frontier(returns, bounds, Sharpe_Type, wanted_retur
         parameters.append(efficient_frontier.calculate_efficient_frontier(ret_port, cov_port,bounds,Sharpe_Type,wanted_return, maximum_risk))
     return parameters
 
-def efficient_frontier_solo(returns, bounds, Sharpe_Type,start_date,end_date, wanted_return = None, maximum_risk = None,monthly_or_yearly_mean = "monthly"):
+def efficient_frontier_solo(returns, bounds, Sharpe_Type,start_date,end_date, wanted_return = None, maximum_risk = None,monthly_or_yearly_mean = "yearly"):
     parameters = []
     sample_rolling_window = returns.loc['{}'.format(str(start_date)):'{}'.format(str(end_date))]
     if monthly_or_yearly_mean == "monthly":

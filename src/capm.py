@@ -4,35 +4,23 @@ import matplotlib as mpl
 import statsmodels.api as stat
 from src.portfolio import *
 
-def calculate_capital_asset_price_model():
-    """
+def calculate_portfolio_beta(market,portfolio, portfolio_weights):
     
-    :param:
-    :param:
-    :returns: 
-    """
-    beta = []
-
-    for asset in data:
-        x = 
-        y = 
-        endog_var =
-        exog_var =
-
-        model = stat.OLS(endog= , exog= )
-        result = model.fit()
-
     
-    return result
+    betas = []
+    for i in range(len(portfolio.columns)):
 
-def significance_test():
-    """
+        betas.append(np.cov(market[portfolio.columns[i]],market['SPY'])[0][1]/np.var(market['SPY']))
+
+    beta_of_port = np.multiply(betas,portfolio_weights).values.sum()
+
+    return(beta_of_port)
+def capm_calc(market_expected_returns,risk_free_rate,beta):
+    print(f'Excpected return on investment is {100*(risk_free_rate+beta*(market_expected_returns-risk_free_rate))}%')
+
+    return(risk_free_rate+beta*(market_expected_returns-risk_free_rate))
     
-    :param:
-    :param:
-    :returns: 
-    """
 
-
-    return
-
+def alpha(expected_return,actual_return):
+    return(actual_return-expected_return)
+  
