@@ -24,3 +24,28 @@ def capm_calc(market_expected_returns,risk_free_rate,beta):
 def alpha(expected_return,actual_return):
     return(actual_return-expected_return)
   
+def calculate_portfolio_beta_ols(market, portfolio, portfolio_weights):
+
+    betas = []
+    for i in range(len(portfolio.columns)):
+
+        x = portfolio.columns[i]
+        print(x)
+        y = market['SPY']
+        print(y)
+
+        # adding the constant term
+        x = stat.add_constant(x)
+
+        # performing the regression
+        # and fitting the model
+        result = stat.OLS(y, x).fit()
+    
+        # printing the summary table
+        print(result.summary())
+
+        betas.append(result.params)
+
+    beta_of_port = np.multiply(betas,portfolio_weights).values.sum()
+
+    return(beta_of_port)
