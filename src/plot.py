@@ -60,8 +60,8 @@ def plot_efficient_frontier(parameters,start_year,end_year,risk_free_rate,plot_c
             plt.ylim([-0.2,0.7])
             if i % 3 != 0:
                 continue
-            plt.plot(opt_sr_vol,  opt_sr_ret, marker='o', color = f'{colors[i]}', markersize=8, label=f'{start_year:02d}-{end_year:02d} Max Sharp Ratio')
-            plt.plot(frontier_x, frontier_y, linestyle='--', color = f'{colors[i]}', linewidth=2, label=f'{start_year:02d}-{end_year:02d} Efficient Frontier')
+            plt.plot(opt_sr_vol,  opt_sr_ret, marker='o', color = f'{colors[i]}', markersize=8, label=f' {start_year} - {end_year} Max Sharp Ratio')
+            plt.plot(frontier_x, frontier_y, linestyle='--', color = f'{colors[i]}', linewidth=2, label=f'{start_year}-{end_year} Efficient Frontier')
         elif plot_cml == True:
             plt.title('Efficient Frontier with Max Sharp')
             plt.xlim([0.0,0.4])
@@ -73,8 +73,8 @@ def plot_efficient_frontier(parameters,start_year,end_year,risk_free_rate,plot_c
                 continue
 
             plt.plot(cm_x,cm_y, color='k', linewidth = 2, label = 'Capital Market Line')
-            plt.plot(opt_sr_vol,  opt_sr_ret, marker='o', color = f'{colors[i]}', markersize=8, label=f'{start_year:02d}-{end_year:02d} Max Sharp Ratio')
-            plt.plot(frontier_x, frontier_y, linestyle='--', color = f'{colors[i]}', linewidth=2, label=f'{start_year:02d}-{end_year:02d} Efficient Frontier')
+            plt.plot(opt_sr_vol,  opt_sr_ret, marker='o', color = f'{colors[i]}', markersize=8, label=f'{start_year}-{end_year} Max Sharp Ratio')
+            plt.plot(frontier_x, frontier_y, linestyle='--', color = f'{colors[i]}', linewidth=2, label=f'{start_year}-{end_year} Efficient Frontier')
 
             
             
