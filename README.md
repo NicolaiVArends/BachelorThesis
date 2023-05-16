@@ -43,6 +43,6 @@ After the project has been cloned to your local machine (using step 1 above). Al
 
 `python unit_test.py`
 
-4. Wait for the test results to be displayed in the console. The test results will indicate which tests passed, failed, or encountered errors.
+4. The test results will be displayed in the console. It will indicate which tests passed, failed, or encountered with errors.
 
 
