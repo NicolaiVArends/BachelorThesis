@@ -13,7 +13,7 @@ The project ...
 
 Before running this project, ensure that you have the following packages installed:
 
-* NumPy
+* [NumPy](https://numpy.org/)
 * Pandas
 *
 
