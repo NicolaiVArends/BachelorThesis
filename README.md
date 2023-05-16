@@ -12,14 +12,14 @@ This project repository in Optimising Sustainable Financial Portfolios provides 
 
 Before running this project, ensure that you have the following packages installed:
 
-* NumPy
-* Pandas
-* SciPy
-* yfinance
-* forex-python
-* Statsmodels
-* Matplotlib
-* ipywidgets
+* NumPy == 1.24.3
+* Pandas == 1.4.2
+* SciPy == 1.10.0
+* yfinance == 0.2.4
+* forex-python == 1.8
+* Statsmodels == 0.14.0 
+* Matplotlib == 3.5.2
+* ipywidgets == 8.0.6
 
 
 ### Jupyter Notebooks
