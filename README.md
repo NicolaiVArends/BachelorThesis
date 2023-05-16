@@ -9,10 +9,13 @@ The project ...
 
 ## Running this Project
 
-### Prerequirements
+### Requirements
 
+Before running this project, ensure that you have the following packages installed:
 
-
+* NumPy
+* Pandas
+*
 
 
 ### Jupyter Notebooks
