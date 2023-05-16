@@ -2,10 +2,9 @@
 
 This repository holds files for a bachelorthesis in Optimising Sustaniable Financial Portfolios.
 
-## Abount this Project
+## About this Project
 
-The project ...
-
+This project repository in Optimising Sustainable Financial Portfolios provides solutions for optimizing investment portfolios using modern portfolio theory incoporating ESG scores. The project leverages advanced data analysis techniques to help investors make portfolio decisions while considering environmental, social, and governance (ESG) factors.
 
 ## Running this Project
 
