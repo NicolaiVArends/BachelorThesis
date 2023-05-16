@@ -11,14 +11,14 @@ The project contains multiple files of Jupyter Notebook that by running all cell
 
 1. Open the folder `notebooks`.
 
-2. Locate and open the files
+2. Locate and open the files that 
 
 3. Click run all
 
 
-### Unittesting in Jupyter Notebook
+### Unittesting
 
-For 
+For testing the functio unittesting, tin jupyter 
 
 
 
