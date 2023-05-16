@@ -7,8 +7,13 @@ This repository holds files for the bachelor thesis in Optimising Sustaniable Fi
 The project ...
 
 
-
 ## Running this Project
+
+### Prerequirements
+
+
+
+
 
 ### Jupyter Notebooks
 
