@@ -51,7 +51,9 @@ def alpha(expected_return, actual_return):
     """
     return (actual_return-expected_return)
   
-def calculate_portfolio_beta_ols(market, portfolio, portfolio_weights):
+def calculate_portfolio_beta_ols(market: pd.DataFrame, 
+                                 portfolio: pd.DataFrame, 
+                                 portfolio_weights: pd.DataFrame):
     """ This function uses ordinary least squares (OLS) to calculate and return the portfolio betas.
 
     In this function we takes the price data for a benchmark market, the portfolio returns and the optimal weight allocation for each rolling window of the portfolio.
