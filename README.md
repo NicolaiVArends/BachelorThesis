@@ -1,6 +1,6 @@
 # Bachelor Thesis
 
-This repository holds files for the bachelor thesis in Optimising Sustaniable Financial Portfolios.
+This repository holds files for a bachelorthesis in Optimising Sustaniable Financial Portfolios.
 
 ## Abount this Project
 
@@ -58,4 +58,10 @@ After the project has been cloned to your local machine (using step 1 above). Al
 
 4. The test results will be displayed in the console. It will indicate which tests passed, failed, or encountered with errors.
 
+
+## Contributors
+
+* Tor Rosenberg Osted
+* Olivia Sommer Nørgaard
+* Nicolai Veiglin Arends
 
