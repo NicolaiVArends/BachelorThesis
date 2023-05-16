@@ -6,19 +6,21 @@ import yfinance as yf
 import statsmodels.api as smf
 from forex_python.converter import CurrencyRates
 
-def esg_score_weight(data: pd.DataFrame, weights: np.array, min_esg_score: float, max_esg_score = 2000):
-    """
-    
-    :param: 
-    :param:
-    :param: 
+def esg_score_weight(data: pd.DataFrame, 
+                     weights: np.array,
+                     min_esg_score: float, 
+                     max_esg_score = 2000):
+    """ This function makes 
+
+    :param data:
+    :param weights: 
+    :param min_esg_score: 
+    :param max_esg_score: 
     :returns:
     """
     if np.sum(weights) != 1:
         return("Weights must sum to 1")
     else:
-
-
         data["weighted_score"] = (((data["environment_score"] * (weights[0])) + \
                            (data["governance_score"] * (weights[1])) + \
                            (data["social_score"] * (weights[2])))*3)
@@ -36,13 +38,16 @@ def esg_score_weight(data: pd.DataFrame, weights: np.array, min_esg_score: float
         #data["weighted_score"] <= max_esg_score
         return result
     
-def stock_monthly_close(esg_data: pd.DataFrame, dates: tuple):
-    """
-    
-    :param: 
-    :param:
-    :param: 
-    :returns:
+def stock_monthly_close(esg_data: pd.DataFrame, 
+                        dates: tuple):
+    """ This function uses esg data in the portfolio and the period, downloads monthly close price data and returns a full dataframe with esg scores and price data.
+
+    In this function, we take the esg score and period of the wanted historical price period. With yahoo finance api, we download the monthly close data of each stock from yahoo finance.
+    The function then concatenate the dataframes of the esg score and historical monthly close prices of stocks to one dataframe that is returned.
+
+    :param esg_data: Esg score in portfolio
+    :param dates: Period for the historical monthly close price data
+    :returns: Dataframe with both monthly close price data for the stocks and esg score
     """
     symbols = esg_data['stock_symbol'].unique()
 
@@ -64,12 +69,10 @@ def stock_monthly_close(esg_data: pd.DataFrame, dates: tuple):
         full_data = full_data.dropna(axis=1,how='any')
     return full_data
 
-def seperate_full_data(full_data):
-    """
+def seperate_full_data(full_data: pd.DataFrame):
+    """ This function takes and seperates a dataframe with both esg weigthed score and 
     
-    :param: 
-    :param:
-    :param: 
+    :param full_data: 
     :returns:
     """
     # select columns ending with '_weighted'
@@ -135,16 +138,6 @@ def currency_rates(prices):
         
     return prices
 
-def filter_prices(prices, from_asset, to_asset):
-    """
-    
-    :param:
-    :param:
-    :returns: 
-    """
-    prices_filtered = prices.iloc[:,from_asset:to_asset]
-    return prices_filtered
-
 def pct_returns_from_prices(prices):
     """
     
@@ -154,36 +147,3 @@ def pct_returns_from_prices(prices):
     """
     returns_pct_change = prices.pct_change().dropna()
     return returns_pct_change
-
-def financial_benchmark_data(start_date, end_date, stocks):
-    """
-    
-    :param:
-    :param:
-    :param: 
-    :returns:
-    """
-
-    return
-
-def filter_universe_esg(esg_score, esg_data: pd.DataFrame):
-    """
-    Takes financial asset data and filter it on ESG-score
-    :param esg_score: Given level of min ESG-score
-    :param esg_data: A Dataframe containing ESG-score for different assets
-    :returns: Asset data filtered on given ESG-score
-    """
-    filtered_df = esg_data[esg_data['esg'] >= esg_score] 
-
-    return filtered_df
-
-def simulate_random_data_esg(n_rows = 10000):
-    """
-
-    :param n: 
-    :returns: 
-    """
-    data = np.random.randint(0, 100, size=n_rows)
-    result = {'ESG' : data}
-    df = pd.DataFrame(result)
-    return df
