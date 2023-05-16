@@ -13,10 +13,14 @@ The project ...
 
 Before running this project, ensure that you have the following packages installed:
 
-* [NumPy](https://numpy.org/)
-* [Pandas](https://pandas.pydata.org/) 3.1
-* []
-* [Statsmodels](https://www.statsmodels.org/stable/index.html)
+* NumPy
+* Pandas
+* SciPy
+* yfinance
+* forex-python
+* Statsmodels
+* Matplotlib
+* ipywidgets
 
 
 ### Jupyter Notebooks
