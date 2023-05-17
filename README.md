@@ -15,6 +15,7 @@ Before running this project, ensure that you have the following packages install
 * NumPy >= 1.24.3
 * Pandas >= 1.4.2
 * SciPy >= 1.10.0
+* jupyter >= 1.0.0
 * yfinance >= 0.2.4
 * forex-python >= 1.8
 * Statsmodels >= 0.14.0 
