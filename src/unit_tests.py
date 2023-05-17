@@ -1,8 +1,11 @@
-import portfolio
-import data
-import efficient_frontier
-import unittest
+import sys
+sys.path.append("../")
 
+from src import portfolio
+from src import data
+from src import efficient_frontier
+
+import unittest
 import pandas as pd
 import numpy as np
 import numpy.testing as npt
