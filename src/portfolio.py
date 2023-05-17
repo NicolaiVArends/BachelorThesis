@@ -209,7 +209,6 @@ def esg_score_of_portfolio(weights_of_portfolio: pd.DataFrame,
     return (result)
 
 
-#This function calculates the capital market-line return based on an accepted risk for our portfolio and a risk free rate
 def capital_mark_line_returns(parameters: np.array,
                               risk_free_rate: float, 
                               accepted_risk: float): 
