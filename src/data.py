@@ -143,20 +143,20 @@ def currency_rates(prices: pd.DataFrame):
 
 
 def pct_returns_from_prices(prices: pd.DataFrame):
-    """
+    """ This function takes stock closing prices, calculates and returns the percent changes in the stock prices and removes the missing values.
     
-    :param:
-    :returns: 
+    :param: Stock prices closing price
+    :returns: Percent changes in stock prices 
     """
     returns_pct_change = prices.pct_change().dropna()
     return returns_pct_change
 
 
 def simulate_random_data_esg(n_rows: int = 10000):
-    """
+    """ This function simulates random total ESG score data with NumPy by taking a number of n wanted rows of ESG scores.
 
-    :param n_rows: 
-    :returns: 
+    :param n_rows: Number of rows ESG score wanted, default is 10000
+    :returns: Random simulated ESG scores
     """
     data = np.random.randint(0, 100, size=n_rows)
     result = {'ESG' : data}
