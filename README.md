@@ -4,7 +4,7 @@ This repository holds files for a bachelorthesis in Optimising Sustaniable Finan
 
 ## About this Project
 
-This project repository in Optimising Sustainable Financial Portfolios provides solutions for optimizing investment portfolios using modern portfolio theory incoporating ESG scores. The project leverages advanced data analysis techniques to help investors make portfolio decisions while considering environmental, social, and governance (ESG) factors.
+This project repository in Optimising Sustainable Financial Portfolios provides solutions for optimising investment portfolios using modern portfolio theory incoporating ESG scores. The project leverages advanced data analysis techniques to help investors make portfolio decisions while considering environmental, social, and governance (ESG) factors.
 
 ## Running this Project
 
@@ -25,7 +25,7 @@ Before running this project, ensure that you have the following packages install
 
 ### Jupyter Notebooks
 
-The project contains multiple files of Jupyter Notebook that by running all cells will run the project in optimising sustaniable financial portfolios.
+The project contains multiple files of Jupyter Notebook that by running the cells will run the project in optimising sustaniable financial portfolios.
 
 To run this project locally, it can be done by following the steps:
 
