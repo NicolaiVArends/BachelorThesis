@@ -1,6 +1,6 @@
 # Optimising Sustaniable Financial Portfolios
 
-This repository holds files for a bachelorthesis in Optimising Sustaniable Financial Portfolios.
+This repository holds files for a bachelorthesis in optimising sustaniable financial portfolios.
 
 ## About this Project
 
