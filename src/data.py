@@ -6,11 +6,11 @@ import yfinance as yf
 import statsmodels.api as smf
 from forex_python.converter import CurrencyRates
 
-def esg_score_weight(data: pd.DataFrame, 
+def esg_score_weight(data: pd.DataFrame,
                      weights: np.array,
-                     min_esg_score: float, 
-                     max_esg_score = 2000):
-    """ This function makes 
+                     min_esg_score: int = 500, 
+                     max_esg_score: int = 2000):
+    """ This function takes ESG score data as well as wanted weight allocation for environment, governance and sustaniability seperately
 
     :param data:
     :param weights: 
