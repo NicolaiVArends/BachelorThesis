@@ -72,6 +72,7 @@ def stock_monthly_close(esg_data: pd.DataFrame,
         full_data = full_data.dropna(axis=1,how='any')
     return full_data
 
+
 def seperate_full_data(full_data: pd.DataFrame):
     """ This function takes and seperates a full dataframe with both esg weigthed score and returns a tuple with dataframe for prices and ESG scores seperately.
     
@@ -90,6 +91,7 @@ def seperate_full_data(full_data: pd.DataFrame):
     prices = full_data.drop(weighted_cols, axis=1)
     prices.index = pd.to_datetime(prices.index)
     return prices, esg
+
 
 def data_for_beta(symbols,
                   dates: tuple):
@@ -110,6 +112,7 @@ def data_for_beta(symbols,
     # retrieve data from yfinance
         stock_data1 = pd.concat([stock_data1,stock_data], axis = 1)
     return stock_data1
+
 
 def currency_rates(prices: pd.DataFrame):
     """
@@ -141,6 +144,7 @@ def currency_rates(prices: pd.DataFrame):
         
     return prices
 
+
 def pct_returns_from_prices(prices: pd.DataFrame):
     """
     
@@ -149,3 +153,15 @@ def pct_returns_from_prices(prices: pd.DataFrame):
     """
     returns_pct_change = prices.pct_change().dropna()
     return returns_pct_change
+
+
+def simulate_random_data_esg(n_rows = 10000):
+    """
+
+    :param n_rows: 
+    :returns: 
+    """
+    data = np.random.randint(0, 100, size=n_rows)
+    result = {'ESG' : data}
+    df = pd.DataFrame(result)
+    return df
