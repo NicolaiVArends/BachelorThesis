@@ -4,10 +4,10 @@ from datetime import datetime as dt
 import efficient_frontier
 from scipy.optimize import Bounds, LinearConstraint, minimize
 
-
-
-
-def rolling_window_expected_return(returns, start_year = 2003, end_year = 2023, window_size = 10):
+def rolling_window_expected_return(returns, 
+                                   start_year = 2003, 
+                                   end_year = 2023, 
+                                   window_size = 10):
     """
 
     :param: 
@@ -40,7 +40,14 @@ def rolling_window_expected_return(returns, start_year = 2003, end_year = 2023, 
 
     return expected_return
 
-def rolling_window_efficient_frontier(returns, bounds, Sharpe_Type, wanted_return = None , maximum_risk = None, window_size = 10,start_year=2003):
+
+def rolling_window_efficient_frontier(returns, 
+                                      bounds, 
+                                      Sharpe_Type, 
+                                      wanted_return = None , 
+                                      maximum_risk = None, 
+                                      window_size = 10,
+                                      start_year=2003):
 
     """
 
@@ -72,7 +79,9 @@ def efficient_frontier_solo(returns, bounds, Sharpe_Type,start_date,end_date, wa
 
     return parameters
 
-def mean_return_annual(returns, frequency=12):
+
+def mean_return_annual(returns, 
+                       frequency=12):
     """
 
     :param: 
@@ -90,8 +99,8 @@ def covariance_matric_monthly(returns):
     return(returns.cov())
 
 
-
-def covariance_matrix_annual(returns, frequency=12):
+def covariance_matrix_annual(returns, 
+                             frequency=12):
     """
    
     :param: 
@@ -101,7 +110,9 @@ def covariance_matrix_annual(returns, frequency=12):
     covmatrix_annual = returns.cov() * frequency
     return covmatrix_annual
 
-def portfolio_return(returns: pd.DataFrame, weights: pd.DataFrame):
+
+def portfolio_return(returns: pd.DataFrame, 
+                     weights: pd.DataFrame):
     """
     Function that uses portfolio returns and weights to compute the portfolio return by doing dot product between returns and weights
     :param: A dataframe of asset returns in portfolio
@@ -110,6 +121,7 @@ def portfolio_return(returns: pd.DataFrame, weights: pd.DataFrame):
     """
     
     return np.dot(returns, weights)
+
 
 def portfolio_mean(returns: pd.DataFrame):
     """
@@ -120,6 +132,7 @@ def portfolio_mean(returns: pd.DataFrame):
 
     return returns.mean()
 
+
 def portfolio_covariance(returns: pd.DataFrame):
     """
     Function that takes the returns of the different assets in a portfolio and computes the covariance matrix of it
@@ -129,7 +142,9 @@ def portfolio_covariance(returns: pd.DataFrame):
     
     return returns.cov()
 
-def portfolio_std(port_cov, weights: pd.DataFrame):
+
+def portfolio_std(port_cov, 
+                  weights: pd.DataFrame):
     """
     Function that takes portfolio weigths and covariance matrix and computes the portfolio standard deviation (risk)
     :param: A dataframe or numpy array with the portfolio weights
@@ -139,13 +154,18 @@ def portfolio_std(port_cov, weights: pd.DataFrame):
     
     return np.sqrt(np.dot(weights, np.dot(weights, port_cov)))
 
-def esg_score_of_portfolio(weights_of_portfolio: pd.DataFrame, ESG_score: pd.DataFrame): #This calculates the esg_score of our portfolios
+
+def esg_score_of_portfolio(weights_of_portfolio: pd.DataFrame, 
+                           ESG_score: pd.DataFrame): #This calculates the esg_score of our portfolios
     row_sums = (ESG_score.values * weights_of_portfolio).sum(axis = 1)
     result = pd.DataFrame({'ESG_score_of_portfolio': row_sums}, index = weights_of_portfolio.index)
     return(result)
 
+
 #This function calculates the capital market-line return based on an accepted risk for our portfolio and a risk free rate
-def capital_mark_line_returns(parameters: np.array,risk_free_rate: float, accepted_risk: float ): 
+def capital_mark_line_returns(parameters: np.array,
+                              risk_free_rate: float, 
+                              accepted_risk: float ): 
     prt_exp_return_array = []
     prt_risk_array =  []
     portfolio_allocations = []
