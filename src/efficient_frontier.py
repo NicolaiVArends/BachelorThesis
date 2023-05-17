@@ -145,9 +145,9 @@ def maximize_sharp_ratio_no_spec(port_return: pd.DataFrame,
 def calculate_efficient_frontier(ret_port: pd.DataFrame, 
                                  cov_port: pd.DataFrame,
                                  bounds: Bounds,
-                                 Sharpe_Type,
-                                 wanted_return = None, 
-                                 max_risk = None):
+                                 Sharpe_Type: str,
+                                 wanted_return: float = None, 
+                                 max_risk: float = None):
     """ This function will take different inputs including portfolio return and covariance matrix, to maximize the sharp ratio of different portfolios with no extra constraints.
     
     :param ret_port: Portfolio return
