@@ -43,12 +43,12 @@ def esg_score_weight(data: pd.DataFrame,
     
 def stock_monthly_close(esg_data: pd.DataFrame, 
                         dates: tuple):
-    """ This function uses esg data in the portfolio and the period, downloads monthly close price data and returns a full dataframe with esg scores and price data.
+    """ This function uses ESG data in the portfolio and the period, downloads monthly close price data and returns a full dataframe with ESG scores and price data.
 
-    In this function, we take the esg score and period of the wanted historical price period. With yahoo finance api, we download the monthly close data of each stock from yahoo finance.
-    The function then concatenate the dataframes of the esg score and historical monthly close prices of stocks to one dataframe that is returned.
+    In this function, we take the ESG score and period of the wanted historical price period. With yahoo finance api, we download the monthly close data of each stock from yahoo finance.
+    The function then concatenate the dataframes of the ESG score and historical monthly close prices of stocks to one dataframe that is returned.
 
-    :param esg_data: Esg score in portfolio
+    :param esg_data: ESG score in portfolio
     :param dates: Period for the historical monthly close price data
     :returns: Dataframe with both monthly close price data for the stocks and esg score
     """
