@@ -37,7 +37,7 @@ def plot_efficient_frontier(parameters,
                             plot_cml: bool = True,
                             plot_max_sharp: bool = False,
                             mpl_style: str = 'default'):
-    """ This function will plot and show a 2D graph of the efficient frontier with options showing capital market line and/or point of max sharp ratio.
+    """ This function will plot and show a 2D graph of the efficient frontier with options showing capital market line and/or the max sharp ratio.
 
     Note: The function will not return anything but will show a plot of the efficient frontier when running.
 
@@ -94,19 +94,17 @@ def plot_efficient_frontier_cml(parameters,
                                 plot_cml: bool = True,
                                 risk: float = 0.1,
                                 mpl_style: str ='default'):
-    """
-    Function that plot and shows a 2D graph for
+    """ This function will plot and show a 2D graph of the efficient frontier with capital market line and the max sharp ratio.
 
     Note: The function will not return anything but will show a plot of the efficient frontier when running.
 
-    :param: 
-    :param:
-    :param:
-    :param: 
-    :param:
-    :param: 
-    :param:
-    :param: 
+    :param parameters: Calculated efficient frontier data
+    :param start_year: Start year of the data that is going to be plotted 
+    :param end_year: End year of the data that is going to be plotted 
+    :param risk_free_rate: Risk free rate of investment
+    :param plot_cml: Boolean to enable or disable plotting of capital market line, default is True
+    :param risk: Acceptable risk level, default is 0.1
+    :param mpl_style: Matplotlib style of the plot, default is 'default'
     """
     mpl.style.use(mpl_style)
     plt.xlabel('Risk/Volatility')
@@ -139,110 +137,3 @@ def plot_efficient_frontier_cml(parameters,
     plt.legend()
     plt.show()
     return None
-
-def plot_efficient_frontier_return_3D(max_sr_return, 
-                               max_sr_risk,
-                               frontier_x_axis, 
-                               frontier_y_axis,
-                               cml_x_axis,
-                               cml_y_axis, 
-                               mpl_style='default',
-                               title='Efficient Frontier 3D'):
-    """
-    
-    :param:
-    :param:
-    :param:
-    :param: 
-    :param:
-    :param: 
-    :param:
-    :param: 
-    :returns: 
-    """
-
-    mpl.style.use(mpl_style)
-    fig = plt.figure(figsize = (10,10))
-    ax = plt.axes(projection='3d')
-    ax.set_title(title)
-    #ax.set_xlabel('Portfolio risk')
-    #ax.set_ylabel('Portfolio returns')
-    #ax.set_zlabel('ESG')
-    ax.scatter(frontier_x_axis, frontier_y_axis, esg, cmap ='viridis')
-    ax.grid()
-    plt.legend()
-    plt.show()
-
-    return None
-
-
-def plot_efficient_frontier_esg_2D(max_sr_return, 
-                               max_sr_risk, 
-                               frontier_x_axis, 
-                               frontier_y_axis,
-                               cml_x_axis,
-                               cml_y_axis, 
-                               mpl_style='default',
-                               title='Efficient Frontier'):
-    """
-    Function that plot and shows a 2D graph for 
-    :param: 
-    :param:
-    :param:
-    :param: 
-    :param:
-    :param: 
-    :param:
-    :param: 
-    :returns: 
-    """
-    
-    mpl.style.use(mpl_style)
-    plt.title(title)
-    #plt.xlabel('Portfolio Risk')
-    #plt.ylabel('Portfolio Return')
-    plt.xlim([min(frontier_x_axis), max(frontier_x_axis)])
-    plt.ylim([min(frontier_y_axis), max(frontier_y_axis)])
-    plt.plot(frontier_x_axis, frontier_y_axis)
-    plt.plot(max_sr_risk, max_sr_return, marker='o')
-    plt.plot(cml_x_axis, cml_y_axis, label=f'CML')
-    plt.legend()
-    plt.show()
-
-    return None
-
-def plot_efficient_frontier_esg_3D(max_sr_return, 
-                               max_sr_risk,
-                               frontier_x_axis, 
-                               frontier_y_axis,
-                               cml_x_axis,
-                               cml_y_axis, 
-                               mpl_style='default',
-                               title='Efficient Frontier 3D'):
-    """
-    
-    :param:
-    :param:
-    :param:
-    :param: 
-    :param:
-    :param: 
-    :param:
-    :param: 
-    :returns: 
-    """
-
-    mpl.style.use(mpl_style)
-    fig = plt.figure(figsize = (10,10))
-    ax = plt.axes(projection='3d')
-    ax.set_title(title)
-    #ax.set_xlabel('Portfolio risk')
-    #ax.set_ylabel('Portfolio returns')
-    #ax.set_zlabel('ESG')
-    ax.scatter(frontier_x_axis, frontier_y_axis, esg, cmap ='viridis')
-    ax.grid()
-    plt.legend()
-    plt.show()
-
-    return None
-
