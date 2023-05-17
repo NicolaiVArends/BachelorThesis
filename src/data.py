@@ -42,14 +42,14 @@ def esg_score_weight(data: pd.DataFrame,
     
 
 def stock_monthly_close(esg_data: pd.DataFrame, 
-                        dates: tuple):
+                        dates: list = ['2003-01-01','2023-01-01']):
     """ This function uses ESG data for the assets and the period, downloads monthly close price data and returns a full dataframe with ESG scores and price data.
 
-    In this function, we take the ESG score and period of the wanted historical price period. With yahoo finance api, we download the monthly close data of each stock from yahoo finance.
+    In this function, we take the ESG score and period of the wanted historical price period. With yahoo finance api, we download the monthly close data of each stock from yahoo finance using the stock/ticker symbol.
     The function then concatenate the dataframes of the ESG score and historical monthly close prices of stocks to one dataframe that is returned.
 
-    :param esg_data: ESG score for the assets
-    :param dates: Period for the historical monthly close price data
+    :param esg_data: ESG score for the assets including the stock/ticker symbol
+    :param dates: Period for the historical monthly close price data, default is ['2003-01-01','2023-01-01']
     :returns: Dataframe with both monthly close price data for the stocks and esg score
     """
     symbols = esg_data['stock_symbol'].unique()
@@ -93,39 +93,39 @@ def seperate_full_data(full_data: pd.DataFrame):
     return prices, esg
 
 
-def data_for_beta(symbols,
-                  dates: tuple):
-    """
+def data_for_beta(symbols: list = ['SPY'],
+                  dates: tuple = ['2003-01-01','2023-01-01']):
+    """ This function takes all stock/ticker symbols for both benchmark market and stock prices, download and returns a dataframe with the stock monthly close prices on given period.
     
-    :param symbols: 
-    :param dates: Period for the historical data
-    :returns:
+    :param symbols: Stock/Ticker symbol for benchmark market and portfolio in in list, default is ['SPY']
+    :param dates: Period for the historical data which is the same as the portfolio data, default is ['2003-01-01','2023-01-01']
+    :returns: Historical stock prices for benchmark market and portfolio
     """
-
     # create a new dataframe to store the monthly closing data
     stock_data = pd.DataFrame()
     for i in range(len(symbols)):
         stock_data_download = yf.download(symbols[i], start=dates[0], end=dates[1], interval='1mo', progress=False)
         stock_data_download = stock_data_download[['Close']].rename(columns={'Close': symbols[i]})
+
         # retrieve data from yfinance
         stock_data = pd.concat([stock_data,stock_data_download], axis = 1)
     return stock_data
 
 
 def currency_rates(prices: pd.DataFrame):
-    """ This function takes the exchange rates from forex-python api for foreign 
-    
-    :param prices: 
-    :returns:
-    """
+    """ This function takes the stock prices, gets the exchange rates from forex-python api for any foreign currencies to, converts all foreign stock prices to USD and returns the stock prices in USD.
 
+    In this function, we fetch the currency rates that exchanges from any stock prices in foreign currencies (not USD) to USD. The exchange rates is downloaded historically for the foreign currencies using forex-python api.
+    The function looks what the stock symbol endswith when getting and exchanging the currency to USD.
+    
+    :param prices: Stock prices that is not in USD, only stock from the nordic stock exchange is supported
+    :returns: Stock prices in one currency rate (USD)
+    """
     # convert currency in dataframe to USD from forex currency converter
     cr = CurrencyRates()
     exchange_rate_dict = {}
-
     for date in range(0, len(prices.index)):
         exchange_rate_dict.update({prices.index[date] : cr.get_rates("USD", prices.index[date])})
-
     for asset in prices:
         if asset.endswith('.ST'):
             dates = list(prices.index)
