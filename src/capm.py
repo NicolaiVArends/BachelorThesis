@@ -40,7 +40,8 @@ def capm_calc(market_expected_returns: pd.DataFrame,
 
     return(risk_free_rate+beta*(market_expected_returns-risk_free_rate))
 
-def alpha(expected_return, actual_return):
+def jensens_alpha(expected_return: float, 
+                  actual_return: float):
     """ This function uses expected return calculated from the CAPM model and actual return from the portfolio, calculates and returns jensens alpha.
 
     In this function we uses Jensens alpha and the expected return calculated from the CAPM model to compute Jensens alpha.
