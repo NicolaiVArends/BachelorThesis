@@ -35,7 +35,7 @@ To run this project locally, it can be done by following the steps:
 
 2. Navigate to the cloned repository on your local machine
 
-3. Open the folder "notebooks" in the cloned repository and open a notebook with... of own choice in visual studio code or another IDE that supports Jupyter Notebook files (.ipynb)
+3. Open the folder "notebooks" in the cloned repository and open a notebook with (...) of own choice in visual studio code or another IDE that supports Jupyter Notebook files (.ipynb)
 
 4. Change or insert own user defined parameters in the cell inside the jupyter notebook
 
