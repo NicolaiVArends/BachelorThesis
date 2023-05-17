@@ -153,9 +153,9 @@ def calculate_efficient_frontier(ret_port: pd.DataFrame,
     :param ret_port: Portfolio return
     :param cov_port: Portfolio covariance matrix
     :param bounds: Bounds for the minimizer
-    :param Sharpe_Type:
-    :param wanted_return:
-    :param max_risk:
+    :param Sharpe_Type: Constraint that can be either "Wanted_return", "Maximum_risk", or "No_extra_constraint"
+    :param wanted_return: Sets minimum limit for the wanted return as a constraint
+    :param max_risk: Sets maximum limit of taken risk as a constraint
     :returns: Calculated efficient frontier including optimal return and risk for sharp ratio and points for plotting the efficient frontier
     """
     sr_opt_set = set()
