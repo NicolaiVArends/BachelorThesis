@@ -35,7 +35,7 @@ To run this project locally, it can be done by following the steps:
 
 3. Open the folder `/notebooks` in the cloned repository
 
-4. Open a notebook with a premade investment strategi of own choice or open and customise the file `portfolio_for_you.ipynb` in visual studio code or another IDE that supports Jupyter Notebook files (.ipynb)
+4. Open a notebook with a premade investment strategi of own choice or open and customise the file `portfolio_for_you.ipynb` in visual studio code or another IDE that supports Jupyter Notebook files (`.ipynb`)
 
 5. Change or insert own user defined parameters in the cell inside the jupyter notebook
 
