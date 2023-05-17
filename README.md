@@ -29,9 +29,7 @@ The project contains multiple files of Jupyter Notebook that by running the cell
 
 To run this project locally, it can be done by following the steps:
 
-1. Clone the repository to your local machine e.g. by using the command in terminal
-
-`git clone https://github.com//NicolaiVArends/BachelorThesis`
+1. Clone the repository to your local machine e.g. by using the command in terminal: `git clone https://github.com//NicolaiVArends/BachelorThesis`
 
 2. Navigate to the cloned repository on your local machine
 
@@ -52,9 +50,7 @@ After the project has been cloned to your local machine (using step 1 above). Al
 
 2. Open the folder "src" in the cloned repository
 
-3. In the directory, execute the following command to run all the unit tests using the testing framework configured for the project:
-
-`python unit_test.py`
+3. In the directory, execute the following command to run all the unit tests using the testing framework configured for the project: `python unit_test.py`
 
 4. The test results will be displayed in the console. It will indicate which tests passed, failed, or encountered with errors.
 
