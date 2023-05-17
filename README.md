@@ -37,7 +37,7 @@ To run this project locally, it can be done by following the steps:
 
 4. Open a notebook with a premade investment strategi of own choice or open and customise the file `portfolio_for_you.ipynb` in visual studio code or another IDE that supports Jupyter Notebook files (`.ipynb`)
 
-5. Change or insert own user defined parameters in the cell inside the jupyter notebook
+5. If it is prefered you can change or insert own user defined parameters in the cell inside the jupyter notebook
 
 6. Save the file locally and click on "Run All" to run all calculation in the notebook
 
