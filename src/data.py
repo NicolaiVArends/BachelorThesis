@@ -73,10 +73,12 @@ def stock_monthly_close(esg_data: pd.DataFrame,
     return full_data
 
 def seperate_full_data(full_data: pd.DataFrame):
-    """ This function takes and seperates a dataframe with both esg weigthed score and 
+    """ This function takes and seperates a full dataframe with both esg weigthed score and returns a tuple with dataframe for prices and ESG scores seperately.
     
-    :param full_data: 
-    :returns:
+
+
+    :param full_data: Both prices and ESG weigthed scores in one dataframe
+    :returns: Prices and ESG scores as seperated dataframes
     """
     # select columns ending with '_weighted'
     weighted_cols = full_data.columns[full_data.columns.str.endswith('_weighted')]
@@ -89,12 +91,12 @@ def seperate_full_data(full_data: pd.DataFrame):
     prices.index = pd.to_datetime(prices.index)
     return prices, esg
 
-def data_for_beta(symbols,dates):
+def data_for_beta(symbols,
+                  dates: tuple):
     """
     
-    :param: 
-    :param:
-    :param: 
+    :param symbols: 
+    :param dates:
     :returns:
     """
 
@@ -109,12 +111,10 @@ def data_for_beta(symbols,dates):
         stock_data1 = pd.concat([stock_data1,stock_data], axis = 1)
     return stock_data1
 
-def currency_rates(prices):
+def currency_rates(prices: pd.DataFrame):
     """
     
-    :param: 
-    :param:
-    :param: 
+    :param prices: 
     :returns:
     """
 
@@ -141,10 +141,9 @@ def currency_rates(prices):
         
     return prices
 
-def pct_returns_from_prices(prices):
+def pct_returns_from_prices(prices: pd.DataFrame):
     """
     
-    :param:
     :param:
     :returns: 
     """

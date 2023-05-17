@@ -3,8 +3,6 @@ import numpy as np
 
 
 
-
-
 def filter_asset(data):
     """
     Takes financial asset data and filter it on ESG-score

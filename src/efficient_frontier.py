@@ -3,7 +3,9 @@ import numpy as np
 from scipy.optimize import Bounds, LinearConstraint, minimize
 import portfolio
 
-def sharp_ratio(portfolio_returns, weights, portfolio_covariance):
+def sharp_ratio(portfolio_returns: pd.DataFrame, 
+                weights, 
+                portfolio_covariance):
     """
     Function that computes the sharp ratio by using the portfolio returns, weights and covariance from the functions portfolio_return() and portfolio_risk()
     :param: A dataframe containing the portfolio return
@@ -16,10 +18,12 @@ def sharp_ratio(portfolio_returns, weights, portfolio_covariance):
                             returns=portfolio_returns) / portfolio_std(port_cov=portfolio_covariance,
                                                                        weights=weights)
 
+
 def check_sum(weight):
     return np.sum(weight)-1
 
-def minimize_risk(port_covariance,
+
+def minimize_risk(port_covariance: pd.DataFrame,
                   x0,
                   bounds):
     """
@@ -46,8 +50,9 @@ def minimize_risk(port_covariance,
    
     return result.x
 
-def maximize_sharp_ratio_wanted_returns(port_return, 
-                         port_covariance,
+
+def maximize_sharp_ratio_wanted_returns(port_return: pd.DataFrame, 
+                         port_covariance: pd.DataFrame,
                          x0,
                          bounds,
                          wanted_return: float):
@@ -69,8 +74,9 @@ def maximize_sharp_ratio_wanted_returns(port_return,
    
     return result.x
 
-def maximize_sharp_ratio_wanted_risk(port_return, 
-                         port_covariance,
+
+def maximize_sharp_ratio_wanted_risk(port_return: pd.DataFrame, 
+                         port_covariance: pd.DataFrame,
                          x0,
                          bounds,
                          max_risk: float):
@@ -95,10 +101,8 @@ def maximize_sharp_ratio_wanted_risk(port_return,
     return result.x
 
 
-
-
-def maximize_sharp_ratio_no_spec(port_return, 
-                         port_covariance,
+def maximize_sharp_ratio_no_spec(port_return: pd.DataFrame, 
+                         port_covariance: pd.DataFrame,
                          x0,
                          bounds,
                          max_risk: float):
@@ -120,10 +124,12 @@ def maximize_sharp_ratio_no_spec(port_return,
     return result.x
 
 
-
-
-
-def calculate_efficient_frontier(ret_port, cov_port,bounds,Sharpe_Type,wanted_return = None, max_risk = None):
+def calculate_efficient_frontier(ret_port, 
+                                 cov_port,
+                                 bounds,
+                                 Sharpe_Type,
+                                 wanted_return = None, 
+                                 max_risk = None):
 
     
     sr_opt_set = set()
@@ -180,7 +186,9 @@ def calculate_efficient_frontier(ret_port, cov_port,bounds,Sharpe_Type,wanted_re
 
     return opt_sr_vol, opt_sr_ret, opt_risk_vol,  opt_risk_ret, frontier_x, frontier_y, w_sr_top
 
-def capital_market_line(max_sr_return, max_sr_risk):
+
+def capital_market_line(max_sr_return, 
+                        max_sr_risk):
     """
     
     :param:
@@ -194,6 +202,7 @@ def capital_market_line(max_sr_return, max_sr_risk):
 
     return slope, cml_x_axis, cml_y_axis
 
+
 def weights_of_portfolio(stocks: pd.DataFrame, parameters: np.array): #Function that gives us the weight of each stock in the portfolio in a dataframe
     weight_array = []
     column_names = stocks.columns.values
@@ -206,14 +215,8 @@ def weights_of_portfolio(stocks: pd.DataFrame, parameters: np.array): #Function 
     return(df)
 
 
-
-    
-
-    
-
-
-
-def portfolio_std(port_cov, weights: pd.DataFrame):
+def portfolio_std(port_cov: pd.DataFrame, 
+                  weights: pd.DataFrame):
     """
     Function that takes portfolio weigths and covariance matrix and computes the portfolio standard deviation (risk)
     :param: A dataframe or numpy array with the portfolio weights

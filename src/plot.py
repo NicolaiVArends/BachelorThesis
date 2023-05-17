@@ -31,7 +31,11 @@ def plot_cummulative_portfolio_returns(returns: pd.DataFrame,
 
     return None
 
-def plot_efficient_frontier(parameters,start_year,end_year,risk_free_rate,plot_cml = True,
+
+def plot_efficient_frontier(parameters,start_year,
+                            end_year,
+                            risk_free_rate,
+                            plot_cml = True,
                             plot_max_sharp = False,
                             mpl_style='default',
                             title='Efficient Frontier'):
@@ -94,10 +98,14 @@ def plot_efficient_frontier(parameters,start_year,end_year,risk_free_rate,plot_c
 
     return None
 
-def plot_efficient_frontier_cml(parameters,start_year,end_year,risk_free_rate,plot_cml = True,
-                            risk = 0.1,
-                            mpl_style='default',
-                            title='Efficient Frontier'):
+def plot_efficient_frontier_cml(parameters,
+                                start_year,
+                                end_year,
+                                risk_free_rate,
+                                plot_cml = True,
+                                risk = 0.1,
+                                mpl_style='default',
+                                title='Efficient Frontier'):
     """
     Function that plot and shows a 2D graph for 
     :param: 
