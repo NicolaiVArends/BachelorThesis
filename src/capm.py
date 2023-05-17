@@ -24,15 +24,15 @@ def calculate_portfolio_beta(market: pd.DataFrame,
     return (beta_of_port)
 
 def capm_calc(market_expected_returns: pd.DataFrame,
-              beta,
+              beta: float,
               risk_free_rate: float = 0.05):
     """ This function uses the capital assets price model (CAPM), calculates and returns the calculated model.
 
     In this function we takes the expected return data for a benchmark market, the risk free rate of the investment and the calculated betas of each portfolio.
-    It uses and return the computed CAPM model.
+    It uses and return the computed CAPM.
 
     :param market_expected_returns: Expected returns data for the benchmark market
-    :param beta: Calculated betas of each portfolio
+    :param beta: Calculated betas of each portfolio from the CAPM
     :param risk_free_rate: Risk free rate allocation of the investment in procent, default is 0.05
     :returns: Computed CAPM model
     """
@@ -42,9 +42,9 @@ def capm_calc(market_expected_returns: pd.DataFrame,
 
 def jensens_alpha(expected_return: float, 
                   actual_return: float):
-    """ This function uses expected return calculated from the CAPM model and actual return from the portfolio, calculates and returns jensens alpha.
+    """ This function uses expected return calculated from the CAPM and actual return from the portfolio, calculates and returns jensens alpha.
 
-    In this function we uses Jensens alpha and the expected return calculated from the CAPM model to compute Jensens alpha.
+    In this function we uses Jensens alpha and the expected return calculated from the CAPM to compute jensens alpha.
 
     :param expected_return: Expected return from the portfolio given 
     :param actual_return: Actual return for portfolio
