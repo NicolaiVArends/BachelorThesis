@@ -10,13 +10,16 @@ def esg_score_weight(data: pd.DataFrame,
                      weights: np.array,
                      min_esg_score: int = 500, 
                      max_esg_score: int = 2000):
-    """ This function takes ESG score data as well as wanted weight allocation for environment, governance and sustaniability seperately
+    """ This function takes ESG score data and the wanted weight allocation for environment, sustaniability and governance seperately, calculates and returns ESG data with including the new weighted score.
 
-    :param data:
-    :param weights: 
-    :param min_esg_score: 
-    :param max_esg_score: 
-    :returns:
+    In this function, we takes raw ESG score data over the assets in the portfolio from a data provider, a wanted weight allocation for E, S and G seperately, a minimum and maximum acceptabel limit of total wanted weigthed ESG score.
+    The function takes the weigthed fractions of E, S and/or G scores from the raw data and make a new column with the total weigthed score wanted. The weight allocation must sum up to 100% = 1.00. Further, the function have a limit setting a minimum or/and maximum level of total ESG score.
+
+    :param data: Raw ESG score for the assets in a portfolio
+    :param weights: Weight allocation in percent for environment, sustaniability and governance seperately in an array formated np.array([E, S, G]), must sum to 1.00
+    :param min_esg_score: Limit for the minimum acceptable total esg score, default is 500
+    :param max_esg_score: Limit for the maximum acceptable total esg score, default is 2000
+    :returns: Raw ESG score including a weighted score according to the wanted levels of environment, sustaniability and governance seperately
     """
     if np.sum(weights) != 1:
         return("Weights must sum to 1")
