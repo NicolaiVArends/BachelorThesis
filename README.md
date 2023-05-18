@@ -54,7 +54,7 @@ After the project has been cloned to your local machine (using step 1 above). Al
 
 3. In the directory, execute the following command to run all the unit tests using the testing framework configured for the project: `python unit_test.py`
 
-4. The test results will be displayed in the console. It will indicate which tests passed, failed, or encountered with errors.
+4. Wait a little and the test results will be displayed in the console. It will indicate which tests passed, failed, or encountered with errors.
 
 
 
