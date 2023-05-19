@@ -113,7 +113,7 @@ def data_for_beta(prices: pd.DataFrame,
         stock_data_download = stock_data_download[['Close']].rename(columns={'Close': Market[i]})
 
         # retrieve data from yfinance
-        stock_data = pd.concat([stock_data[dates[0]:dates[1]],stock_data_download], axis = 1)
+        stock_data = pd.concat([stock_data,stock_data_download], axis = 1)
     return stock_data
 
 
