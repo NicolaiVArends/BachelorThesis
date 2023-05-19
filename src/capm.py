@@ -16,12 +16,12 @@ def calculate_portfolio_beta(market: pd.DataFrame,
     :param market: Price data for benchmark market in the model
     :param portfolio: Returns data for the portfolio assets
     :param portfolio_weights: Optimal weight allocations as a dataframe for each calculated rolling window
-    :param market_name: Name of the market you want to calculate betas with
+    :param market_name: Name of the market you want to calculate betas
     :returns: Betas for each portfolio 
     """
     betas = []
     for i in range(len(portfolio.columns)):
-        betas.append(np.cov(market[portfolio.columns[i]],market[market_name])[0][1]/np.var(market['SPY']))
+        betas.append(np.cov(market[portfolio.columns[i]],market[market_name])[0][1]/np.var(market[market_name]))
     beta_of_port = np.multiply(betas,portfolio_weights).values.sum()
     return (beta_of_port)
 
