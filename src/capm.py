@@ -6,7 +6,8 @@ from src import portfolio
 
 def calculate_portfolio_beta(market: pd.DataFrame, 
                              portfolio: pd.DataFrame, 
-                             portfolio_weights: pd.DataFrame):
+                             portfolio_weights: pd.DataFrame,
+                             market_name: str):
     """ This function uses covariance and variance to calculate and return the portfolio betas.
 
     In this function we takes the price data for a benchmark market, the portfolio returns and the optimal weight allocation for each rolling window of the portfolio.
@@ -15,11 +16,12 @@ def calculate_portfolio_beta(market: pd.DataFrame,
     :param market: Price data for benchmark market in the model
     :param portfolio: Returns data for the portfolio assets
     :param portfolio_weights: Optimal weight allocations as a dataframe for each calculated rolling window
+    :param market_name: Name of the market you want to calculate betas with
     :returns: Betas for each portfolio 
     """
     betas = []
     for i in range(len(portfolio.columns)):
-        betas.append(np.cov(market[portfolio.columns[i]],market['SPY'])[0][1]/np.var(market['SPY']))
+        betas.append(np.cov(market[portfolio.columns[i]],market[market_name])[0][1]/np.var(market['SPY']))
     beta_of_port = np.multiply(betas,portfolio_weights).values.sum()
     return (beta_of_port)
 

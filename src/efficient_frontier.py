@@ -42,8 +42,7 @@ def minimize_risk(port_covariance: pd.DataFrame,
                       x0,
                       method='SLSQP', 
                       bounds=bounds, 
-                      constraints=constraint, 
-                      options=options)
+                      constraints=constraint)
     return result.x
 
 
@@ -67,16 +66,15 @@ def maximize_sharp_ratio_wanted_returns(port_return: pd.DataFrame,
                    {'type': 'eq',
                     'fun': lambda weight: wanted_return - weight@port_return})
                     #{'type': 'eq', 'fun': lambda weight: np.sqrt(np.dot(weight, np.dot(weight, port_covariance)))}) #Second restraint lets us define how high a return we want                                                          
-    options = {'xtol': 1e-07, 
-               'gtol': 1e-07, 
-               'barrier_tol': 1e-07, 
-               'maxiter': 1000}
+    #options = {'xtol': 1e-07, 
+               #'gtol': 1e-07, 
+            #   'barrier_tol': 1e-07, 
+              # 'maxiter': 1000}
     result = minimize(function, 
                       x0,
                       method='SLSQP', 
                       bounds=bounds, 
-                      constraints=constraints, 
-                      options=options)
+                      constraints=constraintss)
     return result.x
 
 
@@ -102,13 +100,12 @@ def maximize_sharp_ratio_wanted_risk(port_return: pd.DataFrame,
                      'fun': lambda weight:  max_risk - np.sqrt(np.dot(weight, np.dot(weight, port_covariance)))},
                      {'type': 'ineq', 'fun': lambda weight: np.sqrt(np.dot(weight, np.dot(weight, port_covariance))) - max_risk})
                     #{'type': 'eq', 'fun': lambda weight: np.sqrt(np.dot(weight, np.dot(weight, port_covariance)))}) #Second restraint lets us define how high a return we want                                    
-    options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
+    #options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
     result = minimize(function, 
                       x0,
                       method='SLSQP', 
                       bounds=bounds, 
-                      constraints=constraints, 
-                      options=options)
+                      constraints=constraints)
     return result.x
 
 
@@ -136,8 +133,7 @@ def maximize_sharp_ratio_no_spec(port_return: pd.DataFrame,
                       x0,
                       method='SLSQP', 
                       bounds=bounds, 
-                      constraints=constraints, 
-                      options=options)
+                      constraints=constraints)
    
     return result.x
 

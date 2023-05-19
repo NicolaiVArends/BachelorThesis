@@ -21,6 +21,7 @@ def esg_score_weight(data: pd.DataFrame,
     :param max_esg_score: Limit for the maximum acceptable total esg score, default is 2000
     :returns: Raw ESG score including a new weighted score column according to the wanted levels of environment, sustaniability and governance seperately
     """
+    
     if np.sum(weights) != 1:
         return("Weights must sum to 1")
     else:
@@ -93,22 +94,26 @@ def seperate_full_data(full_data: pd.DataFrame):
     return prices, esg
 
 
-def data_for_beta(symbols: list = ['SPY'],
-                  dates: tuple = ['2003-01-01','2023-01-01']):
+def data_for_beta(prices: pd.DataFrame,
+                  Market: list = ['SPY'],
+                  dates: tuple = ('2000-01-01','2023-01-01')):
+    
     """ This function takes all stock/ticker symbols for both benchmark market and stock prices, download and returns a dataframe with the stock monthly close prices on given period.
     
     :param symbols: Stock/Ticker symbol for benchmark market and portfolio in in list, default is ['SPY']
     :param dates: Period for the historical data which is the same as the portfolio data, default is ['2003-01-01','2023-01-01']
     :returns: Historical stock prices for benchmark market and portfolio
     """
+    stock_data = prices
+    #print(stock_data.index)
     # create a new dataframe to store the monthly closing data
-    stock_data = pd.DataFrame()
-    for i in range(len(symbols)):
-        stock_data_download = yf.download(symbols[i], start=dates[0], end=dates[1], interval='1mo', progress=False)
-        stock_data_download = stock_data_download[['Close']].rename(columns={'Close': symbols[i]})
+    
+    for i in range(len(Market)):
+        stock_data_download = yf.download(Market[i], start=dates[0], end=dates[1], interval='1mo', progress=False)
+        stock_data_download = stock_data_download[['Close']].rename(columns={'Close': Market[i]})
 
         # retrieve data from yfinance
-        stock_data = pd.concat([stock_data,stock_data_download], axis = 1)
+        stock_data = pd.concat([stock_data[dates[0]:dates[1]],stock_data_download], axis = 1)
     return stock_data
 
 
