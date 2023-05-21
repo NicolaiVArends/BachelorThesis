@@ -137,3 +137,76 @@ def plot_efficient_frontier_cml(parameters,
     plt.legend()
     plt.show()
     return None
+
+
+import matplotlib.pyplot as plt
+
+def compare_returns(dates, portfolio_returns, market_returns):
+    # Plotting the bar chart
+    plt.figure(figsize=(10, 6))
+    for i in range(len(dates)):
+        plt.bar(dates[i], portfolio_returns[i], width=0.4, label='Portfolio Returns')
+        plt.bar(dates[i], market_returns[i], width=0.4, label='Market Returns')
+    plt.xlabel('Date')
+    plt.ylabel('Returns')
+    plt.title('Portfolio Returns vs. Market Returns')
+    plt.legend()
+
+    # Rotating x-axis labels for better readability
+    plt.xticks(rotation=45)
+
+    # Displaying the chart
+    plt.tight_layout()
+    plt.show()
+    return(None)
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+def compare_returns1(dates, portfolio_returns, market_returns):
+    # Set the width of the bars
+    bar_width = 0.2
+
+    # Create an array of indices to use as x-axis positions
+    x = np.arange(len(dates))
+
+    # Plotting the bar chart
+    fig, ax = plt.subplots(figsize=(12, 6))
+    portfolio_bars = ax.bar(x - bar_width/2, portfolio_returns, width=bar_width, label='Portfolio Returns')
+    market_bars = ax.bar(x + bar_width/2, market_returns, width=bar_width, label='Market Returns')
+
+    # Add a line separating positive and negative values
+    ax.axhline(0, color='black', linewidth=1)
+
+    # Add mesh background
+    ax.set_axisbelow(True)
+    ax.yaxis.grid(color='gray', linestyle='dashed')
+
+    # Add labels, title, and legend
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Returns')
+    ax.set_title('Portfolio Returns vs. Market Returns')
+    ax.set_xticks(x)
+    ax.set_xticklabels(dates)
+    ax.legend()
+
+    # Add data labels above each bar
+    def autolabel(bars):
+        for bar in bars:
+            height = bar.get_height()
+            ax.annotate(f'{height:.2%}', xy=(bar.get_x() + bar.get_width() / 2, height),
+                        xytext=(0, 3), textcoords='offset points',
+                        ha='center', va='bottom', fontsize='small')
+
+    autolabel(portfolio_bars)
+    autolabel(market_bars)
+
+    # Adjust spacing and layout
+    fig.tight_layout()
+
+    # Show the plot
+    plt.show()
+
