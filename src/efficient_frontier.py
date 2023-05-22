@@ -74,7 +74,7 @@ def maximize_sharp_ratio_wanted_returns(port_return: pd.DataFrame,
                       x0,
                       method='SLSQP', 
                       bounds=bounds, 
-                      constraints=constraintss)
+                      constraints=constraints)
     return result.x
 
 

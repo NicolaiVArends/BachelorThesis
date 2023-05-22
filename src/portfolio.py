@@ -1,8 +1,11 @@
 import pandas as pd
 import numpy as np
+from sklearn.covariance import LedoitWolf
+
 from datetime import datetime as dt
 from src import efficient_frontier
 from scipy.optimize import Bounds, LinearConstraint, minimize
+
 
 def rolling_window_expected_return(returns: pd.DataFrame, 
                                    start_year: int = 2003, 
@@ -139,7 +142,7 @@ def covariance_matric_monthly(returns: pd.DataFrame):
     :param returns: Monthly stock price/returns data in the portfolio
     :returns: Monthly portfolio covariance matrix
     """
-    return(returns.cov())
+    return(LedoitWolf().fit(np.random.multivariate_normal(mean=np.zeros(len(returns.cov())),cov=returns.cov(),size=50)).covariance_) #https://scikit-learn.org/stable/modules/generated/sklearn.covariance.LedoitWolf.html
 
 
 def covariance_matrix_annual(returns: pd.DataFrame, 
@@ -150,8 +153,7 @@ def covariance_matrix_annual(returns: pd.DataFrame,
     :param frequency: Multiplier for making the return from monthly to annual data, default is 12
     :returns: Yearly portfolio covariance matrix 
     """
-    covmatrix_annual = returns.cov() * frequency
-    return covmatrix_annual
+    return(LedoitWolf().fit(np.random.multivariate_normal(mean=np.zeros(len(returns.cov())),cov=returns.cov(),size=50)).covariance_* frequency)
 
 
 def portfolio_return(returns: pd.DataFrame, 
