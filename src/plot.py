@@ -202,7 +202,6 @@ def compare_returns1(dates: pd.DataFrame,
     ax.set_xticks(x)
     ax.set_xticklabels(dates)
     ax.legend()
-
     # Add data labels above each bar
     def autolabel(bars):
         for bar in bars:
@@ -213,10 +212,8 @@ def compare_returns1(dates: pd.DataFrame,
 
     autolabel(portfolio_bars)
     autolabel(market_bars)
-
     # Adjust spacing and layout
     fig.tight_layout()
-
     # Show the plot
     plt.show()
 
