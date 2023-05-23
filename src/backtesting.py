@@ -1,8 +1,7 @@
-from src import filter_assets
 from src import efficient_frontier
 from src import capm
-import data
-import portfolio
+from src import data
+from src import portfolio
 import pandas as pd
 import numpy as np
 import yfinance as yf
@@ -55,7 +54,7 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
     """
     covariance_window_time_delta = relativedelta(years=covariance_window) #The time delta for the covariance window
     esg_data = data.esg_score_weight(strategy['df'],strategy['weights'],strategy['min_esg_score'],strategy['max_esg_score'])
-    full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(years=rebalancing_freq,months=1))])#Making sure we download enough data
+    full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(years=rebalancing_freq,months=1))]) #Making sure we download enough data
     prices,esgdata = data.seperate_full_data(full_data)
     pct_returns = data.pct_returns_from_prices(prices)
     stock_data_download = yf.download(market_name, start=strategy['start_year']-covariance_window_time_delta, end=end_date+relativedelta(years=rebalancing_freq+1), interval='1mo', progress=False)
@@ -81,7 +80,6 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
     if monthly_or_yearly_rebalancing == 'yearly':
         delta = relativedelta(years=rebalancing_freq)
         while (start_date <= end_date):
-
             listparameters.append(portfolio.efficient_frontier_solo(pct_returns,
                             strategy['Bounds1'],
                             strategy['sharpe_type'],
@@ -97,7 +95,6 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
             list_of_cml_allocations.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[1])
             betas_of_portfolios.append(capm.calculate_portfolio_beta(pct,prices[start_date-covariance_window_time_delta:start_date],list_of_port_weights[i],market_name))            
             capm_for_portfolio.append(capm.capm_calc(pct[market_name][start_date-covariance_window_time_delta:start_date].tz_localize(None).mean(),strategy['risk_free_rate'],betas_of_portfolios[i]))
-
             list_of_portfolio_actual_returns.append(((portfolio.portfolio_return(prices.loc[start_date+delta],list_of_port_weights[i].T)[0])
                                                      *(1-list_of_cml_allocations[i][0])-(portfolio.portfolio_return(prices.loc[start_date],list_of_port_weights[i].T)[0])
                                                      *(1-list_of_cml_allocations[i][0]))/(portfolio.portfolio_return(prices.loc[start_date],list_of_port_weights[i].T)[0])
@@ -110,7 +107,7 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
         return(list_of_port_weights,list_of_port_esg_scores,list_of_port_allocations,betas_of_portfolios,list_of_cmle_returns,list_of_portfolio_actual_returns,list_of_pct_returns_sp500,list_of_return_dates)
     
     elif monthly_or_yearly_rebalancing == 'monthly':
-        delta = delta = np.timedelta64(rebalancing_freq,'M')
+        delta = relativedelta(months=rebalancing_freq)
         while (start_date <= end_date):
             listparameters.append(portfolio.efficient_frontier_solo(pct_returns,
                             strategy['Bounds1'],
