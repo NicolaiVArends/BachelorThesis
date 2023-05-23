@@ -56,7 +56,8 @@ def jensens_alpha(expected_return: float,
   
 def calculate_portfolio_beta_ols(market: pd.DataFrame, 
                                  portfolio: pd.DataFrame, 
-                                 portfolio_weights: pd.DataFrame):
+                                 portfolio_weights: pd.DataFrame,
+                                 market_name):
     """ This function uses ordinary least squares (OLS) to calculate and return the portfolio betas.
 
     In this function we takes the price data for a benchmark market, the portfolio returns and the optimal weight allocation for each rolling window of the portfolio.
@@ -69,15 +70,13 @@ def calculate_portfolio_beta_ols(market: pd.DataFrame,
     """
     betas = []
     for i in range(len(portfolio.columns)):
-        x = portfolio.columns[i]
-        y = market['SPY']
-        # adding the constant term
-        x = stat.add_constant(x)
-        # performing the regression
-        # and fitting the model
-        result = stat.OLS(y, x).fit()
-        # printing the summary table
-        print(result.summary())
-        betas.append(result.params)
+        x = market[market_name]
+        x1 = stat.add_constant(x)
+        y = market[portfolio.columns[i]]
+        result = stat.OLS(y, x1).fit()
+        print(result.params)
+        betas.append(result.params[1])
+    print(betas)
     beta_of_port = np.multiply(betas,portfolio_weights).values.sum()
     return(beta_of_port)
+
