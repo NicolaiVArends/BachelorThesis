@@ -43,7 +43,7 @@ def rolling_window_backtesting(prices: pd.DataFrame,
 
 
 def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_date,end_date,covariance_window,market_name):
-    """ This function makes a backtest ...
+    """ This function makes a backtest given a strategy, rebalacing informations, information of data period, window size and benchmark market name.
       
     In this function
 
