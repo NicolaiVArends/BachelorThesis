@@ -139,8 +139,6 @@ def plot_efficient_frontier_cml(parameters,
     return None
 
 
-import matplotlib.pyplot as plt
-
 def compare_returns(dates, portfolio_returns, market_returns):
     # Plotting the bar chart
     plt.figure(figsize=(10, 6))
@@ -160,11 +158,6 @@ def compare_returns(dates, portfolio_returns, market_returns):
     plt.show()
     return(None)
 
-import matplotlib.pyplot as plt
-import numpy as np
-
-import matplotlib.pyplot as plt
-import numpy as np
 
 def compare_returns1(dates, portfolio_returns, market_returns):
     # Set the width of the bars
