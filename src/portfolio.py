@@ -50,7 +50,7 @@ def rolling_window_efficient_frontier(returns: pd.DataFrame,
                                       wanted_return: float = None, 
                                       maximum_risk: float = None, 
                                       window_size: int = 10):
-    """ This function 
+    """ This function calculates efficient frontier on a rolling window.
 
     :param returns: Stock price/returns data in the portfolio
     :param bounds: Bounds for the minimizer
@@ -83,7 +83,7 @@ def efficient_frontier_solo(returns: pd.DataFrame,
                             maximum_risk: float = None,
                             monthly_or_yearly_mean: str = "yearly",
                             ledoit_Wolf: bool = True):
-    """ This function 
+    """ This function calculates the efficient frontier on one window time period.
 
     :param returns: Stock price/returns data in the portfolio
     :param bounds: Bounds for the minimizer
@@ -93,7 +93,7 @@ def efficient_frontier_solo(returns: pd.DataFrame,
     :param wanted_return: Sets minimum limit for the wanted return as a constraint, default is None
     :param maximum_risk: Sets maximum limit of taken risk as a constraint, default is None
     :param monthly_or_yearly_mean: Define if the data is yearly or monthly mean, default is "yearly"
-    :returns: 
+    :returns: Parameters with the calculated efficient frontier data
     """    
     parameters = []
     sample_rolling_window = returns.loc['{}'.format(str(start_date)):'{}'.format(str(end_date))]
