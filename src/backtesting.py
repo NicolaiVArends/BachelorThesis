@@ -7,6 +7,7 @@ import numpy as np
 import yfinance as yf
 from datetime import date
 from dateutil.relativedelta import relativedelta
+from dateutil.parser import parse
 import warnings
 # Suppress the FutureWarning
 warnings.simplefilter(action='ignore', category=FutureWarning) #We get a weird warning, a bug with pandas according to their github
@@ -52,6 +53,31 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
     :param 
     :returns:
     """
+    
+    assert isinstance(strategy, dict), "strategy should be a dictionary"
+    
+    required_keys = ['df', 'weights', 'min_esg_score', 'max_esg_score', 'start_year', 'Bounds1', 'sharpe_type', 'Wanted_return', 'maximum_risk', 'rebalancing_freq', 'risk_free_rate']
+    
+    missing_keys = [k for k in required_keys if k not in strategy.keys()]
+    
+    
+    assert not missing_keys, "The strategy dictionary is missing the following keys: {}".format(', '.join(missing_keys))
+    assert monthly_or_yearly_rebalancing in ["monthly", "yearly"], "monthly_or_yearly_rebalancing should be 'monthly' or 'yearly'"
+    assert isinstance(rebalancing_freq, int), "rebalancing_freq should be an integer"
+    assert rebalancing_freq > 0, "rebalancing_freq should be greater than zero"
+    assert isinstance(start_date, (str, pd.Timestamp)), "start_date should be a string or a pandas Timestamp object"
+    assert isinstance(end_date, (str, pd.Timestamp)), "end_date should be a string or a pandas Timestamp object"
+    assert isinstance(covariance_window, int), "covariance_window should be an integer"
+    assert covariance_window > 0, "covariance_window should be greater than zero"
+    assert isinstance(market_name, str), "market_name should be a string"
+
+    if isinstance(start_date, str):
+        start_date = parse(start_date)
+
+    if isinstance(end_date, str):
+        end_date = parse(end_date)
+
+    assert start_date <= end_date, "start_date should be less than or equal to end_date"
     covariance_window_time_delta = relativedelta(years=covariance_window) #The time delta for the covariance window
     esg_data = data.esg_score_weight(strategy['df'],strategy['weights'],strategy['min_esg_score'],strategy['max_esg_score'])
     full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(years=rebalancing_freq,months=1))]) #Making sure we download data from the first covariance date, until the last date we sell our stocks
