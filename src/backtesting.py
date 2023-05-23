@@ -95,7 +95,7 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
     list_of_port_allocations = []
     list_of_cmle_returns = []
     list_of_portfolio_actual_returns = []
-    sp500_list = []
+    list_of_portfolio_actual_returns_cmle = []
     list_of_pct_returns_sp500 = []
     betas_of_portfolios = []
     capm_for_portfolio = []
@@ -121,16 +121,17 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
             list_of_cml_allocations.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[1])
             betas_of_portfolios.append(capm.calculate_portfolio_beta(pct,prices[start_date-covariance_window_time_delta:start_date],list_of_port_weights[i],market_name))            
             capm_for_portfolio.append(capm.capm_calc(pct[market_name][start_date-covariance_window_time_delta:start_date].tz_localize(None).mean(),strategy['risk_free_rate'],betas_of_portfolios[i]))
-            list_of_portfolio_actual_returns.append(((portfolio.portfolio_return(prices.loc[start_date+delta],list_of_port_weights[i].T)[0])
-                                                     *(1-list_of_cml_allocations[i][0])-(portfolio.portfolio_return(prices.loc[start_date],list_of_port_weights[i].T)[0])
-                                                     *(1-list_of_cml_allocations[i][0]))/(portfolio.portfolio_return(prices.loc[start_date],list_of_port_weights[i].T)[0])
-                                                     *(1-list_of_cml_allocations[i][0])+list_of_cml_allocations[i][0]*strategy['risk_free_rate'])#list of how large a percentage you would have made using your investment strategy
+            list_of_portfolio_actual_returns.append((portfolio.portfolio_return(prices.loc[start_date+delta],list_of_port_weights[i])
+                                                    -portfolio.portfolio_return(prices.loc[start_date],list_of_port_weights[i]))/portfolio.portfolio_return(prices.loc[start_date],list_of_port_weights[i]))
+            list_of_portfolio_actual_returns_cmle.append(list_of_cml_allocations[i][0]*list_of_portfolio_actual_returns[i]+((1-list_of_cml_allocations[i][0])*strategy['risk_free_rate']))
+                                                    
+                                                    # list_of_cml_allocations[i][0]*strategy['risk_free_rate'])#list of how large a percentage you would have made using your investment strategy
             #List of portfolios actual returns skal laves om så man tager højde cml allokeringen
             list_of_pct_returns_sp500.append((stock_data_download.loc[start_date+delta][0]-stock_data_download.loc[start_date][0])/stock_data_download.loc[start_date][0])#List of how large a percentage you would have made investing everything in the market
             list_of_return_dates.append((start_date+delta).strftime('%Y/%m/%d'))
             start_date += delta
             i += 1
-        return(list_of_port_weights,list_of_port_esg_scores,list_of_port_allocations,betas_of_portfolios,list_of_cmle_returns,list_of_portfolio_actual_returns,list_of_pct_returns_sp500,list_of_return_dates)
+        return(list_of_port_weights,list_of_port_esg_scores,list_of_port_allocations,betas_of_portfolios,list_of_cmle_returns,list_of_portfolio_actual_returns,list_of_pct_returns_sp500,list_of_portfolio_actual_returns_cmle,list_of_return_dates)
     
     elif monthly_or_yearly_rebalancing == 'monthly':
         delta = relativedelta(months=rebalancing_freq)
@@ -150,20 +151,17 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
             list_of_cml_allocations.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[1])
             betas_of_portfolios.append(capm.calculate_portfolio_beta(pct,prices[start_date-covariance_window_time_delta:start_date],list_of_port_weights[i],market_name))            
             capm_for_portfolio.append(capm.capm_calc(pct[market_name][start_date-covariance_window_time_delta:start_date].tz_localize(None).mean(),strategy['risk_free_rate'],betas_of_portfolios[i]))
-
-            list_of_portfolio_actual_returns.append(((portfolio.portfolio_return(prices.loc[start_date+delta],list_of_port_weights[i].T)[0])
-                                                     *(1-list_of_cml_allocations[i][0])-(portfolio.portfolio_return(prices.loc[start_date],list_of_port_weights[i].T)[0])
-                                                     *(1-list_of_cml_allocations[i][0]))/(portfolio.portfolio_return(prices.loc[start_date],list_of_port_weights[i].T)[0])
-                                                     *(1-list_of_cml_allocations[i][0])+list_of_cml_allocations[i][0]*strategy['risk_free_rate'])#list of how large a percentage you would have made using your investment strategy
+            list_of_portfolio_actual_returns.append((portfolio.portfolio_return(prices.loc[start_date+delta]*list_of_port_weights[i])
+                                                    -portfolio.portfolio_return(prices.loc[start_date]*list_of_port_weights[i]))/portfolio.portfolio_return(prices.loc[start_date]*list_of_port_weights[i]))
+            list_of_portfolio_actual_returns_cmle.append(list_of_cml_allocations[i][0]*list_of_portfolio_actual_returns[i]+((1-list_of_cml_allocations[i][0])*strategy['risk_free_rate']))
+                                                    
+                                                    # list_of_cml_allocations[i][0]*strategy['risk_free_rate'])#list of how large a percentage you would have made using your investment strategy
             #List of portfolios actual returns skal laves om så man tager højde cml allokeringen
             list_of_pct_returns_sp500.append((stock_data_download.loc[start_date+delta][0]-stock_data_download.loc[start_date][0])/stock_data_download.loc[start_date][0])#List of how large a percentage you would have made investing everything in the market
             list_of_return_dates.append((start_date+delta).strftime('%Y/%m/%d'))
-            print(list_of_portfolio_actual_returns)
-            print(list_of_pct_returns_sp500)
             start_date += delta
             i += 1
-
-        return(list_of_port_weights,list_of_port_esg_scores,list_of_port_allocations,betas_of_portfolios,list_of_return_dates,list_of_cmle_returns,list_of_pct_returns_sp500)      
+        return(list_of_port_weights,list_of_port_esg_scores,list_of_port_allocations,betas_of_portfolios,list_of_cmle_returns,list_of_portfolio_actual_returns,list_of_pct_returns_sp500,list_of_portfolio_actual_returns_cmle,list_of_return_dates)
     
     else:
         raise Exception('You can only call this function with monthly or yearly')

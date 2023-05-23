@@ -174,7 +174,7 @@ def portfolio_return(returns: pd.DataFrame,
     :param weights: Portfolio weight allocation
     :returns: Computed portfolio return with given weight allocation
     """
-    return np.dot(returns, weights)
+    return np.dot(returns, weights.T)
 
 
 def portfolio_mean(returns: pd.DataFrame):
