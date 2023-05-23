@@ -22,6 +22,10 @@ Before running this project, ensure that you have the following packages install
 * Matplotlib >= 3.5.2
 * ipywidgets >= 8.0.6
 
+This can be done using the following command:
+
+$ pip install -r requirements.txt
+
 
 ### Jupyter Notebooks
 
