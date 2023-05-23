@@ -136,14 +136,16 @@ def currency_rates(prices: pd.DataFrame):
             dates = list(prices.index)
             for month in range(len(prices[asset])):
                 prices[asset][month] = prices[asset][month]/(exchange_rate_dict[dates[month]]["SEK"])
-        if asset.endswith('.OL'):
+        elif asset.endswith('.OL'):
             dates = list(prices.index)
             for month in range(len(prices[asset])):
                 prices[asset][month] = prices[asset][month]/(exchange_rate_dict[dates[month]]["NOK"])
-        if asset.endswith('.CO'):
+        elif asset.endswith('.CO'):
             dates = list(prices.index)
             for month in range(len(prices[asset])):
                 prices[asset][month] = prices[asset][month]/(exchange_rate_dict[dates[month]]["DKK"])
+        else:
+            raise Exception('Can not recorgnize the stock symbol to exchange the currency rate')
     return prices
 
 
