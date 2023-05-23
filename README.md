@@ -22,9 +22,6 @@ Before running this project, ensure that you have the following packages install
 * Matplotlib >= 3.5.2
 * ipywidgets >= 8.0.6
 
-This can be done using the following command:
-`pip install -r requirements.txt`
-
 
 ### Jupyter Notebooks
 
@@ -38,11 +35,14 @@ To run this project locally, it can be done by following the steps:
 
 3. Open the folder `/notebooks` in the cloned repository
 
-4. Open a notebook with a premade investment strategi of own choice or open and customise the file `portfolio_for_you.ipynb` in visual studio code or another IDE that supports Jupyter Notebook files (`.ipynb`)
+4. Install all of requirements which can be done by using the following command:
+`pip install -r requirements.txt`
 
-5. If it is prefered you can change or insert own user defined parameters in the cell inside the jupyter notebook
+5. Open a notebook with a premade investment strategi of own choice or open and customise the file `portfolio_for_you.ipynb` in visual studio code or another IDE that supports Jupyter Notebook files (`.ipynb`)
 
-6. Save the file locally and click on "Run All" to run all calculation in the notebook
+6. If it is prefered you can change or insert own user defined parameters in the cell inside the jupyter notebook
+
+7. Save the file locally and click on "Run All" to run all calculation in the notebook
 
 
 ### Unit Tests
