@@ -166,6 +166,5 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
         return(list_of_port_weights,list_of_port_esg_scores,list_of_port_allocations,betas_of_portfolios,list_of_return_dates,list_of_cmle_returns,list_of_pct_returns_sp500)      
     
     else:
-        print('You can only call this function with monthly or yearly')
-        return(False)
+        raise Exception('You can only call this function with monthly or yearly')
     
