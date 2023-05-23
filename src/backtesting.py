@@ -54,10 +54,10 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
     """
     covariance_window_time_delta = relativedelta(years=covariance_window) #The time delta for the covariance window
     esg_data = data.esg_score_weight(strategy['df'],strategy['weights'],strategy['min_esg_score'],strategy['max_esg_score'])
-    full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(years=rebalancing_freq,months=1))]) #Making sure we download enough data
+    full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(years=rebalancing_freq,months=1))]) #Making sure we download data from the first covariance date, until the last date we sell our stocks
     prices,esgdata = data.seperate_full_data(full_data)
     pct_returns = data.pct_returns_from_prices(prices)
-    stock_data_download = yf.download(market_name, start=strategy['start_year']-covariance_window_time_delta, end=end_date+relativedelta(years=rebalancing_freq+1), interval='1mo', progress=False)
+    stock_data_download = yf.download(market_name, start=strategy['start_year']-covariance_window_time_delta, end=end_date+relativedelta(years=rebalancing_freq+1), interval='1mo', progress=False) #Downloads the market stock close for same window.
     stock_data_download = stock_data_download[['Close']].rename(columns={'Close': market_name})
     stock_data = pd.concat([prices,stock_data_download], axis = 1)
     pct = data.pct_returns_from_prices(stock_data)[start_date-covariance_window_time_delta:end_date+relativedelta(years=rebalancing_freq+1)]

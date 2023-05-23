@@ -81,7 +81,8 @@ def efficient_frontier_solo(returns: pd.DataFrame,
                             end_date: int, 
                             wanted_return: float = None, 
                             maximum_risk: float = None,
-                            monthly_or_yearly_mean: str = "yearly"):
+                            monthly_or_yearly_mean: str = "yearly",
+                            ledoit_Wolf: bool = True):
     """ This function 
 
     :param returns: Stock price/returns data in the portfolio
@@ -98,14 +99,14 @@ def efficient_frontier_solo(returns: pd.DataFrame,
     sample_rolling_window = returns.loc['{}'.format(str(start_date)):'{}'.format(str(end_date))]
     if monthly_or_yearly_mean == "monthly":
         parameters.append(efficient_frontier.calculate_efficient_frontier(mean_return_monthly(sample_rolling_window),
-                                                                          covariance_matric_monthly(sample_rolling_window),
+                                                                          covariance_matric_monthly(sample_rolling_window,ledoit_Wolf),
                                                                           bounds,
                                                                           Sharpe_Type,
                                                                           wanted_return,
                                                                           maximum_risk))
     elif monthly_or_yearly_mean == "yearly":
         parameters.append(efficient_frontier.calculate_efficient_frontier(mean_return_annual(sample_rolling_window),
-                                                                          covariance_matrix_annual(sample_rolling_window),
+                                                                          covariance_matrix_annual(sample_rolling_window,ledoit_Wolf),
                                                                           bounds,
                                                                           Sharpe_Type,
                                                                           wanted_return,
@@ -136,16 +137,20 @@ def mean_return_monthly(returns: pd.DataFrame):
     return(returns.mean())
 
 
-def covariance_matric_monthly(returns: pd.DataFrame):
+def covariance_matric_monthly(returns: pd.DataFrame, ledoit_wolfe = True):
     """ This function makes monhtly portfolio covariance matrix on monthly prices/return for the portfolio.
 
     :param returns: Monthly stock price/returns data in the portfolio
     :returns: Monthly portfolio covariance matrix
     """
-    return(LedoitWolf().fit(np.random.multivariate_normal(mean=np.zeros(len(returns.cov())),cov=returns.cov(),size=50)).covariance_) #https://scikit-learn.org/stable/modules/generated/sklearn.covariance.LedoitWolf.html
+    if ledoit_wolfe == True:
+        return(LedoitWolf().fit(np.random.multivariate_normal(mean=np.zeros(len(returns.cov())),cov=returns.cov(),size=50)).covariance_) #https://scikit-learn.org/stable/modules/generated/sklearn.covariance.LedoitWolf.html
+    else:
+        return(returns.cov())
 
 
-def covariance_matrix_annual(returns: pd.DataFrame, 
+def covariance_matrix_annual(returns: pd.DataFrame,
+                             ledoit_Wolf: bool == True, 
                              frequency: int = 12):
     """ This function makes yearly portfolio covariance matrix by taking in monthly prices/return for the portfolio.
    
@@ -153,7 +158,10 @@ def covariance_matrix_annual(returns: pd.DataFrame,
     :param frequency: Multiplier for making the return from monthly to annual data, default is 12
     :returns: Yearly portfolio covariance matrix 
     """
-    return(LedoitWolf().fit(np.random.multivariate_normal(mean=np.zeros(len(returns.cov())),cov=returns.cov(),size=50)).covariance_* frequency)
+    if ledoit_Wolf == True:
+        return(LedoitWolf().fit(np.random.multivariate_normal(mean=np.zeros(len(returns.cov())),cov=returns.cov(),size=50)).covariance_* frequency)
+    else:
+        return(returns.cov()*frequency)
 
 
 def portfolio_return(returns: pd.DataFrame, 
