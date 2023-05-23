@@ -168,7 +168,6 @@ def calculate_efficient_frontier(ret_port: pd.DataFrame,
 
     #These are the weights of the assets in the portfolio with the highest Sharpe ratio.
     #Here we chose whether we want to use risk or return as an ectra constraint
-
     if Sharpe_Type == "Maximum_risk":    
         w_sr_top = maximize_sharp_ratio_wanted_risk(ret_port,cov_port,x0,bounds,max_risk)
     elif Sharpe_Type == "Wanted_return":
@@ -176,8 +175,7 @@ def calculate_efficient_frontier(ret_port: pd.DataFrame,
     elif Sharpe_Type == "No_extra_constraint":
         w_sr_top = maximize_sharp_ratio_no_spec(ret_port,cov_port,x0,bounds)
     else:
-        print("wrong constraint type")
-        return False
+        raise Exception('Wrong constraint type')
 
     opt_sr_ret = portfolio.portfolio_return(ret_port, w_sr_top)
     opt_sr_vol = portfolio_std(cov_port, w_sr_top)
