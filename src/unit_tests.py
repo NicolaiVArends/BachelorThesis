@@ -32,7 +32,7 @@ class monthly_returns_test(unittest.TestCase):
         testcase = pd.read_csv('../data/test/test_prices.csv',index_col=['Date'])
         
         expected = np.array([[1., 0., 0.]])
-        npt.assert_almost_equal(expected,efficient_frontier.weights_of_portfolio(testcase,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(0,1), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly')))
+        npt.assert_almost_equal(expected,efficient_frontier.weights_of_portfolio(testcase,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(0,1), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly', False)))
     def test_of_expected_returns_no_short_selling(self):
         expected = 0.0268
         testcase = pd.read_csv('../data/test/test_prices.csv',index_col=['Date'])
@@ -46,7 +46,7 @@ class monthly_returns_test(unittest.TestCase):
     def test_of_sharpe_ratio_no_short_selling(self):
         expected =  0.517347 
         testcase = pd.read_csv('../data/test/test_prices.csv',index_col=['Date'])
-        self.assertAlmostEqual(expected,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(0,1), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly', False)[0][1]/portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(0,1), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly')[0][0], places=5, msg=None, delta=None)
+        self.assertAlmostEqual(expected,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(0,1), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly', False)[0][1]/portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(0,1), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly', False)[0][0], places=5, msg=None, delta=None)
     
     def test_of_expected_returns_with_short_selling(self):
         expected = 0.041845
@@ -64,6 +64,6 @@ class monthly_returns_test(unittest.TestCase):
         expected =   0.6091821 
 
         testcase = pd.read_csv('../data/test/test_prices.csv',index_col=['Date'])
-        self.assertAlmostEqual(expected,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(-1,2), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly', False)[0][1]/portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(-1,2), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly')[0][0], places=5, msg=None, delta=None)
+        self.assertAlmostEqual(expected,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(-1,2), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly', False)[0][1]/portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase),Bounds(-1,2), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly', False)[0][0], places=5, msg=None, delta=None)
 
 unittest.main()
