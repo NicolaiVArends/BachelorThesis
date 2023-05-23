@@ -138,7 +138,17 @@ def plot_efficient_frontier_cml(parameters,
     return None
 
 
-def compare_returns(dates, portfolio_returns, market_returns):
+def compare_returns(dates: pd.DataFrame, 
+                    portfolio_returns: pd.DataFrame,
+                    market_returns: pd.DataFrame):
+    """ This function will plot 
+
+    Note: The function will not return anything but will show a plot
+
+    :param dates: 
+    :param portfolio_returns:
+    :param market_returns:
+    """
     # Plotting the bar chart
     plt.figure(figsize=(10, 6))
     for i in range(len(dates)):
@@ -148,17 +158,25 @@ def compare_returns(dates, portfolio_returns, market_returns):
     plt.ylabel('Returns')
     plt.title('Portfolio Returns vs. Market Returns')
     plt.legend()
-
     # Rotating x-axis labels for better readability
     plt.xticks(rotation=45)
-
     # Displaying the chart
     plt.tight_layout()
     plt.show()
     return(None)
 
 
-def compare_returns1(dates, portfolio_returns, market_returns):
+def compare_returns1(dates: pd.DataFrame, 
+                    portfolio_returns: pd.DataFrame,
+                    market_returns: pd.DataFrame):
+    """ This function will plot that will compare returns from the benchmark market to the portfolio returns.
+
+    Note: The function will not return anything but will show a plot
+
+    :param dates: 
+    :param portfolio_returns:
+    :param market_returns:
+    """
     # Set the width of the bars
     bar_width = 0.2
 
