@@ -144,7 +144,7 @@ def covariance_matric_monthly(returns: pd.DataFrame, ledoit_wolfe = True):
     :returns: Monthly portfolio covariance matrix
     """
     if ledoit_wolfe == True:
-        return(LedoitWolf().fit(np.random.multivariate_normal(mean=np.zeros(len(returns.cov())),cov=returns.cov(),size=50)).covariance_) #https://scikit-learn.org/stable/modules/generated/sklearn.covariance.LedoitWolf.html
+        return(LedoitWolf().fit(np.random.multivariate_normal(mean=returns.mean(),cov=returns.cov(),size=50)).covariance_) #https://scikit-learn.org/stable/modules/generated/sklearn.covariance.LedoitWolf.html
     else:
         return(returns.cov())
 
@@ -159,7 +159,7 @@ def covariance_matrix_annual(returns: pd.DataFrame,
     :returns: Yearly portfolio covariance matrix 
     """
     if ledoit_Wolf == True:
-        return(LedoitWolf().fit(np.random.multivariate_normal(mean=np.zeros(len(returns.cov())),cov=returns.cov(),size=50)).covariance_* frequency)
+        return(LedoitWolf().fit(np.random.multivariate_normal(mean=returns.mean(),cov=returns.cov(),size=50)).covariance_* frequency)
     else:
         return(returns.cov()*frequency)
 
