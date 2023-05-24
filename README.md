@@ -21,6 +21,7 @@ Before running this project, ensure that you have the following packages install
 * Statsmodels >= 0.14.0 
 * Matplotlib >= 3.5.2
 * ipywidgets >= 8.0.6
+* scikit-learn
 
 
 ### Jupyter Notebooks
