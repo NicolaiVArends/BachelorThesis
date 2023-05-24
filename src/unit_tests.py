@@ -88,10 +88,15 @@ class monthly_returns_test(unittest.TestCase):
         testcase = data.pct_returns_from_prices(pd.read_csv('../data/test/test_prices.csv',index_col=['Date']))
         self.assertAlmostEqual(expected, capm.jensens_alpha(capm.capm_calc(testcase['SP500'].mean(),1.8087630,0.01), np.sum(portfolio.portfolio_return(testcase[['MMM','AOS','ABT']], pd.DataFrame(np.array([[0.33,0.33,0.33]]))))), places=4, msg=None, delta=None)
 
-    def test_of_backtesting(self):
-        expected =
-        testcase =
-        self.assertAlmostEqual(expected, 
+    def test_of_backtesting_portfolio_actual_returns_cmle(self):
+        expected = []
+        testcase = pd.read_excel('../data/test/.xlsx')
+        self.assertAlmostEqual(expected,  backtesting.backtesting({'df': testcase, 'weights': np.array([1/3,1/3,1/3]), 'min_esg_score': 1200, 'max_esg_score': 2000, 'Bounds1': Bounds(0,1), 'sharpe_type': "No_extra_constraint", 'Wanted_return': 0.20, 'maximum_risk': 0.10, 'rebalancing_freq': 'monthly', 'risk_free_rate': 0.01, 'start_year' : pd.Timestamp(np.datetime64('2000-01-01')), 'end_year' : pd.Timestamp(np.datetime64('2022-01-01'))} , 'yearly', 1, '2015-01-01','2022-01-01',10,'SPY'))
+
+    def test_of_backtesting_pct_returns_sp500(self):
+        #expected = 0
+        #testcase = pd.read_csv('../data/test/test_prices.csv',index_col=['Date'])
+        #self.assertAlmostEqual(expected,  backtesting.backtesting()
 
 unittest.main()
 
