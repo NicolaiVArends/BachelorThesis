@@ -5,6 +5,7 @@ from src import portfolio
 from src import data
 from src import efficient_frontier
 from src import capm
+from src import backtesting
 
 import unittest
 import pandas as pd
@@ -86,6 +87,11 @@ class monthly_returns_test(unittest.TestCase):
         expected = 0.2009064
         testcase = data.pct_returns_from_prices(pd.read_csv('../data/test/test_prices.csv',index_col=['Date']))
         self.assertAlmostEqual(expected, capm.jensens_alpha(capm.capm_calc(testcase['SP500'].mean(),1.8087630,0.01), np.sum(portfolio.portfolio_return(testcase[['MMM','AOS','ABT']], pd.DataFrame(np.array([[0.33,0.33,0.33]]))))), places=4, msg=None, delta=None)
+
+    def test_of_backtesting(self):
+        expected =
+        testcase =
+        self.assertAlmostEqual(expected, 
 
 unittest.main()
 
