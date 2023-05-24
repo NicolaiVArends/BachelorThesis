@@ -34,7 +34,7 @@ class monthly_returns_test(unittest.TestCase):
        [134.72999573,  24.85000038,  39.77999878]]))
         expected = np.array([0.026750,0.031154,0.009160])
         npt.assert_almost_equal(expected,data.pct_returns_from_prices(testcase).mean().to_numpy(),decimal = 5)
-        
+
     def test_of_weights_no_short_selling(self):
         testcase = pd.read_csv('../data/test/test_prices.csv',index_col=['Date'])
         print(testcase.keys(),'fisk')
@@ -82,7 +82,10 @@ class monthly_returns_test(unittest.TestCase):
         testcase = data.pct_returns_from_prices(pd.read_csv('../data/test/test_prices.csv',index_col=['Date']))
         self.assertAlmostEqual(expected,capm.capm_calc(testcase['SP500'].mean(),1.8087630,0.01), places=4, msg=None, delta=None)
 
-    #def test_of_capm(self):
+    def test_of_alpha(self):
+        expected = 0.2009064
+        testcase = data.pct_returns_from_prices(pd.read_csv('../data/test/test_prices.csv',index_col=['Date']))
+        self.assertAlmostEqual(expected, capm.jensens_alpha(capm.capm_calc(testcase['SP500'].mean(),1.8087630,0.01), np.sum(portfolio.portfolio_return(testcase[['MMM','AOS','ABT']], pd.DataFrame(np.array([[0.33,0.33,0.33]]))))), places=4, msg=None, delta=None)
 
 unittest.main()
 
