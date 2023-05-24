@@ -107,11 +107,11 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
         delta = relativedelta(years=rebalancing_freq)
         while (start_date <= end_date):
             listparameters.append(portfolio.efficient_frontier_solo(pct_returns,
-                            strategy['Bounds1'],
+                            strategy['bounds'],
                             strategy['sharpe_type'],
                             start_date-covariance_window_time_delta,#The start date for portfolio optimization will be the start date minus the covariance window
                             start_date,#The end date for portfolio optimization will be the start date minus the covariance window
-                            strategy['Wanted_return'],
+                            strategy['wanted_return'],
                             strategy['maximum_risk'],
                             strategy['rebalancing_freq'])) 
             list_of_port_weights.append(efficient_frontier.weights_of_portfolio(prices,listparameters[i]))
@@ -137,11 +137,11 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
         delta = relativedelta(months=rebalancing_freq)
         while (start_date <= end_date):
             listparameters.append(portfolio.efficient_frontier_solo(pct_returns,
-                            strategy['Bounds1'],
+                            strategy['bounds'],
                             strategy['sharpe_type'],
                             start_date-covariance_window_time_delta,#The start date for portfolio optimization will be the start date minus the covariance window
                             start_date,#The end date for portfolio optimization will be the start date minus the covariance window
-                            strategy['Wanted_return'],
+                            strategy['wanted_return'],
                             strategy['maximum_risk'],
                             strategy['rebalancing_freq'])) 
             list_of_port_weights.append(efficient_frontier.weights_of_portfolio(prices,listparameters[i]))
