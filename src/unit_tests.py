@@ -34,16 +34,16 @@ class monthly_returns_test(unittest.TestCase):
        [134.72999573,  24.85000038,  39.77999878]]))
         expected = np.array([0.026750,0.031154,0.009160])
         npt.assert_almost_equal(expected,data.pct_returns_from_prices(testcase).mean().to_numpy(),decimal = 5)
+        
     def test_of_weights_no_short_selling(self):
         testcase = pd.read_csv('../data/test/test_prices.csv',index_col=['Date'])
         print(testcase.keys(),'fisk')
-        
         expected = np.array([[1., 0., 0.]])
         npt.assert_almost_equal(expected,efficient_frontier.weights_of_portfolio(testcase[['MMM','AOS','ABT']],portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase[['MMM','AOS','ABT']]),Bounds(0,1), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly', False)))
+    
     def test_of_expected_returns_no_short_selling(self):
         expected = 0.0268
         testcase = pd.read_csv('../data/test/test_prices.csv',index_col=['Date'])
-        
         self.assertAlmostEqual(expected,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase[['MMM','AOS','ABT']]),Bounds(0,1), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly', False)[0][1], places=4, msg=None, delta=None)
 
     def test_of_expected_risk_no_short_selling(self):
@@ -58,21 +58,19 @@ class monthly_returns_test(unittest.TestCase):
     
     def test_of_expected_returns_with_short_selling(self):
         expected = 0.041845
-
         testcase = pd.read_csv('../data/test/test_prices.csv',index_col=['Date'])
         self.assertAlmostEqual(expected,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase[['MMM','AOS','ABT']]),Bounds(-1,2), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly', False)[0][1], places=4, msg=None, delta=None)
 
     def test_of_expected_risk_with_short_selling(self):
         expected = 0.068691
-
         testcase = pd.read_csv('../data/test/test_prices.csv',index_col=['Date'])
         self.assertAlmostEqual(expected,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase[['MMM','AOS','ABT']]),Bounds(-1,2), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly', False)[0][0], places=4, msg=None, delta=None)
 
     def test_of_sharpe_ratio_with_short_selling(self):
         expected =   0.6091821 
-
         testcase = pd.read_csv('../data/test/test_prices.csv',index_col=['Date'])
         self.assertAlmostEqual(expected,portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase[['MMM','AOS','ABT']]),Bounds(-1,2), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly', False)[0][1]/portfolio.efficient_frontier_solo(data.pct_returns_from_prices(testcase[['MMM','AOS','ABT']]),Bounds(-1,2), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly', False)[0][0], places=4, msg=None, delta=None)
+   
     def test_of_beta(self):
         expected = 1.8088
         testcase = data.pct_returns_from_prices(pd.read_csv('../data/test/test_prices.csv',index_col=['Date']))
