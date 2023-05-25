@@ -33,8 +33,7 @@ def calculate_portfolio_beta(market: pd.DataFrame,
         betas.append(beta)
       
     beta_of_port = np.sum(np.sum(np.multiply(betas,portfolio_weights)))
-    print(beta_of_port)
-    
+
     return (beta_of_port)
 
 def capm_calc(market_expected_returns: pd.DataFrame,

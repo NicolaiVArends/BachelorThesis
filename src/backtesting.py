@@ -9,6 +9,8 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 from dateutil.parser import parse
 import warnings
+
+warnings.filterwarnings("ignore", category=FutureWarning, module='pandas')
 # Suppress the FutureWarning
 warnings.simplefilter(action='ignore', category=FutureWarning) #We get a weird warning, a bug with pandas according to their github
 
@@ -183,7 +185,7 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
             list_of_return_dates.append((start_date+delta).strftime('%Y/%m/%d'))
             start_date += delta
             i += 1
-        return(list_of_port_weights,list_of_port_esg_scores,list_of_port_allocations,betas_of_portfolios,list_of_cmle_returns,list_of_portfolio_actual_returns,list_of_pct_returns_sp500,list_of_portfolio_actual_returns_cmle,list_of_return_dates)
+        return(list_of_port_weights,list_of_port_esg_scores,list_of_port_allocations,betas_of_portfolios,capm_for_portfolio,list_of_cmle_returns,list_of_portfolio_actual_returns,list_of_pct_returns_sp500,list_of_portfolio_actual_returns_cmle,list_of_return_dates)
     
     else:
         raise Exception('You can only call this function with monthly or yearly')
