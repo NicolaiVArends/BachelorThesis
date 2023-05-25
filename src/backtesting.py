@@ -92,6 +92,7 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
 
     stock_data_download = stock_data_download[['Close']].rename(columns={'Close': market_name})
     stock_data = pd.concat([prices,stock_data_download], axis = 1)
+    #print(stock_data[start_date-covariance_window_time_delta:end_date])
     pct = data.pct_returns_from_prices(stock_data)[start_date-covariance_window_time_delta:end_date+relativedelta(years=rebalancing_freq+1)]
     #print(pct_returns)
     pct.index =pct.index.tz_localize(None)
@@ -156,21 +157,24 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
                             strategy['maximum_risk'],
                             strategy['rebalancing_freq'],
                             benoit_wolfe)) 
-            #print(start_date-covariance_window_time_delta)
+            
+            
             list_of_port_weights.append(efficient_frontier.weights_of_portfolio(prices,listparameters[i]))
             #print(list_of_port_weights[i])
             list_of_port_esg_scores.append(portfolio.esg_score_of_portfolio(list_of_port_weights[i],esgdata.head(1)))
             list_of_port_allocations.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[1])
             list_of_cmle_returns.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[0])
             list_of_cml_allocations.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[1])
-            betas_of_portfolios.append(capm.calculate_portfolio_beta(pct[start_date-covariance_window_time_delta-relativedelta(months=1):(start_date-relativedelta(months=1))],
-                                                                     pct_returns[start_date-covariance_window_time_delta-relativedelta(months=1):(start_date-relativedelta(months=1))],
+            betas_of_portfolios.append(capm.calculate_portfolio_beta(pct[start_date-covariance_window_time_delta:(start_date)],
+                                                                     pct_returns[start_date-covariance_window_time_delta:(start_date)],
                                                                      list_of_port_weights[i],
-                                                                     market_name))            
-            capm_for_portfolio.append(capm.capm_calc(pct[market_name][start_date-covariance_window_time_delta:start_date].tz_localize(None).mean(),strategy['risk_free_rate'],betas_of_portfolios[i]))
+                                                                     market_name))
+            
+            capm_for_portfolio.append(capm.capm_calc(pct[market_name][start_date-covariance_window_time_delta:start_date].tz_localize(None).mean(),betas_of_portfolios[i],strategy['risk_free_rate']))
+            #print(capm.capm_calc(pct[market_name][start_date-covariance_window_time_delta:start_date].tz_localize(None).mean(),betas_of_portfolios[i],strategy['risk_free_rate']))
             list_of_portfolio_actual_returns.append((portfolio.portfolio_return(prices.loc[start_date+delta],list_of_port_weights[i])
                                                     -portfolio.portfolio_return(prices.loc[start_date],list_of_port_weights[i]))/portfolio.portfolio_return(prices.loc[start_date],list_of_port_weights[i]))
-            print(prices[start_date-covariance_window_time_delta-relativedelta(months=1):(start_date-relativedelta(months=1))])
+            #print(prices[start_date-covariance_window_time_delta-relativedelta(months=1):(start_date-relativedelta(months=1))])
             list_of_portfolio_actual_returns_cmle.append(list_of_cml_allocations[i][0]*list_of_portfolio_actual_returns[i]+((1-list_of_cml_allocations[i][0])*strategy['risk_free_rate']))
             #print(prices.loc[start_date+delta],list_of_port_weights[i],prices.loc[start_date])                 #Vi køber den sidste dag i vores optimeringsprofil
                                                     # list_of_cml_allocations[i][0]*strategy['risk_free_rate'])#list of how large a percentage you would have made using your investment strategy
