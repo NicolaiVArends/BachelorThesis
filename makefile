@@ -8,3 +8,7 @@ install_requirements:
 
 run:
 	@jupyter nbconvert --execute $(NOTEBOOKS_DIR)/$(NOTEBOOK) --to $(OUTPUT_FORMAT) --output /dev/null
+
+unittest:
+	cd src && python unit_tests.py
+
