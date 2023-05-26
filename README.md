@@ -24,6 +24,20 @@ Before running this project, ensure that you have the following packages install
 * scikit-learn >= 1.2.2
 * openpyxl >= 3.1.2
 
+### Unit Tests
+
+For testing and ensuring the functionallity of this project, the repository contains a comprehensive set of unit testcases. It is recommended to run the tests before running the project.
+
+After the project has been cloned to your local machine (using step 1 above). All the unit tests can be runned, by following the steps:
+
+1. Navigate to the cloned repository on your local machine
+
+2. Open the folder `/src` in the cloned repository
+
+3. In the directory, execute the following command to run all the unit tests using the testing framework configured for the project: `python unit_test.py`
+
+4. Wait a little and the test results will be displayed in the console. It will indicate which tests passed, failed, or encountered with errors.
+
 
 ### Jupyter Notebooks
 
@@ -46,20 +60,6 @@ To run this project locally, it can be done by following the steps:
 
 7. Save the file locally and click on "Run All" to run all calculation in the notebook
 
-
-### Unit Tests
-
-For testing and ensuring the functionallity of this project, the repository contains a comprehensive set of unit testcases. 
-
-After the project has been cloned to your local machine (using step 1 above). All the unit tests can be runned, by following the steps:
-
-1. Navigate to the cloned repository on your local machine
-
-2. Open the folder `/src` in the cloned repository
-
-3. In the directory, execute the following command to run all the unit tests using the testing framework configured for the project: `python unit_test.py`
-
-4. Wait a little and the test results will be displayed in the console. It will indicate which tests passed, failed, or encountered with errors.
 
 
 
