@@ -24,19 +24,25 @@ Before running this project, ensure that you have the following packages install
 * scikit-learn >= 1.2.2
 * openpyxl >= 3.1.2
 
+
 ### Unit Tests
 
 For testing and ensuring the functionallity of this project, the repository contains a comprehensive set of unit testcases. It is recommended to run the tests before running the project.
 
 After the project has been cloned to your local machine (using step 1 above). All the unit tests can be runned, by following the steps:
 
-1. Navigate to the cloned repository on your local machine
+1. Clone the repository to your local machine e.g. by using the command in terminal: `git clone https://github.com//NicolaiVArends/BachelorThesis`
 
-2. Open the folder `/src` in the cloned repository
+2. Navigate to the cloned repository on your local machine
 
-3. In the directory, execute the following command to run all the unit tests using the testing framework configured for the project: `python unit_test.py`
+3. Make sure to have installed all of requirements which can be done by using the following command: 
+`pip install -r requirements.txt`
 
-4. Wait a little and the test results will be displayed in the console. It will indicate which tests passed, failed, or encountered with errors.
+4. Open the folder `/src` in the cloned repository
+
+5. In the directory, execute the following command to run all the unit tests using the testing framework configured for the project: `python unit_test.py`
+
+6. Wait a little and the test results will be displayed in the console. It will indicate which tests passed, failed, or encountered with errors.
 
 
 ### Jupyter Notebooks
@@ -49,10 +55,10 @@ To run this project locally, it can be done by following the steps:
 
 2. Navigate to the cloned repository on your local machine
 
-3. Open the folder `/notebooks` in the cloned repository
-
-4. Install all of requirements which can be done by using the following command:
+3. Make sure to have installed all of requirements which can be done by using the following command: 
 `pip install -r requirements.txt`
+
+4. Open the folder `/notebooks` in the cloned repository
 
 5. Open a notebook with a premade investment strategi of own choice or open and customise the file `portfolio_for_you.ipynb` in visual studio code or another IDE that supports Jupyter Notebook files (`.ipynb`)
 
