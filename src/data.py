@@ -23,7 +23,7 @@ def esg_score_weight(data: pd.DataFrame,
     """
     
     if np.sum(weights) != 1:
-        return("Weights must sum to 1")
+        raise Exception("Weights must sum to 1")
     else:
         data["weighted_score"] = (((data["environment_score"] * (weights[0])) + \
                            (data["governance_score"] * (weights[1])) + \
