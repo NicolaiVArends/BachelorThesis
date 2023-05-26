@@ -5,6 +5,7 @@ from src import portfolio
 import pandas as pd
 import numpy as np
 import yfinance as yf
+from datetime import datetime
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from dateutil.parser import parse
@@ -44,7 +45,10 @@ def rolling_window_backtesting(prices: pd.DataFrame,
     return backtest_portfolio_return, backtest_portfolio_risk
 
 
-def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_date,end_date,covariance_window_yearly,covariance_window_monthly,market_name,benoit_wolfe = True): #,covariance_window_monthly
+def backtesting(strategy, monthly_or_yearly_rebalancing,
+                rebalancing_freq,start_date,end_date,
+                covariance_window_yearly,covariance_window_monthly,
+                market_name,benoit_wolfe = True): #,covariance_window_monthly
     """ This function makes a backtest given a strategy, rebalacing informations, information of data period, window size and benchmark market name.
       
     In this function
@@ -58,9 +62,14 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
     
     assert isinstance(strategy, dict), "strategy should be a dictionary"
     
-    required_keys = ['df', 'weights', 'min_esg_score', 'max_esg_score', 'start_year', 'bounds', 'sharpe_type', 'wanted_return', 'maximum_risk', 'rebalancing_freq', 'risk_free_rate']
+    required_keys = ['df', 'weights', 'min_esg_score', 'max_esg_score', 'bounds', 'sharpe_type', 'wanted_return', 'maximum_risk', 'rebalancing_freq', 'risk_free_rate']
     
     missing_keys = [k for k in required_keys if k not in strategy.keys()]
+    if monthly_or_yearly_rebalancing == 'yearly':
+        assert pd.to_datetime(end_date) + pd.DateOffset(years=rebalancing_freq, months = 1) <= pd.Timestamp(datetime.now()), "The end_date and rebalancing dates should not be in the future"
+    elif monthly_or_yearly_rebalancing == 'monthly':
+        assert pd.to_datetime(end_date) + pd.DateOffset(months=rebalancing_freq + 1) <= pd.Timestamp(datetime.now()), "The end_date and rebalancing dates should not be in the future"
+
     
     
     assert not missing_keys, "The strategy dictionary is missing the following keys: {}".format(', '.join(missing_keys))
@@ -84,13 +93,19 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
     covariance_window_time_delta = relativedelta(years=covariance_window_yearly,months=covariance_window_monthly) #The time delta for the covariance window
     esg_data = data.esg_score_weight(strategy['df'],strategy['weights'],strategy['min_esg_score'],strategy['max_esg_score'])
     #print(esg_data)
-    full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(years=rebalancing_freq,months=1))]) #Making sure we download data from the first covariance date, until the last date we sell our stocks
+    #print([pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(years=rebalancing_freq,months=1))])
+    if monthly_or_yearly_rebalancing == 'yearly':
+        full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(years=rebalancing_freq,months=1))]) 
+    if monthly_or_yearly_rebalancing == 'monthly':
+        full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(months=rebalancing_freq+1))]) 
+
+#Making sure we download data from the first covariance date, until the last date we sell our stocks
     prices,esgdata = data.seperate_full_data(full_data)
     pct_returns = data.pct_returns_from_prices(prices)
     if monthly_or_yearly_rebalancing == 'yearly':
-        stock_data_download = yf.download(market_name, start=strategy['start_year']-covariance_window_time_delta, end=end_date+relativedelta(years=rebalancing_freq+1,months=1), interval='1mo', progress=False) #Downloads the market stock close for same window.
+        stock_data_download = yf.download(market_name, start=start_date-covariance_window_time_delta, end=end_date+relativedelta(years=rebalancing_freq+1,months=1), interval='1mo', progress=False) #Downloads the market stock close for same window.
     elif monthly_or_yearly_rebalancing == 'monthly':
-        stock_data_download = yf.download(market_name, start=strategy['start_year']-covariance_window_time_delta, end=end_date+relativedelta(months=rebalancing_freq+1), interval='1mo', progress=False)
+        stock_data_download = yf.download(market_name, start=start_date-covariance_window_time_delta, end=end_date+relativedelta(months=rebalancing_freq+1), interval='1mo', progress=False)
 
     stock_data_download = stock_data_download[['Close']].rename(columns={'Close': market_name})
     stock_data = pd.concat([prices,stock_data_download], axis = 1)
@@ -111,6 +126,13 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
     capm_for_portfolio = []
     list_of_cml_allocations = []
     list_of_return_dates = []
+    cumulative_market_return = 1
+    cumulative_cml_return = 1
+    cumulative_portfolio_return = 1
+    cumulative_market_return_list = []
+    cumulative_cml_return_list = []
+    cumulative_portfolio_return_list = []
+
     i = 0
 
     if monthly_or_yearly_rebalancing == 'yearly':
@@ -143,9 +165,26 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
             #List of portfolios actual returns skal laves om så man tager højde cml allokeringen
             list_of_pct_returns_sp500.append((stock_data_download.loc[start_date+delta][0]-stock_data_download.loc[start_date][0])/stock_data_download.loc[start_date][0])#List of how large a percentage you would have made investing everything in the market
             list_of_return_dates.append((start_date+delta).strftime('%Y/%m/%d'))
+            cumulative_market_return *=(1+list_of_pct_returns_sp500[i])
+            cumulative_cml_return *= (1+list_of_portfolio_actual_returns_cmle[i])
+            cumulative_portfolio_return *= (1+list_of_portfolio_actual_returns[i])
+            cumulative_cml_return_list.append(cumulative_cml_return-1)
+            cumulative_market_return_list.append(cumulative_market_return-1)
+            cumulative_portfolio_return_list.append(cumulative_portfolio_return-1)
+            
+
+
+
+
+
             start_date += delta
             i += 1
-        return(list_of_port_weights,list_of_port_esg_scores,list_of_port_allocations,betas_of_portfolios,list_of_cmle_returns,list_of_portfolio_actual_returns,list_of_pct_returns_sp500,list_of_portfolio_actual_returns_cmle,list_of_return_dates)
+        return(list_of_port_weights,list_of_port_esg_scores,
+               list_of_port_allocations,betas_of_portfolios,capm_for_portfolio,
+               list_of_cmle_returns,list_of_portfolio_actual_returns,
+               list_of_pct_returns_sp500,list_of_portfolio_actual_returns_cmle,
+               list_of_return_dates, cumulative_cml_return_list,
+               cumulative_market_return_list,cumulative_portfolio_return_list)
     
     elif monthly_or_yearly_rebalancing == 'monthly':
         delta = relativedelta(months=rebalancing_freq)
@@ -159,34 +198,44 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,rebalancing_freq,start_d
                             strategy['maximum_risk'],
                             strategy['rebalancing_freq'],
                             benoit_wolfe)) 
-            
-            
+            #print(start_date-covariance_window_time_delta)
             list_of_port_weights.append(efficient_frontier.weights_of_portfolio(prices,listparameters[i]))
             #print(list_of_port_weights[i])
             list_of_port_esg_scores.append(portfolio.esg_score_of_portfolio(list_of_port_weights[i],esgdata.head(1)))
             list_of_port_allocations.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[1])
             list_of_cmle_returns.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[0])
             list_of_cml_allocations.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[1])
-            betas_of_portfolios.append(capm.calculate_portfolio_beta(pct[start_date-covariance_window_time_delta:(start_date)],
-                                                                     pct_returns[start_date-covariance_window_time_delta:(start_date)],
-                                                                     list_of_port_weights[i],
-                                                                     market_name))
-            
-            capm_for_portfolio.append(capm.capm_calc(pct[market_name][start_date-covariance_window_time_delta:start_date].tz_localize(None).mean(),betas_of_portfolios[i],strategy['risk_free_rate']))
-            #print(capm.capm_calc(pct[market_name][start_date-covariance_window_time_delta:start_date].tz_localize(None).mean(),betas_of_portfolios[i],strategy['risk_free_rate']))
+            betas_of_portfolios.append(capm.calculate_portfolio_beta(pct,prices[start_date-covariance_window_time_delta:start_date],list_of_port_weights[i],market_name))            
+            capm_for_portfolio.append(capm.capm_calc(pct[market_name][start_date-covariance_window_time_delta:start_date-relativedelta(months=1)].tz_localize(None).mean(),strategy['risk_free_rate'],betas_of_portfolios[i]))
             list_of_portfolio_actual_returns.append((portfolio.portfolio_return(prices.loc[start_date+delta],list_of_port_weights[i])
                                                     -portfolio.portfolio_return(prices.loc[start_date],list_of_port_weights[i]))/portfolio.portfolio_return(prices.loc[start_date],list_of_port_weights[i]))
-            #print(prices[start_date-covariance_window_time_delta-relativedelta(months=1):(start_date-relativedelta(months=1))])
+            #print(start_date+delta+relativedelta(months=1),start_date+relativedelta(months=1))
             list_of_portfolio_actual_returns_cmle.append(list_of_cml_allocations[i][0]*list_of_portfolio_actual_returns[i]+((1-list_of_cml_allocations[i][0])*strategy['risk_free_rate']))
             #print(prices.loc[start_date+delta],list_of_port_weights[i],prices.loc[start_date])                 #Vi køber den sidste dag i vores optimeringsprofil
                                                     # list_of_cml_allocations[i][0]*strategy['risk_free_rate'])#list of how large a percentage you would have made using your investment strategy
             #List of portfolios actual returns skal laves om så man tager højde cml allokeringen
             list_of_pct_returns_sp500.append((stock_data_download.loc[start_date+delta][0]-stock_data_download.loc[start_date][0])/stock_data_download.loc[start_date][0])#List of how large a percentage you would have made investing everything in the market
             list_of_return_dates.append((start_date+delta).strftime('%Y/%m/%d'))
+            cumulative_market_return *=(1+list_of_pct_returns_sp500[i])
+            cumulative_cml_return *= (1+list_of_portfolio_actual_returns_cmle[i])
+            cumulative_portfolio_return *= (1+list_of_portfolio_actual_returns[i])
+            cumulative_cml_return_list.append(cumulative_cml_return-1)
+            cumulative_market_return_list.append(cumulative_market_return-1)
+            cumulative_portfolio_return_list.append(cumulative_portfolio_return-1)
+            
+
+
+
+
+
             start_date += delta
             i += 1
-        return(list_of_port_weights,list_of_port_esg_scores,list_of_port_allocations,betas_of_portfolios,capm_for_portfolio,list_of_cmle_returns,list_of_portfolio_actual_returns,list_of_pct_returns_sp500,list_of_portfolio_actual_returns_cmle,list_of_return_dates)
-    
+        return(list_of_port_weights,list_of_port_esg_scores,
+               list_of_port_allocations,betas_of_portfolios,capm_for_portfolio,
+               list_of_cmle_returns,list_of_portfolio_actual_returns,
+               list_of_pct_returns_sp500,list_of_portfolio_actual_returns_cmle,
+               list_of_return_dates, cumulative_cml_return_list,
+               cumulative_market_return_list,cumulative_portfolio_return_list)
     else:
         raise Exception('You can only call this function with monthly or yearly')
     

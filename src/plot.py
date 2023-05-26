@@ -217,3 +217,53 @@ def compare_returns1(dates: pd.DataFrame,
     # Show the plot
     plt.show()
 
+def compare_cumulative_returns(dates: list, 
+                    portfolio_cumulative_returns: list,
+                    market_cumulative_returns: list):
+    """ This function will plot that will compare returns from the benchmark market to the portfolio returns.
+
+    Note: The function will not return anything but will show a plot
+
+    :param dates: 
+    :param portfolio_returns:
+    :param market_returns:
+    """
+    # Set the width of the bars
+    bar_width = 0.2
+
+    # Create an array of indices to use as x-axis positions
+    x = np.arange(len(dates))
+
+    # Plotting the bar chart
+    fig, ax = plt.subplots(figsize=(12, 6))
+    portfolio_bars = ax.bar(x - bar_width/2, portfolio_cumulative_returns, width=bar_width, label='Portfolio cumulative  Returns')
+    market_bars = ax.bar(x + bar_width/2, market_cumulative_returns, width=bar_width, label='Market cumulative Returns')
+
+    # Add a line separating positive and negative values
+    ax.axhline(0, color='black', linewidth=1)
+
+    # Add mesh background
+    ax.set_axisbelow(True)
+    ax.yaxis.grid(color='gray', linestyle='dashed')
+
+    # Add labels, title, and legend
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Returns')
+    ax.set_title('Portfolio cumulative Returns vs. Market cumulative Returns')
+    ax.set_xticks(x)
+    ax.set_xticklabels(dates)
+    ax.legend()
+    # Add data labels above each bar
+    def autolabel(bars):
+        for bar in bars:
+            height = bar.get_height()
+            ax.annotate(f'{height:.2%}', xy=(bar.get_x() + bar.get_width() / 2, height),
+                        xytext=(0, 3), textcoords='offset points',
+                        ha='center', va='bottom', fontsize='small')
+
+    autolabel(portfolio_bars)
+    autolabel(market_bars)
+    # Adjust spacing and layout
+    fig.tight_layout()
+    # Show the plot
+    plt.show()
