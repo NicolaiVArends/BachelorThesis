@@ -184,7 +184,7 @@ def compare_returns1(dates: pd.DataFrame,
     x = np.arange(len(dates))
 
     # Plotting the bar chart
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(18, 6))
     portfolio_bars = ax.bar(x - bar_width/2, portfolio_returns, width=bar_width, label='Portfolio Returns')
     market_bars = ax.bar(x + bar_width/2, market_returns, width=bar_width, label='Market Returns')
 

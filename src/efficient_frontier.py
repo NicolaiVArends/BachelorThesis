@@ -79,10 +79,10 @@ def maximize_sharp_ratio_wanted_returns(port_return: pd.DataFrame,
 
 
 def maximize_sharp_ratio_wanted_risk(port_return: pd.DataFrame, 
-                         port_covariance: pd.DataFrame,
-                         x0,
-                         bounds: Bounds,
-                         max_risk: float):
+                                     port_covariance: pd.DataFrame,
+                                     x0,
+                                     bounds: Bounds,
+                                     max_risk: float):
     """ This function will take different inputs including portfolio return and covariance matrix, to maximize the sharp ratio of different portfolios with a maximum risk limit.
     
     :param port_return: Portfolio return
@@ -93,14 +93,11 @@ def maximize_sharp_ratio_wanted_risk(port_return: pd.DataFrame,
     :returns: Portfolio weight choice for maximizing sharp ratio with maximum limit of risk
     """
     
-    function = lambda weight: np.sqrt(np.dot(weight,np.dot(weight,port_covariance)))/port_return.dot(weight)
+    function = lambda weight: np.sqrt(np.dot(weight, np.dot(weight, port_covariance))) / port_return.dot(weight)
     bounds = bounds
-    constraints = (LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int),1,1),
-                   {'type': 'eq',
-                     'fun': lambda weight:  max_risk - np.sqrt(np.dot(weight, np.dot(weight, port_covariance)))},
-                     {'type': 'ineq', 'fun': lambda weight: np.sqrt(np.dot(weight, np.dot(weight, port_covariance))) - max_risk})
-                    #{'type': 'eq', 'fun': lambda weight: np.sqrt(np.dot(weight, np.dot(weight, port_covariance)))}) #Second restraint lets us define how high a return we want                                    
-    #options = {'xtol': 1e-07, 'gtol': 1e-07, 'barrier_tol': 1e-07, 'maxiter': 1000}
+    constraints = (LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int), 1, 1),
+                   {'type': 'ineq', 'fun': lambda weight: max_risk - np.sqrt(np.dot(weight, np.dot(weight, port_covariance)))})
+                    
     result = minimize(function, 
                       x0,
                       method='SLSQP', 

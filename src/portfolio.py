@@ -4,7 +4,7 @@ from sklearn.covariance import LedoitWolf
 from datetime import datetime as dt
 from src import efficient_frontier
 from scipy.optimize import Bounds, LinearConstraint, minimize
-
+np.random.seed(42) #We give it a seed, so the ledoit wolf give the same output each time
 
 def rolling_window_expected_return(returns: pd.DataFrame, 
                                    start_year: int = 2003, 
