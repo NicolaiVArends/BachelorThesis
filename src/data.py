@@ -122,6 +122,8 @@ def currency_rates(prices: pd.DataFrame):
 
     In this function, we fetch the currency rates that exchanges from any stock prices in foreign currencies (not USD) to USD. The exchange rates is downloaded historically for the foreign currencies using forex-python api.
     The function looks what the stock symbol endswith when getting and exchanging the currency to USD.
+
+    NOTE: Currently, it is only stocks from the nordic NASDAQ stock exchange that is supported.
     
     :param prices: Stock prices that is not in USD, only stock from the nordic stock exchange is supported
     :returns: Stock prices in one currency rate (USD)
