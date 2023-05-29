@@ -3,6 +3,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import ipywidgets
+import seaborn as sns
+sns.set_theme()
 from mpl_toolkits import mplot3d
 
 def plot_cummulative_portfolio_returns(returns: pd.DataFrame,
@@ -235,7 +237,7 @@ def compare_cumulative_returns(dates: list,
     x = np.arange(len(dates))
 
     # Plotting the bar chart
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(18, 6))
     portfolio_bars = ax.bar(x - bar_width/2, portfolio_cumulative_returns, width=bar_width, label='Portfolio cumulative  Returns')
     market_bars = ax.bar(x + bar_width/2, market_cumulative_returns, width=bar_width, label='Market cumulative Returns')
 
@@ -267,3 +269,41 @@ def compare_cumulative_returns(dates: list,
     fig.tight_layout()
     # Show the plot
     plt.show()
+
+
+def plot_portfolio_betas(dates, portfolio_betas):
+    plt.figure(figsize=(14,8))
+    bars = plt.bar(dates, portfolio_betas, color='dodgerblue', edgecolor='black')
+    plt.xlabel('Date', fontsize=12)
+    plt.ylabel('Portfolio Beta', fontsize=12)
+    plt.title('Portfolio Betas Over Time', fontsize=16)
+    plt.xticks(rotation=90, fontsize=10)  # Rotate x-axis labels for better visibility
+    plt.yticks(fontsize=10)
+    plt.grid(axis='y', linestyle='--', alpha=0.6)  # Add y-axis gridlines
+    sns.despine()  # Remove top and right spines for a cleaner look
+    # Add data labels
+    for bar in bars:
+        yval = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, yval, round(yval, 2), ha='center', va='bottom')
+    plt.tight_layout()
+    plt.show()
+
+def plot_portfolio_esg_scores(dates, portfolio_esg_scores):
+    portfolio_esg_scores = [df.iloc[0, 0] for df in portfolio_esg_scores]
+
+    plt.figure(figsize=(14,8))
+    bars = plt.bar(dates, portfolio_esg_scores, color='seagreen', edgecolor='black')
+    plt.xlabel('Date', fontsize=12)
+    plt.ylabel('Portfolio ESG Scores', fontsize=12)
+    plt.title('Portfolio ESG Scores Over Time', fontsize=16)
+    plt.xticks(rotation=90, fontsize=10)  # Rotate x-axis labels for better visibility
+    plt.yticks(fontsize=10)
+    plt.grid(axis='y', linestyle='--', alpha=0.6)  # Add y-axis gridlines
+    sns.despine()  # Remove top and right spines for a cleaner look
+    # Add data labels
+    for bar in bars:
+        yval = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, yval, round(yval, 2), ha='center', va='bottom')
+    plt.tight_layout()
+    plt.show()
+
