@@ -90,7 +90,7 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
     listparameters = []
     list_of_port_weights =[]
     list_of_port_esg_scores = []
-    list_of_port_allocations = []
+
     list_of_cmle_returns = []
     list_of_portfolio_actual_returns = []
     list_of_portfolio_actual_returns_cmle = []
@@ -126,7 +126,6 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
 
             list_of_port_esg_scores.append(portfolio.esg_score_of_portfolio(list_of_port_weights[i],esgdata.head(1)))
 
-            list_of_port_allocations.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[1])
 
             list_of_cmle_returns.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[0])
 
@@ -167,7 +166,6 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
         results = {
             'portfolio_weights': list_of_port_weights,
             'portfolio_esg_scores': list_of_port_esg_scores,
-            'portfolio_allocations': list_of_port_allocations,
             'betas_of_portfolios': betas_of_portfolios,
             'capm_for_portfolio': capm_for_portfolio,
             'cmle_returns': list_of_cmle_returns,
@@ -199,7 +197,6 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
 
             list_of_port_esg_scores.append(portfolio.esg_score_of_portfolio(list_of_port_weights[i],esgdata.head(1)))
 
-            list_of_port_allocations.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[1])
 
             list_of_cmle_returns.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[0])
 
@@ -240,7 +237,6 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
         results = {
             'portfolio_weights': list_of_port_weights,
             'portfolio_esg_scores': list_of_port_esg_scores,
-            'portfolio_allocations': list_of_port_allocations,
             'betas_of_portfolios': betas_of_portfolios,
             'capm_for_portfolio': capm_for_portfolio,
             'cmle_returns': list_of_cmle_returns,
