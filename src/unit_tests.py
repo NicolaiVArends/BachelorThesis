@@ -43,7 +43,6 @@ class monthly_returns_test(unittest.TestCase):
 
     def test_of_weights_no_short_selling(self):
         testcase = pd.read_csv('../data/test/test_prices.csv',index_col=['Date'])
-        print(testcase.keys(),'fisk')
         expected = np.array([[1., 0., 0.]])
         npt.assert_almost_equal(expected,efficient_frontier.weights_of_portfolio(testcase[['MMM','AOS','ABT']],efficient_frontier.efficient_frontier_solo(data.pct_returns_from_prices(testcase[['MMM','AOS','ABT']]),Bounds(0,1), "No_extra_constraint",'2013-04-01','2014-03-01', 0.2, 0.1,'monthly', False)))
     
