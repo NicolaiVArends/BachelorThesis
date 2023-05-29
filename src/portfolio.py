@@ -99,7 +99,7 @@ def efficient_frontier_solo(returns: pd.DataFrame,
     sample_rolling_window = returns.loc['{}'.format(str(start_date)):'{}'.format(str(end_date))]
     if monthly_or_yearly_mean == "monthly":
         parameters.append(efficient_frontier.calculate_efficient_frontier(mean_return_monthly(sample_rolling_window),
-                                                                          covariance_matric_monthly(sample_rolling_window,ledoit_Wolf),
+                                                                          covariance_matrix_monthly(sample_rolling_window,ledoit_Wolf),
                                                                           bounds,
                                                                           Sharpe_Type,
                                                                           wanted_return,
@@ -137,7 +137,7 @@ def mean_return_monthly(returns: pd.DataFrame):
     return(returns.mean())
 
 
-def covariance_matric_monthly(returns: pd.DataFrame, ledoit_wolfe = True):
+def covariance_matrix_monthly(returns: pd.DataFrame, ledoit_wolfe = True):
     """ This function makes monhtly portfolio covariance matrix on monthly prices/return for the portfolio.
 
     :param returns: Monthly stock price/returns data in the portfolio
