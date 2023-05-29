@@ -73,9 +73,6 @@ def rolling_window_efficient_frontier(returns: pd.DataFrame,
     return parameters
 
 
-
-
-
 def mean_return_annual(returns: pd.DataFrame, 
                        frequency: int = 12):
     """ This function makes annual mean on prices/return for portfolio.
@@ -136,15 +133,6 @@ def portfolio_return(returns: pd.DataFrame,
     :returns: Computed portfolio return with given weight allocation
     """
     return np.dot(returns, weights.T)
-
-
-def portfolio_mean(returns: pd.DataFrame):
-    """ This function computed the portfolio mean.
-
-    :param returns: Monthly/Yearly stock price/returns data in the portfolio
-    :returns: Monthly/Yearly portfolio mean
-    """
-    return returns.mean()
 
 
 def portfolio_std(port_cov: pd.DataFrame, 
