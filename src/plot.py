@@ -10,7 +10,7 @@ def plot_cummulative_portfolio_returns(returns: pd.DataFrame,
                            title: str = 'Portfolio cummulative returns'):
     """ This function uses raw price data to plot and show a 2D graph of portfolio cummulative returns.
 
-    Note: The function will not return anything but will show a plot when running.
+    NOTE: The function will not return anything but will show a plot when running.
 
     :param returns: Raw price/returns that is not in percent already
     :param mpl_style: Matplotlib style of the plot, default is 'default'
@@ -39,7 +39,7 @@ def plot_efficient_frontier(parameters,
                             mpl_style: str = 'default'):
     """ This function will plot and show a 2D graph of the efficient frontier with options showing capital market line and/or the max sharp ratio.
 
-    Note: The function will not return anything but will show a plot of the efficient frontier when running.
+    NOTE: The function will not return anything but will show a plot of the efficient frontier when running.
 
     :param parameters: Calculated efficient frontier data
     :param start_year: Start year of the data that is going to be plotted 
@@ -95,7 +95,7 @@ def plot_efficient_frontier_cml(parameters,
                                 mpl_style: str ='default'):
     """ This function will plot and show a 2D graph of the efficient frontier with capital market line and the max sharp ratio.
 
-    Note: The function will not return anything but will show a plot of the efficient frontier when running.
+    NOTE: The function will not return anything but will show a plot of the efficient frontier when running.
 
     :param parameters: Calculated efficient frontier data
     :param start_year: Start year of the data that is going to be plotted 
@@ -143,7 +143,7 @@ def compare_returns(dates: pd.DataFrame,
                     market_returns: pd.DataFrame):
     """ This function will plot 
 
-    Note: The function will not return anything but will show a plot
+    NOTE: The function will not return anything but will show a plot
 
     :param dates: 
     :param portfolio_returns:
@@ -171,7 +171,7 @@ def compare_returns1(dates: pd.DataFrame,
                     market_returns: pd.DataFrame):
     """ This function will plot that will compare returns from the benchmark market to the portfolio returns.
 
-    Note: The function will not return anything but will show a plot
+    NOTE: The function will not return anything but will show a plot
 
     :param dates: 
     :param portfolio_returns:
@@ -222,7 +222,7 @@ def compare_cumulative_returns(dates: list,
                     market_cumulative_returns: list):
     """ This function will plot that will compare returns from the benchmark market to the portfolio returns.
 
-    Note: The function will not return anything but will show a plot
+    NOTE: The function will not return anything but will show a plot
 
     :param dates: 
     :param portfolio_returns:
