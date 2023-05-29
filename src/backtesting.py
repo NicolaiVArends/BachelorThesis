@@ -111,7 +111,7 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
     if monthly_or_yearly_rebalancing == 'yearly':
         delta = relativedelta(years=rebalancing_freq)
         while (start_date <= end_date):
-            listparameters.append(portfolio.efficient_frontier_solo(pct_returns,
+            listparameters.append(efficient_frontier.efficient_frontier_solo(pct_returns,
                             strategy['bounds'],
                             strategy['sharpe_type'],
                             start_date-covariance_window_time_delta,#The start date for portfolio optimization will be the start date minus the covariance window
@@ -127,9 +127,9 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
             list_of_port_esg_scores.append(portfolio.esg_score_of_portfolio(list_of_port_weights[i],esgdata.head(1)))
 
 
-            list_of_cmle_returns.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[0])
+            list_of_cmle_returns.append(efficient_frontier.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[0])
 
-            list_of_cml_allocations.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[1])
+            list_of_cml_allocations.append(efficient_frontier.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[1])
 
             betas_of_portfolios.append(capm.calculate_portfolio_beta(pct[start_date-covariance_window_time_delta:start_date],prices[start_date-covariance_window_time_delta:start_date],list_of_port_weights[i],market_name))     
 
@@ -182,7 +182,7 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
     elif monthly_or_yearly_rebalancing == 'monthly':
         delta = relativedelta(months=rebalancing_freq)
         while (start_date <= end_date):
-            listparameters.append(portfolio.efficient_frontier_solo(pct_returns,
+            listparameters.append(efficient_frontier.efficient_frontier_solo(pct_returns,
                             strategy['bounds'],
                             strategy['sharpe_type'],
                             start_date-covariance_window_time_delta,#The start date for portfolio optimization will be the start date minus the covariance window
@@ -198,9 +198,9 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
             list_of_port_esg_scores.append(portfolio.esg_score_of_portfolio(list_of_port_weights[i],esgdata.head(1)))
 
 
-            list_of_cmle_returns.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[0])
+            list_of_cmle_returns.append(efficient_frontier.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[0])
 
-            list_of_cml_allocations.append(portfolio.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[1])
+            list_of_cml_allocations.append(efficient_frontier.capital_mark_line_returns(listparameters[i],strategy['risk_free_rate'],strategy['maximum_risk'])[1])
 
             betas_of_portfolios.append(capm.calculate_portfolio_beta(pct[start_date-covariance_window_time_delta:start_date],prices[start_date-covariance_window_time_delta:start_date],list_of_port_weights[i],market_name))    
 

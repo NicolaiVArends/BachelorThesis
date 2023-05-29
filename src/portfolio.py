@@ -94,7 +94,7 @@ def mean_return_monthly(returns: pd.DataFrame):
     return(returns.mean())
 
 
-def covariance_matric_monthly(returns: pd.DataFrame, ledoit_wolfe = True):
+def covariance_matrix_monthly(returns: pd.DataFrame, ledoit_wolfe = True):
     """ This function makes monhtly portfolio covariance matrix on monthly prices/return for the portfolio.
 
     :param returns: Monthly stock price/returns data in the portfolio
