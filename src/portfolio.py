@@ -137,12 +137,14 @@ def mean_return_monthly(returns: pd.DataFrame):
     return(returns.mean())
 
 
-def covariance_matric_monthly(returns: pd.DataFrame, ledoit_wolfe = True):
+def covariance_matric_monthly(returns: pd.DataFrame,
+                            ledoit_wolfe: bool = True):
     """ This function makes monhtly portfolio covariance matrix on monthly prices/return for the portfolio.
 
     :param returns: Monthly stock price/returns data in the portfolio
     :returns: Monthly portfolio covariance matrix
     """
+    #print(returns.cov().head().size)
     if ledoit_wolfe == True:
         return(LedoitWolf().fit(np.random.multivariate_normal(mean=returns.mean(),cov=returns.cov(),size=50)).covariance_) #https://scikit-learn.org/stable/modules/generated/sklearn.covariance.LedoitWolf.html
     else:
