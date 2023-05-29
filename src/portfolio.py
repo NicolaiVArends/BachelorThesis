@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 from sklearn.covariance import LedoitWolf
-
 from datetime import datetime as dt
 from src import efficient_frontier
 from scipy.optimize import Bounds, LinearConstraint, minimize
@@ -74,46 +73,7 @@ def rolling_window_efficient_frontier(returns: pd.DataFrame,
     return parameters
 
 
-def efficient_frontier_solo(returns: pd.DataFrame, 
-                            bounds: Bounds, 
-                            Sharpe_Type,
-                            start_date: int,
-                            end_date: int, 
-                            wanted_return: float = None, 
-                            maximum_risk: float = None,
-                            monthly_or_yearly_mean: str = "yearly",
-                            ledoit_Wolf: bool = True):
-    """ This function calculates the efficient frontier on one window time period.
 
-    :param returns: Stock price/returns data in the portfolio
-    :param bounds: Bounds for the minimizer
-    :param Sharpe_Type: Constraint that can be either "Wanted_return", "Maximum_risk", or "No_extra_constraint"
-    :param start_date: Starting year of the stock return/price data in portfolio
-    :param end_date: Ending year of the stock return/price data in portfolio
-    :param wanted_return: Sets minimum limit for the wanted return as a constraint, default is None
-    :param maximum_risk: Sets maximum limit of taken risk as a constraint, default is None
-    :param monthly_or_yearly_mean: Define if the data is yearly or monthly mean, default is "yearly"
-    :returns: Parameters with the calculated efficient frontier data
-    """    
-    parameters = []
-    sample_rolling_window = returns.loc['{}'.format(str(start_date)):'{}'.format(str(end_date))]
-    if monthly_or_yearly_mean == "monthly":
-        parameters.append(efficient_frontier.calculate_efficient_frontier(mean_return_monthly(sample_rolling_window),
-                                                                          covariance_matrix_monthly(sample_rolling_window,ledoit_Wolf),
-                                                                          bounds,
-                                                                          Sharpe_Type,
-                                                                          wanted_return,
-                                                                          maximum_risk))
-    elif monthly_or_yearly_mean == "yearly":
-        parameters.append(efficient_frontier.calculate_efficient_frontier(mean_return_annual(sample_rolling_window),
-                                                                          covariance_matrix_annual(sample_rolling_window,ledoit_Wolf),
-                                                                          bounds,
-                                                                          Sharpe_Type,
-                                                                          wanted_return,
-                                                                          maximum_risk))
-    else:
-        return("monthly or yearly has to be either yearly or monthly")
-    return parameters
 
 
 def mean_return_annual(returns: pd.DataFrame, 
@@ -187,15 +147,6 @@ def portfolio_mean(returns: pd.DataFrame):
     return returns.mean()
 
 
-def portfolio_covariance(returns: pd.DataFrame):
-    """ This function takes the returns of the different assets in a portfolio and computes the covariance matrix of it.
-
-    :param returns: Monthly/Yearly stock price/returns data in the portfolio
-    :returns: Monthly/Yearly portfolio covariance matrix
-    """
-    return returns.cov()
-
-
 def portfolio_std(port_cov: pd.DataFrame, 
                   weights: pd.DataFrame):
     """ This function takes portfolio weigths and covariance matrix and computes the portfolio standard deviation (risk).
@@ -219,30 +170,4 @@ def esg_score_of_portfolio(weights_of_portfolio: pd.DataFrame,
     result = pd.DataFrame({'ESG_score_of_portfolio': row_sums}, index = weights_of_portfolio.index)
     return (result)
 
-
-def capital_mark_line_returns(parameters: np.array,
-                              risk_free_rate: float, 
-                              accepted_risk: float): 
-    """ This function takes parameters from capital market line/efficient frontier, calculates and return the returns in the capital market line based on the risk-free rate and an accepted risk level for the portfolios.
-
-    :param parameters: Portfolio weight allocation
-    :param risk_free_rate: Risk-free rate of capital market line
-    :param accepted_risk: Limit/Level of accepted risk
-    :returns: Return of the capital market line with an accepted risk
-    """
-    prt_exp_return_array = []
-    prt_risk_array =  []
-    portfolio_allocations = []
-    returns = []
-    risk = []
-    cmle = []
-
-    for i in range(len(parameters)):
-        prt_exp_return_array.append(parameters[i][1]) 
-        prt_risk_array.append(parameters[i][0])
-
-    for i in range(len(parameters)):
-        cmle.append(risk_free_rate + accepted_risk*((prt_exp_return_array[i]-risk_free_rate)/prt_risk_array[i]))
-        portfolio_allocations.append((cmle[i]-risk_free_rate)/(prt_exp_return_array[i]-risk_free_rate)) #Portfolio allocations
-    return(cmle,portfolio_allocations)
 
