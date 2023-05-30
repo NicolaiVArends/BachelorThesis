@@ -59,8 +59,8 @@ def plot_efficient_frontier(parameters,
         opt_sr_vol, opt_sr_ret, opt_risk_vol,  opt_risk_ret, frontier_x, frontier_y, _ = x
         if plot_max_sharp:
             plt.title('Efficient Frontier with Max Sharp')
-            plt.xlim([0.0,0.4])
-            plt.ylim([-0.2,0.7])
+            plt.xlim([0.0,0.2])
+            plt.ylim([-0.05,0.1])
             if i % 3 != 0:
                 continue
             plt.plot(opt_sr_vol,  opt_sr_ret, marker='o', color = f'{colors[i]}', markersize=8, label=f' {start_year} - {end_year} Max Sharp Ratio')
@@ -115,8 +115,8 @@ def plot_efficient_frontier_cml(parameters,
         opt_sr_vol, opt_sr_ret, opt_risk_vol,  opt_risk_ret, frontier_x, frontier_y, _ = x
         if plot_cml == True:
             plt.title('Efficient Frontier with Max Sharp')
-            plt.xlim([0.0,0.4])
-            plt.ylim([-0.2,0.7])      
+            plt.xlim([0.0,0.2])
+            plt.ylim([-0.05,0.1])      
             cm_x = np.linspace(0,0.5,100)
             cm_y = (risk_free_rate + cm_x*((opt_sr_ret-risk_free_rate)/opt_sr_vol))
             cm_yy = (risk_free_rate + risk*((opt_sr_ret-risk_free_rate)/opt_sr_vol))

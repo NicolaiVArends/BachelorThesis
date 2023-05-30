@@ -164,6 +164,7 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
             start_date += delta
             i += 1
         results = {
+            'portfolio_parameters': listparameters,
             'portfolio_weights': list_of_port_weights,
             'portfolio_esg_scores': list_of_port_esg_scores,
             'betas_of_portfolios': betas_of_portfolios,
@@ -235,6 +236,7 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
             start_date += delta
             i += 1
         results = {
+            'portfolio_parameters': listparameters,
             'portfolio_weights': list_of_port_weights,
             'portfolio_esg_scores': list_of_port_esg_scores,
             'betas_of_portfolios': betas_of_portfolios,

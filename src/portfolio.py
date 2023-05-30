@@ -95,31 +95,31 @@ def mean_return_monthly(returns: pd.DataFrame):
 
 
 def covariance_matrix_monthly(returns: pd.DataFrame, ledoit_wolfe = True):
-    """ This function makes monhtly portfolio covariance matrix on monthly prices/return for the portfolio.
+    """ This function makes monthly portfolio covariance matrix on monthly prices/return for the portfolio.
 
     :param returns: Monthly stock price/returns data in the portfolio
     :returns: Monthly portfolio covariance matrix
     """
-    #print(returns.cov().head().size)
     if ledoit_wolfe == True:
-        return(LedoitWolf().fit(np.random.multivariate_normal(mean=returns.mean(),cov=returns.cov(),size=50)).covariance_) #https://scikit-learn.org/stable/modules/generated/sklearn.covariance.LedoitWolf.html
+        cov_estimator = LedoitWolf()
+        return cov_estimator.fit(returns).covariance_
     else:
-        return(returns.cov())
+        return returns.cov()
 
 
 def covariance_matrix_annual(returns: pd.DataFrame,
-                             ledoit_Wolf: bool == True, 
+                             ledoit_wolfe: bool == True, 
                              frequency: int = 12):
-    """ This function makes yearly portfolio covariance matrix by taking in monthly prices/return for the portfolio.
-   
+    """ This function makes Yearly portfolio covariance matrix on monthly prices/return for the portfolio.
+
     :param returns: Monthly stock price/returns data in the portfolio
-    :param frequency: Multiplier for making the return from monthly to annual data, default is 12
-    :returns: Yearly portfolio covariance matrix 
+    :returns: Monthly portfolio covariance matrix
     """
-    if ledoit_Wolf == True:
-        return(LedoitWolf().fit(np.random.multivariate_normal(mean=returns.mean(),cov=returns.cov(),size=50)).covariance_* frequency)
+    if ledoit_wolfe == True:
+        cov_estimator = LedoitWolf()
+        return cov_estimator.fit(returns).covariance_*12
     else:
-        return(returns.cov()*frequency)
+        return returns.cov()
 
 
 def portfolio_return(returns: pd.DataFrame, 
@@ -133,6 +133,18 @@ def portfolio_return(returns: pd.DataFrame,
     :returns: Computed portfolio return with given weight allocation
     """
     return np.dot(returns, weights.T)
+
+def portfolio_return_for_plot(returns: pd.DataFrame, 
+                     weights: pd.DataFrame):
+    """This function uses portfolio returns and weights to compute the portfolio return by doing dot product between returns and weights.
+
+    Note: Parameters needs to be on same interval e.g. both yearly or monthly data.
+
+    :param returns: Stock price/returns data in the portfolio
+    :param weights: Portfolio weight allocation
+    :returns: Computed portfolio return with given weight allocation
+    """
+    return np.dot(returns, weights)
 
 
 def portfolio_std(port_cov: pd.DataFrame, 
