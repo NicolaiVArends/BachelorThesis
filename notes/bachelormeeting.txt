@@ -3,3 +3,5 @@ Spørgsmål til Martin:
 
 - Skal vi have en makefile eller er det nok at lave en udførlig README.md?
 - Skal vi have unittest før kørsel af projektet i README.md?
+- Skal vi constrainte på ESG-score også?
+
