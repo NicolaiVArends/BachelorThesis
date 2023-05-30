@@ -85,9 +85,7 @@ def calculate_portfolio_beta_ols(market: pd.DataFrame,
         x1 = stat.add_constant(x)
         y = market[portfolio.columns[i]]
         result = stat.OLS(y, x1).fit()
-        print(result.params)
         betas.append(result.params[1])
-    print(betas)
     beta_of_port = np.multiply(betas,portfolio_weights).values.sum()
     return(beta_of_port)
 
