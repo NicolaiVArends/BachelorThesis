@@ -13,14 +13,21 @@ import numpy as np
 import numpy.testing as npt
 from scipy.optimize import Bounds
 import warnings
-warnings.filterwarnings("ignore", category=FutureWarning, module='pandas')
-# Suppress the FutureWarning
-warnings.simplefilter(action='ignore', category=FutureWarning)
-warnings.simplefilter(action='ignore', category=FutureWarning)
+
 #We calculate the different parameters in excel, and then test if they are the same as the ones we calculate 
 #Using our functions
 class monthly_returns_test(unittest.TestCase):
-    warnings.filterwarnings("ignore", category=FutureWarning, module='pandas')
+
+    def test_zero_input_esg(self):
+        expected = KeyError
+        testcase = pd.DataFrame()
+        self.assertRaises(expected, data.esg_score_weight, testcase, np.array([[1/3,1/3,1/3]]))
+
+    def test_zero_input_prices(self):
+        expected = KeyError
+        testcase = pd.DataFrame()
+        self.assertRaises(expected, data.stock_monthly_close, testcase)
+
     def test_of_beta(self):
         expected = 1.8088
         testcase = data.pct_returns_from_prices(pd.read_csv('../data/test/test_prices.csv',index_col=['Date']))
@@ -81,7 +88,6 @@ class monthly_returns_test(unittest.TestCase):
         testcase = data.pct_returns_from_prices(pd.read_csv('../data/test/test_prices.csv',index_col=['Date']))
         self.assertAlmostEqual(expected,capm.calculate_portfolio_beta(testcase,testcase[['MMM','AOS','ABT']],pd.DataFrame(np.array([[0.33,0.33,0.33]])),'SP500'), places=3, msg=None, delta=None)
 
-        #expected = 0.0204076
     def test_of_capm(self):
         expected = 0.0204076
         testcase = data.pct_returns_from_prices(pd.read_csv('../data/test/test_prices.csv',index_col=['Date']))
@@ -93,9 +99,6 @@ class monthly_returns_test(unittest.TestCase):
         self.assertAlmostEqual(expected, capm.jensens_alpha(0.0179752,0.069864), places=4, msg=None, delta=None)
 
     def test_of_backtesting_portfolio_actual_returns_cml(self):
-        warnings.filterwarnings("ignore", category=FutureWarning, module='pandas')
-# Suppress the FutureWarning
-        warnings.simplefilter(action='ignore', category=FutureWarning)
         expected = 0.097149
         testcase = pd.read_excel('../data/ESG_DATA_S&P500.xlsx')
         testcase = testcase[(testcase["stock_symbol"] == 'MMM') |(testcase['stock_symbol'] == 'AOS') | (testcase['stock_symbol']=='ABT')]
@@ -118,10 +121,8 @@ class monthly_returns_test(unittest.TestCase):
                                                         0,
                                                         10,
                                                         '^GSPC',False)['portfolio_actual_returns_cmle'][0][0], places=4, msg=None, delta=None)
+    
     def test_of_backtesting_pct_returns_portfolio(self):
-        warnings.filterwarnings("ignore", category=FutureWarning, module='pandas')
-# Suppress the FutureWarning
-        warnings.simplefilter(action='ignore', category=FutureWarning)
         expected = 0.069864
         testcase = pd.read_excel('../data/ESG_DATA_S&P500.xlsx')
         testcase = testcase[(testcase["stock_symbol"] == 'MMM') |(testcase['stock_symbol'] == 'AOS') | (testcase['stock_symbol']=='ABT')]
@@ -144,10 +145,8 @@ class monthly_returns_test(unittest.TestCase):
                                                         0,
                                                         10,
                                                         '^GSPC',False)['portfolio_actual_returns'][0][0], places=4, msg=None, delta=None)
+    
     def test_of_backtesting_pct_returns_sp500(self):
-        warnings.filterwarnings("ignore", category=FutureWarning, module='pandas')
-# Suppress the FutureWarning
-        warnings.simplefilter(action='ignore', category=FutureWarning)
         expected = 0.07740
         testcase = pd.read_excel('../data/ESG_DATA_S&P500.xlsx')
         testcase = testcase[(testcase["stock_symbol"] == 'MMM') |(testcase['stock_symbol'] == 'AOS') | (testcase['stock_symbol']=='ABT')]
@@ -170,10 +169,8 @@ class monthly_returns_test(unittest.TestCase):
                                                         0,
                                                         10,
                                                         '^GSPC',False)['pct_returns_sp500'][0], places=4, msg=None, delta=None)
-    def test_of_backtesting_CAPM(self):
-        warnings.filterwarnings("ignore", category=FutureWarning, module='pandas')
-# Suppress the FutureWarning
-        warnings.simplefilter(action='ignore', category=FutureWarning)
+    
+    def test_of_backtesting_capm(self):
         expected = 0.017986
         testcase = pd.read_excel('../data/ESG_DATA_S&P500.xlsx')
         testcase = testcase[(testcase["stock_symbol"] == 'MMM') |(testcase['stock_symbol'] == 'AOS') | (testcase['stock_symbol']=='ABT')]
@@ -195,12 +192,9 @@ class monthly_returns_test(unittest.TestCase):
                                                         0,
                                                         10,
                                                         '^GSPC',False)['capm_for_portfolio'][0], places=4, msg=None, delta=None)        
-    def test_of_backtesting_BETA(self):
-        warnings.filterwarnings("ignore", category=FutureWarning, module='pandas')
-# Suppress the FutureWarning
-        warnings.simplefilter(action='ignore', category=FutureWarning)
+    
+    def test_of_backtesting_beta(self):
         expected = 1.388915771
-
         testcase = pd.read_excel('../data/ESG_DATA_S&P500.xlsx')
         testcase = testcase[(testcase["stock_symbol"] == 'MMM') |(testcase['stock_symbol'] == 'AOS') | (testcase['stock_symbol']=='ABT')]
         self.assertAlmostEqual(expected, 
