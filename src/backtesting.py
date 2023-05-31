@@ -9,12 +9,6 @@ from datetime import datetime
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from dateutil.parser import parse
-import warnings
-
-warnings.filterwarnings("ignore", category=FutureWarning, module='pandas')
-# Suppress the FutureWarning
-warnings.simplefilter(action='ignore', category=FutureWarning) #We get a weird warning, a bug with pandas according to their github
-
 
 def backtesting(strategy, monthly_or_yearly_rebalancing,
                 rebalancing_freq,start_date,end_date,
