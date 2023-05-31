@@ -34,10 +34,6 @@ def minimize_risk(port_covariance: pd.DataFrame,
     """
     function = lambda weight: portfolio.portfolio_std(port_covariance, weights=weight)
     constraint = LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int),1,1)
-    options = {'xtol': 1e-07, 
-               'gtol': 1e-07, 
-               'barrier_tol': 1e-07, 
-               'maxiter': 1000}
     result = minimize(function, 
                       x0,
                       method='SLSQP', 
@@ -117,10 +113,6 @@ def maximize_sharp_ratio_no_spec(port_return: pd.DataFrame,
     bounds = bounds
     constraints = (LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int),1,1))
                     #{'type': 'eq', 'fun': lambda weight: np.sqrt(np.dot(weight, np.dot(weight, port_covariance)))}) #Second restraint lets us define how high a return we want                                           
-    options = {'xtol': 1e-07, 
-               'gtol': 1e-07, 
-               'barrier_tol': 1e-07, 
-               'maxiter': 1000}
     result = minimize(function, 
                       x0,
                       method='SLSQP', 
