@@ -7,3 +7,4 @@ Spørgsmål til Martin:
 - Skal vi constrainte på ESG-score også?
 - Skal vi bruge Adj Close eller Close?
 - Kan vi i diskussionen perspektivere til machine learning modeler?
+- Skal vi have et teoriafsnit med single-index models, hvis vi bruger CAPM kun?
