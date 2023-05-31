@@ -20,20 +20,10 @@ def calculate_portfolio_beta(market: pd.DataFrame,
     :returns: Betas for each portfolio 
     """
     betas = []
-    
-    
-    
-
     for i in range(len(portfolio.columns)):
-        
         beta = np.cov(np.stack([market[portfolio.columns[i]].to_numpy(),market[market_name].to_numpy()]),ddof=0)[0,1]/np.var(market[market_name])
-
-        
-        
         betas.append(beta)
-      
     beta_of_port = np.sum(np.sum(np.multiply(betas,portfolio_weights)))
-
     return (beta_of_port)
 
 def capm_calc(market_expected_returns: pd.DataFrame,
