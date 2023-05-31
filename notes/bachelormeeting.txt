@@ -8,3 +8,4 @@ Spørgsmål til Martin:
 - Skal vi bruge Adj Close eller Close?
 - Kan vi i diskussionen perspektivere til machine learning modeler?
 - Skal vi have et teoriafsnit med single-index models, hvis vi bruger CAPM kun?
+- Skal vi have contributions afsnit efter indledningen m. characters count? Ift. hvem som hovedsageligt har lavet hvad? Eller at vi er fælles om det hele?
