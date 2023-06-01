@@ -13,7 +13,8 @@ from dateutil.parser import parse
 def backtesting(strategy, monthly_or_yearly_rebalancing,
                 rebalancing_freq,start_date,end_date,
                 covariance_window_yearly,covariance_window_monthly,
-                market_name,benoit_wolfe = True): #,covariance_window_monthly
+                market_name,benoit_wolfe = True,
+                Close_type = 'Adj Close'): #,covariance_window_monthly
     """ This function makes a backtest given a strategy, rebalacing informations, information of data period, window size and benchmark market name.
       
     In this function
@@ -48,6 +49,7 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
     assert isinstance(covariance_window_monthly, int), "covariance_window_monthly should be an integer"
     assert covariance_window_yearly + covariance_window_monthly > 0, "covariance_window should be greater than zero"
     assert isinstance(market_name, str), "market_name should be a string"
+    assert Close_type == 'Adj Close' or 'Close'
 
     if isinstance(start_date, str):
         start_date = parse(start_date)
@@ -62,9 +64,9 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
     #print(esg_data)
     #print([pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(years=rebalancing_freq,months=1))])
     if monthly_or_yearly_rebalancing == 'yearly':
-        full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(years=rebalancing_freq,months=1))]) 
+        full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(years=rebalancing_freq,months=1))],Close_type) 
     if monthly_or_yearly_rebalancing == 'monthly':
-        full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(months=rebalancing_freq+1))]) 
+        full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(months=rebalancing_freq+1))],Close_type) 
 
 #Making sure we download data from the first covariance date, until the last date we sell our stocks
     prices,esgdata = data.seperate_full_data(full_data)
@@ -74,7 +76,7 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
     elif monthly_or_yearly_rebalancing == 'monthly':
         stock_data_download = yf.download(market_name, start=start_date-covariance_window_time_delta, end=end_date+relativedelta(months=rebalancing_freq+1), interval='1mo', progress=False)
 
-    stock_data_download = stock_data_download[['Close']].rename(columns={'Close': market_name})
+    stock_data_download = stock_data_download[[Close_type]].rename(columns={Close_type: market_name})
     stock_data = pd.concat([prices,stock_data_download], axis = 1)
     
     pct = data.pct_returns_from_prices(stock_data)[start_date-covariance_window_time_delta:end_date+relativedelta(years=rebalancing_freq+1)]

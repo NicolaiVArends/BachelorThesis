@@ -43,7 +43,8 @@ def esg_score_weight(data: pd.DataFrame,
     
 
 def stock_monthly_close(esg_data: pd.DataFrame, 
-                        dates: list = ['2003-01-01','2023-01-01']):
+                        dates: list = ['2003-01-01','2023-01-01'],
+                        close_type: str = 'Adj Close'):
     """ This function uses ESG data for the assets and the period, downloads monthly close price data and returns a full dataframe with ESG scores and price data.
 
     In this function, we take the ESG score and period of the wanted historical price period. With yahoo finance api, we download the monthly close data of each stock from yahoo finance using the stock/ticker symbol.
@@ -51,8 +52,10 @@ def stock_monthly_close(esg_data: pd.DataFrame,
 
     :param esg_data: ESG score for the assets including the stock/ticker symbol
     :param dates: Period for the historical monthly close price data, default is ['2003-01-01','2023-01-01']
+    :param close_type: The type of closing data the user wants, can either be Adjusted Close or just Close
     :returns: Dataframe with both monthly close price data for the stocks and esg score
     """
+    assert close_type == 'Adj Close' or 'Close'
     symbols = esg_data['stock_symbol'].unique()
 
     # create a new dataframe to store the monthly closing data
@@ -62,7 +65,7 @@ def stock_monthly_close(esg_data: pd.DataFrame,
         stock_data = yf.download(symbol, start=dates[0], end=dates[1], interval='1mo', progress=False)
         
         # extract the 'Close' column and rename it with the stock symbol
-        stock_data = stock_data[['Adj Close']].rename(columns={'Adj Close': symbol})
+        stock_data = stock_data[[close_type]].rename(columns={close_type: symbol})
         
         # add the weighted score for the stock
         weighted_score = esg_data.loc[esg_data['stock_symbol']==symbol, 'weighted_score'].iloc[0]

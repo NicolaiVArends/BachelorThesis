@@ -120,7 +120,7 @@ class monthly_returns_test(unittest.TestCase):
                                                         '2014-07-01',
                                                         0,
                                                         10,
-                                                        '^GSPC',False)['portfolio_actual_returns_cmle'][0][0], places=4, msg=None, delta=None)
+                                                        '^GSPC',False,'Close')['portfolio_actual_returns_cmle'][0][0], places=4, msg=None, delta=None)
     
     def test_of_backtesting_pct_returns_portfolio(self):
         expected = 0.069864
@@ -144,7 +144,7 @@ class monthly_returns_test(unittest.TestCase):
                                                         '2014-07-01',
                                                         0,
                                                         10,
-                                                        '^GSPC',False)['portfolio_actual_returns'][0][0], places=4, msg=None, delta=None)
+                                                        '^GSPC',False,'Close')['portfolio_actual_returns'][0][0], places=4, msg=None, delta=None)
     
     def test_of_backtesting_pct_returns_sp500(self):
         expected = 0.07740
@@ -168,7 +168,7 @@ class monthly_returns_test(unittest.TestCase):
                                                         '2014-07-01',
                                                         0,
                                                         10,
-                                                        '^GSPC',False)['pct_returns_sp500'][0], places=4, msg=None, delta=None)
+                                                        '^GSPC',False,'Close')['pct_returns_sp500'][0], places=4, msg=None, delta=None)
     
     def test_of_backtesting_capm(self):
         expected = 0.017986
@@ -191,7 +191,7 @@ class monthly_returns_test(unittest.TestCase):
                                                         '2014-07-01',
                                                         0,
                                                         10,
-                                                        '^GSPC',False)['capm_for_portfolio'][0], places=4, msg=None, delta=None)        
+                                                        '^GSPC',False,'Close')['capm_for_portfolio'][0], places=4, msg=None, delta=None)        
     
     def test_of_backtesting_beta(self):
         expected = 1.388915771
@@ -214,7 +214,7 @@ class monthly_returns_test(unittest.TestCase):
                                                         '2014-07-01',
                                                         0,
                                                         10,
-                                                        '^GSPC',False)['betas_of_portfolios'][0], places=3, msg=None, delta=None)                   
+                                                        '^GSPC',False,'Close')['betas_of_portfolios'][0], places=3, msg=None, delta=None)                   
         
 
 unittest.main()
