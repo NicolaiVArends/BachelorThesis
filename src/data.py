@@ -62,7 +62,7 @@ def stock_monthly_close(esg_data: pd.DataFrame,
         stock_data = yf.download(symbol, start=dates[0], end=dates[1], interval='1mo', progress=False)
         
         # extract the 'Close' column and rename it with the stock symbol
-        stock_data = stock_data[['Close']].rename(columns={'Close': symbol})
+        stock_data = stock_data[['Adj Close']].rename(columns={'Adj Close': symbol})
         
         # add the weighted score for the stock
         weighted_score = esg_data.loc[esg_data['stock_symbol']==symbol, 'weighted_score'].iloc[0]
@@ -98,7 +98,7 @@ def data_for_beta(prices: pd.DataFrame,
                   Market: list = ['SPY'],
                   dates: tuple = ('2000-01-01','2023-01-01')):
     
-    """ This function takes all stock/ticker symbols for both benchmark market and stock prices, download and returns a dataframe with the stock monthly close prices on given period.
+    """ This function takes all stock/ticker symbols for both benchmark market and stock prices, download and returns a dataframe with the stock monthly adjusted  close prices on given period.
     
     :param symbols: Stock/Ticker symbol for benchmark market and portfolio in in list, default is ['SPY']
     :param dates: Period for the historical data which is the same as the portfolio data, default is ['2003-01-01','2023-01-01']
@@ -110,7 +110,7 @@ def data_for_beta(prices: pd.DataFrame,
     
     for i in range(len(Market)):
         stock_data_download = yf.download(Market[i], start=dates[0], end=dates[1], interval='1mo', progress=False)
-        stock_data_download = stock_data_download[['Close']].rename(columns={'Close': Market[i]})
+        stock_data_download = stock_data_download[['Adj Close']].rename(columns={'Adj Close': Market[i]})
 
         # retrieve data from yfinance
         stock_data = pd.concat([stock_data,stock_data_download], axis = 1)
