@@ -120,7 +120,7 @@ def data_for_beta(prices: pd.DataFrame,
     return stock_data
 
 
-def currency_rates(prices: pd.DataFrame):
+def convert_to_usd(prices: pd.DataFrame):
     """ This function takes the stock prices, gets the exchange rates from forex-python api for any foreign currencies to, converts all foreign stock prices to USD and returns the stock prices in USD.
 
     In this function, we fetch the currency rates that exchanges from any stock prices in foreign currencies (not USD) to USD. The exchange rates is downloaded historically for the foreign currencies using forex-python api.
