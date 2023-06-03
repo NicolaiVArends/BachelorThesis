@@ -86,7 +86,7 @@ def maximize_sharp_ratio_wanted_risk(port_return: pd.DataFrame,
     
     function = lambda weight: np.sqrt(np.dot(weight, np.dot(weight, port_covariance))) / port_return.dot(weight)
     bounds = bounds
-    constraints = (LinearConstraint(np.ones((port_covariance.shape[1],), dtype=int), 1, 1),
+    constraints = (LinearConstraint(np.ones((port_covariance.shape[1]), dtype=int), 1, 1),
                    {'type': 'ineq', 'fun': lambda weight: max_risk - np.sqrt(np.dot(weight, np.dot(weight, port_covariance)))})
                     
     result = minimize(function, 
