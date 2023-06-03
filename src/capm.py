@@ -39,15 +39,15 @@ def capm_calc(market_expected_returns: pd.DataFrame,
     :param risk_free_rate: Risk free rate allocation of the investment in procent, default is 0.05
     :returns: Computed CAPM model
     """
-    print(f'Excpected return on investment is {100*(risk_free_rate+beta*(market_expected_returns-risk_free_rate))}%')
+    print(f'Expected return on investment is {100*(risk_free_rate+beta*(market_expected_returns-risk_free_rate))}%')
 
     return(risk_free_rate+beta*(market_expected_returns-risk_free_rate))
 
 def jensens_alpha(expected_return: float, 
                   actual_return: float):
-    """ This function uses expected return calculated from the CAPM and actual return from the portfolio, calculates and returns jensens alpha.
+    """ This function uses expected return calculated from the CAPM and actual return from the portfolio, calculates and returns Jensens alpha.
 
-    In this function we uses Jensens alpha and the expected return calculated from the CAPM to compute jensens alpha.
+    In this function we use Jensens alpha and the expected return calculated from the CAPM to compute Jensens alpha.
 
     :param expected_return: Expected return from the portfolio given 
     :param actual_return: Actual return for portfolio
