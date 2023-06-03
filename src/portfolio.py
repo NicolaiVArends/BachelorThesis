@@ -100,7 +100,7 @@ def covariance_matrix_monthly(returns: pd.DataFrame, ledoit_wolfe = True):
     :param returns: Monthly stock price/returns data in the portfolio
     :returns: Monthly portfolio covariance matrix
     """
-    if ledoit_wolfe == True:
+    if ledoit_wolfe:
         cov_estimator = LedoitWolf()
         return cov_estimator.fit(returns).covariance_
     else:
@@ -115,7 +115,7 @@ def covariance_matrix_annual(returns: pd.DataFrame,
     :param returns: Monthly stock price/returns data in the portfolio
     :returns: Monthly portfolio covariance matrix
     """
-    if ledoit_wolfe == True:
+    if ledoit_wolfe:
         cov_estimator = LedoitWolf()
         return cov_estimator.fit(returns).covariance_*12
     else:
