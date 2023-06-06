@@ -12,17 +12,17 @@ This project repository in optimising sustainable financial portfolios provides 
 
 Before running this project, ensure that you have the following packages installed:
 
-* NumPy >= 1.24.3
-* Pandas >= 1.4.2
-* SciPy >= 1.10.0
-* jupyter >= 1.0.0
-* yfinance >= 0.2.4
-* forex-python >= 1.8
-* Statsmodels >= 0.14.0 
-* Matplotlib >= 3.5.2
-* ipywidgets >= 8.0.6
-* scikit-learn >= 1.2.2
-* openpyxl >= 3.1.2
+* NumPy>=1.24.3
+* Pandas>=1.4.2
+* SciPy>=1.10.0
+* jupyter>=1.0.0
+* yfinance>=0.2.4
+* forex-python>=1.8
+* Statsmodels>=0.14.0 
+* Matplotlib>=3.5.2
+* ipywidgets>=8.0.6
+* scikit-learn>=1.2.2
+* openpyxl>=3.1.2
 * python-dateutil>=2.8.2
 * seaborn>=0.12.2
 
