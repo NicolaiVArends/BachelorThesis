@@ -19,11 +19,49 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
       
     In this function
 
-    :param
-    :param 
-    :param 
-    :param 
-    :returns:
+    :param strategy: A dict containing the investment strategy
+    should contain the following keys.
+    A dictionary specifying the investment strategy. The dictionary should contain the following keys: 
+        - 'df': DataFrame of the market data
+        - 'weights': Array of weights for the ESG scores
+        - 'min_esg_score': Minimum Environmental, Social, and Governance (ESG) score for the assets
+        - 'max_esg_score': Maximum ESG score for the assets
+        - 'bounds': Bounds for the weights of the assets
+        - 'sharpe_type': Type of Sharpe Ratio to use for the optimization 
+        - 'wanted_return': Desired return for the portfolio (Only used for return sharpe optimization)
+        - 'maximum_risk': Maximum risk acceptable for the portfolio (Used for CMLE returns and minimize risk portfolio optimization)
+        - 'rebalancing_freq': Frequency of portfolio rebalancing
+        - 'risk_free_rate': The risk-free rate to use in the portfolio optimization
+
+    :param monthly_or_yearly_rebalancing : str. Frequency of portfolio rebalancing, either 'monthly' or 'yearly'.
+    :param rebalancing_freq : int. The number of months or years between each rebalance.
+
+    :param start_date : str or pd.Timestamp. The start date of the backtest period. Can be a string formatted as 'yyyy-mm-dd' or a pandas Timestamp object.
+    :param end_date : str or pd.timestamp. The end date of the backtest period. Can be a string formatted as 'yyyy-mm-dd' or a pandas Timestamp object.
+    :param covariance_window_yearly : int. The number of years of data to use for calculating the covariance matrix.
+    :param  covariance_window_monthly : int. The number of months of data to use for calculating the covariance matrix.
+
+    :param market_name : str. The ticker of the benchmark market to compare the investment strategy to.
+    :param benoit_wolfe : bool, optional. Whether to use the Benoit Wolfe method for portfolio optimization. Default is True.
+
+    :param Close_type : str, optional. The type of close prices to use in the calculations. Default is 'Adj Close'.
+
+    :returns: Results a Dict.
+    The dict contains the following.
+    portfolio_parameters: List of the parameters of each portfolio, for each rebalancing date.
+    portfolio_weights: List of the weights of the assets at each rebalancing date
+    portfolio_esg_scores: List of the ESG scores of the portfolio at each rebalance date.
+    betas_of_portfolios: List of the betas of each portfolio for each rebalancing date
+    capm_for_portfolio: List of the expected returns based on the Capital Asset Pricing model returns of the portfolio of each rebalaning date
+    cmle_returns: List of the expected returns based on the Capital Market Line
+    portfolio_actual_returns: List of the actual returns of the portfolio at the rebalancing date
+    pct_returns_sp500: List of the returns of the benchmark market.
+    portfolio_actual_returns _cmle: List of the actual returns based on cml allocation
+    return_dates: List of the dates of each rebalance
+    cumulative_cml_return_list: List of the cumulative cml returns
+    cumulative_market_return_list': List of the cumulative market returns
+    cumulative_portfolio_return_list: List of the cumulative returns of the portfolio
+
     """
     
     assert isinstance(strategy, dict), "strategy should be a dictionary"
