@@ -29,7 +29,7 @@ def plot_cummulative_portfolio_returns(returns: pd.DataFrame,
     plt.xlabel("Time")
     plt.legend(returns_pct_cumm)
     plt.show()
-    return None
+
 
 
 def plot_efficient_frontier(parameters,
@@ -86,7 +86,7 @@ def plot_efficient_frontier(parameters,
             plt.plot(frontier_x, frontier_y, linestyle='--', color = f'{colors[i]}', linewidth=2, label=f'20{3+i:02d}-20{13+i:02d} Efficient Frontier') 
     plt.legend()
     plt.show()
-    return None
+
 
 def plot_efficient_frontier_cml(parameters,
                                 start_year: int,
@@ -137,35 +137,6 @@ def plot_efficient_frontier_cml(parameters,
         plt.plot(frontier_x, frontier_y, linestyle='--', color = f'{colors[i]}', linewidth=2, label=f'20{3+i:02d}-20{13+i:02d} Efficient Frontier') 
     plt.legend()
     plt.show()
-    return None
-
-
-def compare_returns(dates: pd.DataFrame, 
-                    portfolio_returns: pd.DataFrame,
-                    market_returns: pd.DataFrame):
-    """ This function will plot 
-
-    NOTE: The function will not return anything but will show a plot
-
-    :param dates: 
-    :param portfolio_returns:
-    :param market_returns:
-    """
-    # Plotting the bar chart
-    plt.figure(figsize=(10, 6))
-    for i in range(len(dates)):
-        plt.bar(dates[i], portfolio_returns[i], width=0.4, label='Portfolio Returns')
-        plt.bar(dates[i], market_returns[i], width=0.4, label='Market Returns')
-    plt.xlabel('Date')
-    plt.ylabel('Returns')
-    plt.title('Portfolio Returns vs. Market Returns')
-    plt.legend()
-    # Rotating x-axis labels for better readability
-    plt.xticks(rotation=45)
-    # Displaying the chart
-    plt.tight_layout()
-    plt.show()
-    return(None)
 
 
 def compare_returns1(dates: pd.DataFrame, 
@@ -176,8 +147,8 @@ def compare_returns1(dates: pd.DataFrame,
     NOTE: The function will not return anything but will show a plot
 
     :param dates: Return dates af a list computed from the backtest
-    :param portfolio_returns:
-    :param market_returns:
+    :param portfolio_returns: Portfolio returns as a list over time
+    :param market_returns: Market returns as a list over time
     """
     # Set the width of the bars
     bar_width = 0.2
