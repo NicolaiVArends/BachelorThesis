@@ -18,8 +18,8 @@ def backtesting(strategy,
                 covariance_window_yearly,
                 covariance_window_monthly,
                 market_name,
-                lenoit_wolfe = True,
-                Close_type = 'Adj Close'):
+                ledoit_wolfe = True,
+                close_type = 'Adj Close'):
     """ This function makes a backtest given a strategy, rebalacing informations, information of data period, window size and benchmark market name.
       
     In this function
@@ -47,9 +47,9 @@ def backtesting(strategy,
     :param  covariance_window_monthly : int. The number of months of data to use for calculating the covariance matrix.
 
     :param market_name : str. The ticker of the benchmark market to compare the investment strategy to.
-    :param lenoit_wolfe : bool, optional. Whether to use the Benoit Wolfe method for portfolio optimization. Default is True.
+    :param ledoit_wolfe : bool, optional. Whether to use the Benoit Wolfe method for portfolio optimization. Default is True.
 
-    :param Close_type : str, optional. The type of close prices to use in the calculations. Default is 'Adj Close'.
+    :param close_type : str, optional. The type of close prices to use in the calculations. Default is 'Adj Close'.
 
     :returns: Results a Dict.
     The dict contains the following.
@@ -92,7 +92,7 @@ def backtesting(strategy,
     assert isinstance(covariance_window_monthly, int), "covariance_window_monthly should be an integer"
     assert covariance_window_yearly + covariance_window_monthly > 0, "covariance_window should be greater than zero"
     assert isinstance(market_name, str), "market_name should be a string"
-    assert Close_type == 'Adj Close' or 'Close'
+    assert close_type == 'Adj Close' or 'Close'
 
     if isinstance(start_date, str):
         start_date = parse(start_date)
@@ -107,9 +107,9 @@ def backtesting(strategy,
     #print(esg_data)
     #print([pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(years=rebalancing_freq,months=1))])
     if monthly_or_yearly_rebalancing == 'yearly':
-        full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(years=rebalancing_freq,months=1))],Close_type) 
+        full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(years=rebalancing_freq,months=1))],close_type) 
     if monthly_or_yearly_rebalancing == 'monthly':
-        full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(months=rebalancing_freq+1))],Close_type) 
+        full_data = data.stock_monthly_close(esg_data,[pd.Timestamp(start_date-covariance_window_time_delta),pd.Timestamp(end_date+relativedelta(months=rebalancing_freq+1))],close_type) 
 
 #Making sure we download data from the first covariance date, until the last date we sell our stocks
     prices,esgdata = data.seperate_full_data(full_data)
@@ -119,7 +119,7 @@ def backtesting(strategy,
     elif monthly_or_yearly_rebalancing == 'monthly':
         stock_data_download = yf.download(market_name, start=start_date-covariance_window_time_delta, end=end_date+relativedelta(months=rebalancing_freq+1), interval='1mo', progress=False)
 
-    stock_data_download = stock_data_download[[Close_type]].rename(columns={Close_type: market_name})
+    stock_data_download = stock_data_download[[close_type]].rename(columns={close_type: market_name})
     stock_data = pd.concat([prices,stock_data_download], axis = 1)
     
     pct = data.pct_returns_from_prices(stock_data)[start_date-covariance_window_time_delta:end_date+relativedelta(years=rebalancing_freq+1)]
@@ -158,7 +158,7 @@ def backtesting(strategy,
                             strategy['wanted_return'],
                             strategy['maximum_risk'],
                             strategy['rebalancing_freq'],
-                            lenoit_wolfe)) 
+                            ledoit_wolfe)) 
             
             
             list_of_port_weights.append(efficient_frontier.weights_of_portfolio(prices,listparameters[i]))
@@ -231,7 +231,7 @@ def backtesting(strategy,
                             strategy['wanted_return'],
                             strategy['maximum_risk'],
                             strategy['rebalancing_freq'],
-                            lenoit_wolfe)) 
+                            ledoit_wolfe)) 
             
             
             list_of_port_weights.append(efficient_frontier.weights_of_portfolio(prices,listparameters[i]))    
