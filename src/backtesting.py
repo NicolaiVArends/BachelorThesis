@@ -10,11 +10,16 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 from dateutil.parser import parse
 
-def backtesting(strategy, monthly_or_yearly_rebalancing,
-                rebalancing_freq,start_date,end_date,
-                covariance_window_yearly,covariance_window_monthly,
-                market_name,benoit_wolfe = True,
-                Close_type = 'Adj Close'): #,covariance_window_monthly
+def backtesting(strategy, 
+                monthly_or_yearly_rebalancing,
+                rebalancing_freq,
+                start_date,
+                end_date,
+                covariance_window_yearly,
+                covariance_window_monthly,
+                market_name,
+                lenoit_wolfe = True,
+                Close_type = 'Adj Close'):
     """ This function makes a backtest given a strategy, rebalacing informations, information of data period, window size and benchmark market name.
       
     In this function
@@ -42,7 +47,7 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
     :param  covariance_window_monthly : int. The number of months of data to use for calculating the covariance matrix.
 
     :param market_name : str. The ticker of the benchmark market to compare the investment strategy to.
-    :param benoit_wolfe : bool, optional. Whether to use the Benoit Wolfe method for portfolio optimization. Default is True.
+    :param lenoit_wolfe : bool, optional. Whether to use the Benoit Wolfe method for portfolio optimization. Default is True.
 
     :param Close_type : str, optional. The type of close prices to use in the calculations. Default is 'Adj Close'.
 
@@ -153,7 +158,7 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
                             strategy['wanted_return'],
                             strategy['maximum_risk'],
                             strategy['rebalancing_freq'],
-                            benoit_wolfe)) 
+                            lenoit_wolfe)) 
             
             
             list_of_port_weights.append(efficient_frontier.weights_of_portfolio(prices,listparameters[i]))
@@ -226,7 +231,7 @@ def backtesting(strategy, monthly_or_yearly_rebalancing,
                             strategy['wanted_return'],
                             strategy['maximum_risk'],
                             strategy['rebalancing_freq'],
-                            benoit_wolfe)) 
+                            lenoit_wolfe)) 
             
             
             list_of_port_weights.append(efficient_frontier.weights_of_portfolio(prices,listparameters[i]))    
