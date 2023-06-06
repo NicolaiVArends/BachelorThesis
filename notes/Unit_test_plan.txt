@@ -1,3 +1,0 @@
-Vi tester funktionerne i data.py til at starte med
-
-Vi laver en fil og laver et småt datasæt, hvor det er nemt at lave beregninger
