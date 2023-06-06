@@ -125,7 +125,7 @@ def maximize_sharp_ratio_no_spec(port_return: pd.DataFrame,
 def calculate_efficient_frontier(ret_port: pd.DataFrame, 
                                  cov_port: pd.DataFrame,
                                  bounds: Bounds,
-                                 Sharpe_Type: str,
+                                 sharpe_type: str,
                                  wanted_return: float = None, 
                                  max_risk: float = None):
     """ This function will take different inputs including portfolio return and covariance matrix, to maximize the sharp ratio of different portfolios with no extra constraints.
@@ -133,7 +133,7 @@ def calculate_efficient_frontier(ret_port: pd.DataFrame,
     :param ret_port: Portfolio return
     :param cov_port: Portfolio covariance matrix
     :param bounds: Bounds for the minimizer
-    :param Sharpe_Type: Constraint that can be either "Wanted_return", "Maximum_risk", or "No_extra_constraint"
+    :param sharpe_type: Constraint that can be either "Wanted_return", "Maximum_risk", or "No_extra_constraint"
     :param wanted_return: Sets minimum limit for the wanted return as a constraint
     :param max_risk: Sets maximum limit of taken risk as a constraint
     :returns: Calculated efficient frontier including optimal return and risk for sharp ratio and points for plotting the efficient frontier
@@ -152,11 +152,11 @@ def calculate_efficient_frontier(ret_port: pd.DataFrame,
 
     #These are the weights of the assets in the portfolio with the highest Sharpe ratio.
     #Here we chose whether we want to use risk or return as an ectra constraint
-    if Sharpe_Type == "Maximum_risk":    
+    if sharpe_type == "Maximum_risk":    
         w_sr_top = maximize_sharp_ratio_wanted_risk(ret_port,cov_port,x0,bounds,max_risk)
-    elif Sharpe_Type == "Wanted_return":
+    elif sharpe_type == "Wanted_return":
         w_sr_top = maximize_sharp_ratio_wanted_returns(ret_port,cov_port,x0,bounds,wanted_return)
-    elif Sharpe_Type == "No_extra_constraint":
+    elif sharpe_type == "No_extra_constraint":
         w_sr_top = maximize_sharp_ratio_no_spec(ret_port,cov_port,x0,bounds)
     else:
         raise Exception('Wrong constraint type')
@@ -193,7 +193,7 @@ def calculate_efficient_frontier(ret_port: pd.DataFrame,
 
 def efficient_frontier_solo(returns: pd.DataFrame, 
                             bounds: Bounds, 
-                            Sharpe_Type,
+                            sharpe_type,
                             start_date: int,
                             end_date: int, 
                             wanted_return: float = None, 
@@ -204,7 +204,7 @@ def efficient_frontier_solo(returns: pd.DataFrame,
 
     :param returns: Stock price/returns data in the portfolio
     :param bounds: Bounds for the minimizer
-    :param Sharpe_Type: Constraint that can be either "Wanted_return", "Maximum_risk", or "No_extra_constraint"
+    :param sharpe_type: Constraint that can be either "Wanted_return", "Maximum_risk", or "No_extra_constraint"
     :param start_date: Starting year of the stock return/price data in portfolio
     :param end_date: Ending year of the stock return/price data in portfolio
     :param wanted_return: Sets minimum limit for the wanted return as a constraint, default is None
@@ -218,14 +218,14 @@ def efficient_frontier_solo(returns: pd.DataFrame,
         parameters.append(calculate_efficient_frontier(portfolio.mean_return_monthly(sample_rolling_window),
                                                                           portfolio.covariance_matrix_monthly(sample_rolling_window,ledoit_Wolf),
                                                                           bounds,
-                                                                          Sharpe_Type,
+                                                                          sharpe_type,
                                                                           wanted_return,
                                                                           maximum_risk))
     elif monthly_or_yearly_mean == "yearly":
         parameters.append(calculate_efficient_frontier(portfolio.mean_return_annual(sample_rolling_window),
                                                                           portfolio.covariance_matrix_annual(sample_rolling_window,ledoit_Wolf),
                                                                           bounds,
-                                                                          Sharpe_Type,
+                                                                          sharpe_type,
                                                                           wanted_return,
                                                                           maximum_risk))
     else:
