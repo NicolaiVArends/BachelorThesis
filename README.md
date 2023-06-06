@@ -23,6 +23,8 @@ Before running this project, ensure that you have the following packages install
 * ipywidgets >= 8.0.6
 * scikit-learn >= 1.2.2
 * openpyxl >= 3.1.2
+* python-dateutil>=2.8.2
+* seaborn>=0.12.2
 
 
 ### Unit Tests
