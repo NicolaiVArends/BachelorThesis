@@ -271,7 +271,15 @@ def compare_cumulative_returns(dates: list,
     plt.show()
 
 
-def plot_portfolio_betas(dates, portfolio_betas):
+def plot_portfolio_betas(dates: list, 
+                         portfolio_betas: list):
+    """ This function will plot portfolio betas development over time using betas and return dates computed in backtesting().
+
+    NOTE: The function will not return anything but will show a plot
+
+    :param dates: Return dates af a list computed from the backtest
+    :param portfolio_betas: Portfolio betas over time computed from the backtest
+    """
     plt.figure(figsize=(14,8))
     bars = plt.bar(dates, portfolio_betas, color='dodgerblue', edgecolor='black')
     plt.xlabel('Date', fontsize=12)
@@ -288,7 +296,15 @@ def plot_portfolio_betas(dates, portfolio_betas):
     plt.tight_layout()
     plt.show()
 
-def plot_portfolio_esg_scores(dates, portfolio_esg_scores):
+def plot_portfolio_esg_scores(dates: list, 
+                              portfolio_esg_scores: list):
+    """ This function will plot portfolio esg score development over time using portfolio esg scores and return dates computed in backtesting().
+
+    NOTE: The function will not return anything but will show a plot
+
+    :param dates: Return dates af a list computed from the backtest
+    :param portfolio_esg_scores: Portfolio esg score over time computed from the backtest
+    """
     portfolio_esg_scores = [df.iloc[0, 0] for df in portfolio_esg_scores]
 
     plt.figure(figsize=(14,8))
