@@ -31,7 +31,7 @@ Before running this project, ensure that you have the following packages install
 
 For testing and ensuring the functionallity of this project, the repository contains a comprehensive set of unit testcases. It is recommended to run the tests before running the project.
 
-After the project has been cloned to your local machine (using step 1 above). All the unit tests can be runned, by following the steps:
+After the project has been cloned to your local machine (using step 1 below). All the unit tests can be runned, by following the steps:
 
 1. Clone the repository to your local machine e.g. by using the command in terminal: `git clone https://github.com//NicolaiVArends/BachelorThesis`
 
