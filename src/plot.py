@@ -175,7 +175,7 @@ def compare_returns1(dates: pd.DataFrame,
 
     NOTE: The function will not return anything but will show a plot
 
-    :param dates: 
+    :param dates: Return dates af a list computed from the backtest
     :param portfolio_returns:
     :param market_returns:
     """
@@ -226,9 +226,9 @@ def compare_cumulative_returns(dates: list,
 
     NOTE: The function will not return anything but will show a plot
 
-    :param dates: 
-    :param portfolio_returns:
-    :param market_returns:
+    :param dates: Return dates as a list
+    :param portfolio_returns: Portfolio returns as a list over time
+    :param market_returns: Market returns as a list over time
     """
     # Set the width of the bars
     bar_width = 0.2
@@ -277,8 +277,8 @@ def plot_portfolio_betas(dates: list,
 
     NOTE: The function will not return anything but will show a plot
 
-    :param dates: Return dates af a list computed from the backtest
-    :param portfolio_betas: Portfolio betas over time computed from the backtest
+    :param dates: Return dates as a list over time
+    :param portfolio_betas: Portfolio betas over time
     """
     plt.figure(figsize=(14,8))
     bars = plt.bar(dates, portfolio_betas, color='dodgerblue', edgecolor='black')
@@ -302,8 +302,8 @@ def plot_portfolio_esg_scores(dates: list,
 
     NOTE: The function will not return anything but will show a plot
 
-    :param dates: Return dates af a list computed from the backtest
-    :param portfolio_esg_scores: Portfolio esg score over time computed from the backtest
+    :param dates: Return dates as a list over time
+    :param portfolio_esg_scores: Portfolio ESG scoring over time
     """
     portfolio_esg_scores = [df.iloc[0, 0] for df in portfolio_esg_scores]
 
