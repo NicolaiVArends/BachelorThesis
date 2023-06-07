@@ -97,13 +97,10 @@ class monthly_returns_test(unittest.TestCase):
         expected = 0.051888
         testcase = data.pct_returns_from_prices(pd.read_csv('../data/test/test_prices.csv',index_col=['Date']))
         self.assertAlmostEqual(expected, capm.jensens_alpha(0.0179752,0.069864), places=4, msg=None, delta=None)
-
-    def test_of_backtesting_portfolio_actual_returns_cml(self):
-        expected = 0.097149
+    def setUp(self):
         testcase = pd.read_excel('../data/ESG_DATA_S&P500.xlsx')
         testcase = testcase[(testcase["stock_symbol"] == 'MMM') |(testcase['stock_symbol'] == 'AOS') | (testcase['stock_symbol']=='ABT')]
-        self.assertAlmostEqual(expected, 
-                               backtesting.backtesting({'df': testcase, 'weights': np.array([1/3,1/3,1/3]), 
+        self.correct_strategy = {'df': testcase, 'weights': np.array([1/3,1/3,1/3]), 
                                                         'min_esg_score': 0,
                                                         'max_esg_score': 2000, 
                                                         'bounds': Bounds(-1,2), 
@@ -112,8 +109,13 @@ class monthly_returns_test(unittest.TestCase):
                                                         'maximum_risk': 0.10, 
                                                         'rebalancing_freq': 'monthly', 
                                                         'risk_free_rate': 0.01, 
-                                                        'start_year' : pd.Timestamp(np.datetime64('2000-01-01')), 
-                                                        'end_year' : pd.Timestamp(np.datetime64('2022-01-01'))} , 
+                                                        }
+
+
+    def test_of_backtesting_portfolio_actual_returns_cml(self):
+        expected = 0.097149
+        self.assertAlmostEqual(expected, 
+                               backtesting.backtesting(self.correct_strategy.copy(), 
                                                         'monthly', 
                                                         6, 
                                                         '2014-02-01',
@@ -124,20 +126,8 @@ class monthly_returns_test(unittest.TestCase):
     
     def test_of_backtesting_pct_returns_portfolio(self):
         expected = 0.069864
-        testcase = pd.read_excel('../data/ESG_DATA_S&P500.xlsx')
-        testcase = testcase[(testcase["stock_symbol"] == 'MMM') |(testcase['stock_symbol'] == 'AOS') | (testcase['stock_symbol']=='ABT')]
         self.assertAlmostEqual(expected, 
-                               backtesting.backtesting({'df': testcase, 'weights': np.array([1/3,1/3,1/3]), 
-                                                        'min_esg_score': 0,
-                                                        'max_esg_score': 2000, 
-                                                        'bounds': Bounds(-1,2), 
-                                                        'sharpe_type': "No_extra_constraint", 
-                                                        'wanted_return': 0.20, 
-                                                        'maximum_risk': 0.10, 
-                                                        'rebalancing_freq': 'monthly', 
-                                                        'risk_free_rate': 0.01, 
-                                                        'start_year' : pd.Timestamp(np.datetime64('2000-01-01')), 
-                                                        'end_year' : pd.Timestamp(np.datetime64('2022-01-01'))} , 
+                               backtesting.backtesting(self.correct_strategy.copy(), 
                                                         'monthly', 
                                                         6, 
                                                         '2014-02-01',
@@ -148,20 +138,8 @@ class monthly_returns_test(unittest.TestCase):
     
     def test_of_backtesting_pct_returns_sp500(self):
         expected = 0.07740
-        testcase = pd.read_excel('../data/ESG_DATA_S&P500.xlsx')
-        testcase = testcase[(testcase["stock_symbol"] == 'MMM') |(testcase['stock_symbol'] == 'AOS') | (testcase['stock_symbol']=='ABT')]
         self.assertAlmostEqual(expected, 
-                               backtesting.backtesting({'df': testcase, 'weights': np.array([1/3,1/3,1/3]), 
-                                                        'min_esg_score': 0,
-                                                        'max_esg_score': 2000, 
-                                                        'bounds': Bounds(-1,2), 
-                                                        'sharpe_type': "No_extra_constraint", 
-                                                        'wanted_return': 0.20, 
-                                                        'maximum_risk': 0.10, 
-                                                        'rebalancing_freq': 'monthly', 
-                                                        'risk_free_rate': 0.01, 
-                                                        'start_year' : pd.Timestamp(np.datetime64('2000-01-01')), 
-                                                        'end_year' : pd.Timestamp(np.datetime64('2022-01-01'))} , 
+                               backtesting.backtesting(self.correct_strategy.copy(), 
                                                         'monthly', 
                                                         6, 
                                                         '2014-02-01',
@@ -172,19 +150,8 @@ class monthly_returns_test(unittest.TestCase):
     
     def test_of_backtesting_capm(self):
         expected = 0.017986
-        testcase = pd.read_excel('../data/ESG_DATA_S&P500.xlsx')
-        testcase = testcase[(testcase["stock_symbol"] == 'MMM') |(testcase['stock_symbol'] == 'AOS') | (testcase['stock_symbol']=='ABT')]
         self.assertAlmostEqual(expected, 
-                               backtesting.backtesting({'df': testcase, 'weights': np.array([1/3,1/3,1/3]), 
-                                                        'min_esg_score': 0,
-                                                        'max_esg_score': 2000, 
-                                                        'bounds': Bounds(-1,2), 
-                                                        'sharpe_type': "No_extra_constraint", 
-                                                        'wanted_return': 0.20, 
-                                                        'maximum_risk': 0.10, 
-                                                        'rebalancing_freq': 'monthly', 
-                                                        'risk_free_rate': 0.01, 
-                                                        } , 
+                               backtesting.backtesting(self.correct_strategy.copy(), 
                                                         'monthly', 
                                                         6, 
                                                         '2014-02-01',
@@ -195,26 +162,181 @@ class monthly_returns_test(unittest.TestCase):
     
     def test_of_backtesting_beta(self):
         expected = 1.388915771
-        testcase = pd.read_excel('../data/ESG_DATA_S&P500.xlsx')
-        testcase = testcase[(testcase["stock_symbol"] == 'MMM') |(testcase['stock_symbol'] == 'AOS') | (testcase['stock_symbol']=='ABT')]
         self.assertAlmostEqual(expected, 
-                               backtesting.backtesting({'df': testcase, 'weights': np.array([1/3,1/3,1/3]), 
-                                                        'min_esg_score': 0,
-                                                        'max_esg_score': 2000, 
-                                                        'bounds': Bounds(-1,2), 
-                                                        'sharpe_type': "No_extra_constraint", 
-                                                        'wanted_return': 0.20, 
-                                                        'maximum_risk': 0.10, 
-                                                        'rebalancing_freq': 'monthly', 
-                                                        'risk_free_rate': 0.01, 
-                                                        } , 
+                               backtesting.backtesting(self.correct_strategy.copy(), 
                                                         'monthly', 
                                                         6, 
                                                         '2014-02-01',
                                                         '2014-07-01',
                                                         0,
                                                         10,
-                                                        '^GSPC',False,'Close')['betas_of_portfolios'][0], places=3, msg=None, delta=None)                   
+                                                        '^GSPC',False,'Close')['betas_of_portfolios'][0], places=3, msg=None, delta=None)
+    def test_of_backtesting_beta(self):
+        expected = 1.388915771
+        self.assertAlmostEqual(expected, 
+                               backtesting.backtesting(self.correct_strategy.copy(), 
+                                                        'monthly', 
+                                                        6, 
+                                                        '2014-02-01',
+                                                        '2014-07-01',
+                                                        0,
+                                                        10,
+                                                        '^GSPC',False,'Close')['betas_of_portfolios'][0], places=3, msg=None, delta=None)
+    def test_strategy_is_not_dict(self):
+        with self.assertRaises(TypeError):
+            backtesting.backtesting('not a dict', 
+                                    'monthly', 
+                                    6, 
+                                    '2014-02-01',
+                                    '2014-07-01',
+                                    0,
+                                    10,
+                                    '^GSPC',False,'Close')
+    def test_missing_key_in_strategy(self):
+        wrong_strat = self.correct_strategy.copy()
+        del wrong_strat['df']
+        with self.assertRaises(ValueError):
+            backtesting.backtesting(wrong_strat, 
+                                    'monthly', 
+                                    6, 
+                                    '2014-02-01',
+                                    '2014-07-01',
+                                    0,
+                                    10,
+                                    '^GSPC',False,'Close') 
+    def test_wrong_esg(self):    
+        wrong_strat = self.correct_strategy.copy()
+        wrong_strat['min_esg_score'] = 2000
+        wrong_strat['max_esg_score'] = 0
+        with self.assertRaises(ValueError):
+            backtesting.backtesting(wrong_strat, 
+                                    'monthly', 
+                                    6, 
+                                    '2014-02-01',
+                                    '2014-07-01',
+                                    0,
+                                    10,
+                                    '^GSPC',False,'Close') 
+    def test_wrong_rebalancing(self):
+        with self.assertRaises(ValueError):
+            backtesting.backtesting(self.correct_strategy.copy(), 
+                                    2, 
+                                    6, 
+                                    '2014-02-01',
+                                    '2014-07-01',
+                                    0,
+                                    10,
+                                    '^GSPC',False,'Close') 
+    def test_wrong_rebalancing_int(self):
+        with self.assertRaises(TypeError):
+            backtesting.backtesting(self.correct_strategy.copy(), 
+                                    'monthly', 
+                                    '6', 
+                                    '2014-02-01',
+                                    '2014-07-01',
+                                    0,
+                                    10,
+                                    '^GSPC',False,'Close') 
+    def test_low_rebalancing_int(self):
+        with self.assertRaises(ValueError):
+            backtesting.backtesting(self.correct_strategy.copy(), 
+                                    'monthly', 
+                                    0, 
+                                    '2014-02-01',
+                                    '2014-07-01',
+                                    0,
+                                    10,
+                                    '^GSPC',False,'Close') 
+    def test_wrong_date_string1(self):
+        with self.assertRaises(TypeError):
+            backtesting.backtesting(self.correct_strategy.copy(), 
+                                    'monthly', 
+                                    '6', 
+                                    2,
+                                    '2014-07-01',
+                                    0,
+                                    10,
+                                    '^GSPC',False,'Close')
+    def test_wrong_date_string2(self):
+        with self.assertRaises(TypeError):
+            backtesting.backtesting(self.correct_strategy.copy(), 
+                                    'monthly', 
+                                    '6', 
+                                    '2014-07-01',
+                                    1,
+                                    0,
+                                    10,
+                                    '^GSPC',False,'Close')
+    def test_wrong_date_order_warning(self):
+        with self.assertRaises(ValueError):
+            backtesting.backtesting(self.correct_strategy.copy(), 
+                                    'monthly', 
+                                    0, 
+                                    '2014-07-01',
+                                    '2014-02-01',
+                                    0,
+                                    10,
+                                    '^GSPC',False,'Close') 
+    def test_wrong_covariance_window(self):
+        with self.assertRaises(TypeError):
+            backtesting.backtesting(self.correct_strategy.copy(), 
+                                    'monthly', 
+                                    2, 
+                                    '2014-02-01',
+                                    '2014-07-01',
+                                    '2',
+                                    '2',
+                                    '^GSPC',False,'Close')
+    def test_no_covariance_window(self):
+        with self.assertRaises(ValueError):
+            backtesting.backtesting(self.correct_strategy.copy(), 
+                                    'monthly', 
+                                    1, 
+                                    '2014-02-01',
+                                    '2014-07-01',
+                                    0,
+                                    0,
+                                    '^GSPC',False,'Close') 
+    
+    def test_market_name(self):
+        with self.assertRaises(TypeError):
+            backtesting.backtesting(self.correct_strategy.copy(), 
+                                    'monthly', 
+                                    1, 
+                                    '2014-02-01',
+                                    '2014-07-01',
+                                    1,
+                                    2,
+                                    1,False,'Close') 
+    def test_closing_name(self):
+        with self.assertRaises(ValueError):
+                        backtesting.backtesting(self.correct_strategy.copy(), 
+                                    'monthly', 
+                                    1, 
+                                    '2014-02-01',
+                                    '2014-07-01',
+                                    1,
+                                    2,
+                                    '^GSPC',False,'closing') 
+    def test_no_future_data(self):
+        with self.assertRaises(ValueError):
+                        backtesting.backtesting(self.correct_strategy.copy(), 
+                                    'monthly', 
+                                    6, 
+                                    '2014-02-01',
+                                    '2023-06-01',
+                                    1,
+                                    2,
+                                    '^GSPC',False,'Close') 
+
+                        
+            
+            
+
+            
+            
+
+
         
 
 unittest.main()

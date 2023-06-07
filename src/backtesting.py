@@ -69,30 +69,40 @@ def backtesting(strategy,
 
     """
     
-    assert isinstance(strategy, dict), "strategy should be a dictionary"
+    if not isinstance(strategy, dict):
+        raise TypeError("strategy should be a dictionary")
     
     required_keys = ['df', 'weights', 'min_esg_score', 'max_esg_score', 'bounds', 'sharpe_type', 'wanted_return', 'maximum_risk', 'rebalancing_freq', 'risk_free_rate']
     
     missing_keys = [k for k in required_keys if k not in strategy.keys()]
-    if monthly_or_yearly_rebalancing == 'yearly':
-        assert pd.to_datetime(end_date) + pd.DateOffset(years=rebalancing_freq, months = 1) <= pd.Timestamp(datetime.now()), "The end_date and rebalancing dates should not be in the future"
-    elif monthly_or_yearly_rebalancing == 'monthly':
-        assert pd.to_datetime(end_date) + pd.DateOffset(months=rebalancing_freq + 1) <= pd.Timestamp(datetime.now()), "The end_date and rebalancing dates should not be in the future"
+    
+    if missing_keys:
+        raise ValueError("The strategy dictionary is missing the following keys: {}".format(', '.join(missing_keys)))
+    
+    if strategy['min_esg_score'] >= strategy['max_esg_score']:
+        raise ValueError("The minimum ESG score cannot be greater or equal to the maximum ESG score")
+    
+    if not isinstance(market_name, str):
+        raise TypeError("market_name should be a string")
 
-    
-    
-    assert not missing_keys, "The strategy dictionary is missing the following keys: {}".format(', '.join(missing_keys))
-    assert strategy['min_esg_score']<strategy['max_esg_score'], "The minimum ESG score cannot be greater or equal to the maximum esg score" 
-    assert monthly_or_yearly_rebalancing in ["monthly", "yearly"], "monthly_or_yearly_rebalancing should be 'monthly' or 'yearly'"
-    assert isinstance(rebalancing_freq, int), "rebalancing_freq should be an integer"
-    assert rebalancing_freq > 0, "rebalancing_freq should be greater than zero"
-    assert isinstance(start_date, (str, pd.Timestamp)), "start_date should be a string or a pandas Timestamp object"
-    assert isinstance(end_date, (str, pd.Timestamp)), "end_date should be a string or a pandas Timestamp object"
-    assert isinstance(covariance_window_yearly, int), "covariance_window_yearly should be an integer"
-    assert isinstance(covariance_window_monthly, int), "covariance_window_monthly should be an integer"
-    assert covariance_window_yearly + covariance_window_monthly > 0, "covariance_window should be greater than zero"
-    assert isinstance(market_name, str), "market_name should be a string"
-    assert close_type == 'Adj Close' or 'Close'
+    if close_type not in ['Adj Close', 'Close']:
+        raise ValueError("close_type should be either 'Adj Close' or 'Close'")
+
+    if monthly_or_yearly_rebalancing not in ["monthly", "yearly"]:
+        raise ValueError("monthly_or_yearly_rebalancing should be 'monthly' or 'yearly'")
+
+    if not isinstance(rebalancing_freq, int):
+        raise TypeError("rebalancing_freq should be an integer")
+
+    if rebalancing_freq <= 0:
+        raise ValueError("rebalancing_freq should be greater than zero")
+
+    if not isinstance(start_date, (str, pd.Timestamp)):
+        raise TypeError("start_date should be a string or a pandas Timestamp object")
+
+    if not isinstance(end_date, (str, pd.Timestamp)):
+        raise TypeError("end_date should be a string or a pandas Timestamp object")
+
 
     if isinstance(start_date, str):
         start_date = parse(start_date)
@@ -100,7 +110,20 @@ def backtesting(strategy,
     if isinstance(end_date, str):
         end_date = parse(end_date)
 
-    assert start_date <= end_date, "start_date should be less than or equal to end_date"
+    if start_date > end_date:
+        raise ValueError("start_date should be less than or equal to end_date")
+
+    if not isinstance(covariance_window_yearly, int):
+        raise TypeError("covariance_window_yearly should be an integer")
+
+    if not isinstance(covariance_window_monthly, int):
+        raise TypeError("covariance_window_monthly should be an integer")
+
+    if covariance_window_yearly + covariance_window_monthly <= 0:
+        raise ValueError("covariance_window should be greater than zero")
+    if pd.to_datetime(end_date) + pd.DateOffset(months=rebalancing_freq + 1) > pd.Timestamp(datetime.now()):
+            raise ValueError("The end_date and rebalancing dates should not be in the future")
+
     covariance_window_time_delta = relativedelta(years=covariance_window_yearly,months=covariance_window_monthly) #The time delta for the covariance window
     
     esg_data = data.esg_score_weight(strategy['df'],strategy['weights'],strategy['min_esg_score'],strategy['max_esg_score'])
