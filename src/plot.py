@@ -59,8 +59,8 @@ def plot_efficient_frontier(parameters,
         opt_sr_vol, opt_sr_ret, opt_risk_vol,  opt_risk_ret, frontier_x, frontier_y, _ = x
         if plot_max_sharp:
             plt.title('Efficient Frontier with Max Sharp')
-            plt.xlim([0.0,0.3])
-            plt.ylim([-0.5,0.5])
+            plt.xlim([0.0,0.12])
+            plt.ylim([-0.02,0.075])
             if i % 3 != 0:
                 continue
             plt.plot(opt_sr_vol,  opt_sr_ret, marker='o', color = f'{colors[i]}', markersize=8, label=f' {start_year} - {end_year} Max Sharp Ratio')
@@ -115,8 +115,8 @@ def plot_efficient_frontier_cml(parameters,
         opt_sr_vol, opt_sr_ret, opt_risk_vol,  opt_risk_ret, frontier_x, frontier_y, _ = x
         if plot_cml == True:
             plt.title('Efficient Frontier with Max Sharp')
-            plt.xlim([0.0,0.3])
-            plt.ylim([-0.5,0.5])      
+            plt.xlim([0.0,0.12])
+            plt.ylim([-0.02,0.075])      
             cm_x = np.linspace(0,0.5,100)
             cm_y = (risk_free_rate + cm_x*((opt_sr_ret-risk_free_rate)/opt_sr_vol))
             cm_yy = (risk_free_rate + risk*((opt_sr_ret-risk_free_rate)/opt_sr_vol))
@@ -126,15 +126,7 @@ def plot_efficient_frontier_cml(parameters,
             plt.plot(opt_sr_vol,  opt_sr_ret, marker='o', color = f'{colors[i]}', markersize=8, label=f'{start_year:02d}-{end_year:02d} Max Sharp Ratio')
             plt.plot(frontier_x, frontier_y, linestyle='--', color = f'{colors[i]}', linewidth=2, label=f'{start_year:02d}-{end_year:02d} Efficient Frontier')
             plt.plot(risk,cm_yy,  marker="o", markersize=5, markeredgecolor="k", markerfacecolor="k", label = 'wanted return')
-        else:
-            plt.title('Efficient Frontier with Minimum Risk')
-            plt.xlim([0.1,0.2])
-            plt.ylim([-0.2,0.4])
-            if i % 3 != 0:
-                continue
-            plt.plot(opt_risk_vol,  opt_risk_ret, marker='o', color = f'{colors[i]}', markersize=8, label=f'20{3+i:02d}-20{13+i:02d} Minimum Risk')
-            plt.plot(frontier_x, frontier_y, linestyle='--', color = f'{colors[i]}', linewidth=2, label=f'20{3+i:02d}-20{13+i:02d} Efficient Frontier') 
-        plt.plot(frontier_x, frontier_y, linestyle='--', color = f'{colors[i]}', linewidth=2, label=f'20{3+i:02d}-20{13+i:02d} Efficient Frontier') 
+        plt.plot(frontier_x, frontier_y, linestyle='--', color = f'{colors[i]}', linewidth=2, label=f'{start_year:02d}-{end_year:02d} Efficient Frontier') 
     plt.legend()
     plt.show()
 

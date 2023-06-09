@@ -165,7 +165,7 @@ def calculate_efficient_frontier(ret_port: pd.DataFrame,
     opt_sr_vol = portfolio.portfolio_std(cov_port, w_sr_top)
     #print(f'Max. Sharpe Ratio = {opt_sr_ret/opt_sr_vol:.2f} => Return: {(opt_sr_ret*100):.2f}%  Risk: {opt_sr_vol*100:.3f}%')
 
-    frontier_y = np.linspace(-0.3, opt_sr_ret*3, 50)
+    frontier_y = np.linspace(0, opt_sr_ret*3, 50)
     frontier_x = []
 
     x0 = w_sr_top
