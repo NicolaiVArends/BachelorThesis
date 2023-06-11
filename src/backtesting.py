@@ -22,7 +22,7 @@ def backtesting(strategy,
                 close_type = 'Adj Close'):
     """ This function makes a backtest given a strategy, rebalacing informations, information of data period, window size and benchmark market name.
       
-    In this function
+
 
     :param strategy: A dict containing the investment strategy
     should contain the following keys.
@@ -121,6 +121,7 @@ def backtesting(strategy,
 
     if covariance_window_yearly + covariance_window_monthly <= 0:
         raise ValueError("covariance_window should be greater than zero")
+    
     if pd.to_datetime(end_date) + pd.DateOffset(months=rebalancing_freq + 1) > pd.Timestamp(datetime.now()):
             raise ValueError("The end_date and rebalancing dates should not be in the future")
 

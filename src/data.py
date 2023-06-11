@@ -108,7 +108,7 @@ def data_for_beta(prices: pd.DataFrame,
     :returns: Historical stock prices for benchmark market and portfolio
     """
     stock_data = prices
-    #print(stock_data.index)
+
     # create a new dataframe to store the monthly closing data
     
     for i in range(len(Market)):
@@ -164,13 +164,4 @@ def pct_returns_from_prices(prices: pd.DataFrame):
     return returns_pct_change
 
 
-def simulate_random_data_esg(n_rows: int = 10000):
-    """ This function simulates random total ESG score data with NumPy by taking a number of n wanted rows of ESG scores.
 
-    :param n_rows: Number of rows ESG score wanted, default is 10000
-    :returns: Random simulated ESG scores
-    """
-    data = np.random.randint(0, 100, size=n_rows)
-    result = {'ESG' : data}
-    df = pd.DataFrame(result)
-    return df

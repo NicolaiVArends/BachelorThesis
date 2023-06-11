@@ -39,7 +39,7 @@ def capm_calc(market_expected_returns: pd.DataFrame,
     :param risk_free_rate: Risk free rate allocation of the investment in procent, default is 0.05
     :returns: Computed CAPM model
     """
-    print(f'Expected return on investment is {100*(risk_free_rate+beta*(market_expected_returns-risk_free_rate))}%')
+    print(f'Expected return on investment is {(100*(risk_free_rate+beta*(market_expected_returns-risk_free_rate))).round(5)}%')
 
     return(risk_free_rate+beta*(market_expected_returns-risk_free_rate))
 

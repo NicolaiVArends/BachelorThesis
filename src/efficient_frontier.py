@@ -3,19 +3,6 @@ import numpy as np
 from scipy.optimize import Bounds, LinearConstraint, minimize
 from src import portfolio
 
-def sharp_ratio(portfolio_returns: pd.DataFrame, 
-                weights: pd.DataFrame, 
-                portfolio_covariance: pd.DataFrame):
-    """This function computes the sharp ratio by using the portfolio returns, weights and covariance from the functions portfolio_return() and portfolio_risk().
-
-    :param portfolio_returns: Portfolio returns
-    :param weights: Weight allocation of the portfolio
-    :param portfolio_covariance: Portfolio covariance matrix
-    :returns: Sharp ratio for the given portfolio return, weight allocation and covariance matrix
-    """
-    return portfolio.portfolio_return_for_plot(weights=weights, 
-                            returns=portfolio_returns) / portfolio.portfolio_std(port_cov=portfolio_covariance,
-                                                                       weights=weights)
 
 
 def check_sum(weight):
@@ -146,7 +133,7 @@ def calculate_efficient_frontier(ret_port: pd.DataFrame,
  
     #These are the weights of the assets in the portfolio with the lowest level of risk possible. taken from https://towardsdatascience.com/portfolio-optimization-with-scipy-aa9c02e6b937
     w_minr = minimize_risk(cov_port, x0, bounds)
-    opt_risk_ret = portfolio.portfolio_return_for_plot(ret_port, w_minr)
+    opt_risk_ret = portfolio.portfolio_return(ret_port, w_minr)
     opt_risk_vol = portfolio.portfolio_std(cov_port, w_minr)
     #print(f'Min. Risk = {opt_risk_vol*100:.3f}% => Return: {(opt_risk_ret*100):.3f}%  Sharpe Ratio = {opt_risk_ret/opt_risk_vol:.2f}')
 
@@ -159,9 +146,9 @@ def calculate_efficient_frontier(ret_port: pd.DataFrame,
     elif sharpe_type == "No_extra_constraint":
         w_sr_top = maximize_sharp_ratio_no_spec(ret_port,cov_port,x0,bounds)
     else:
-        raise Exception('Wrong constraint type')
+        raise ValueError('Wrong constraint type')
 
-    opt_sr_ret = portfolio.portfolio_return_for_plot(ret_port, w_sr_top)
+    opt_sr_ret = portfolio.portfolio_return(ret_port, w_sr_top)
     opt_sr_vol = portfolio.portfolio_std(cov_port, w_sr_top)
     #print(f'Max. Sharpe Ratio = {opt_sr_ret/opt_sr_vol:.2f} => Return: {(opt_sr_ret*100):.2f}%  Risk: {opt_sr_vol*100:.3f}%')
 
@@ -171,7 +158,7 @@ def calculate_efficient_frontier(ret_port: pd.DataFrame,
     x0 = w_sr_top
     for possible_return in frontier_y:
         cons = ({'type':'eq', 'fun': check_sum},
-                {'type':'eq', 'fun': lambda w: portfolio.portfolio_return_for_plot(ret_port, w) - possible_return})
+                {'type':'eq', 'fun': lambda w: portfolio.portfolio_return(ret_port, w) - possible_return})
 
         #Define a function to calculate volatility
         fun = lambda weights: portfolio.portfolio_std(cov_port, weights)
@@ -214,6 +201,8 @@ def efficient_frontier_solo(returns: pd.DataFrame,
     """    
     parameters = []
     sample_rolling_window = returns.loc['{}'.format(str(start_date)):'{}'.format(str(end_date))]
+    if monthly_or_yearly_mean not in ["monthly", "yearly"]:
+        raise ValueError("monthly_or_yearly_rebalancing should be 'monthly' or 'yearly'")
     if monthly_or_yearly_mean == "monthly":
         parameters.append(calculate_efficient_frontier(portfolio.mean_return_monthly(sample_rolling_window),
                                                                           portfolio.covariance_matrix_monthly(sample_rolling_window,ledoit_Wolf),
@@ -228,8 +217,8 @@ def efficient_frontier_solo(returns: pd.DataFrame,
                                                                           sharpe_type,
                                                                           wanted_return,
                                                                           maximum_risk))
-    else:
-        return("monthly or yearly has to be either yearly or monthly")
+    
+
     return parameters
 
 
