@@ -100,7 +100,7 @@ class monthly_returns_test(unittest.TestCase):
     def setUp(self):
         testcase = pd.read_excel('../data/ESG_DATA_S&P500.xlsx')
         testcase = testcase[(testcase["stock_symbol"] == 'MMM') |(testcase['stock_symbol'] == 'AOS') | (testcase['stock_symbol']=='ABT')]
-        self.correct_strategy = {'df': testcase, 'weights': np.array([1/3,1/3,1/3]), 
+        self.correct_strategy = {'df': testcase, 'weigh**-ts': np.array([1/3,1/3,1/3]), 
                                                         'min_esg_score': 0,
                                                         'max_esg_score': 2000, 
                                                         'bounds': Bounds(-1,2), 

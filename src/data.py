@@ -62,7 +62,7 @@ def stock_monthly_close(esg_data: pd.DataFrame,
     full_data = pd.DataFrame()
     for symbol in symbols:
     # retrieve data from yfinance
-        stock_data = yf.download(symbol, start=dates[0], end=dates[1], interval='1mo', progress=False)
+        stock_data = yf.download(symbol, start=dates[0], end=dates[1], interval='1d', progress=False)
         
         # extract the 'Close' column and rename it with the stock symbol
         stock_data = stock_data[[close_type]].rename(columns={close_type: symbol})

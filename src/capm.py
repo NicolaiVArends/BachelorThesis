@@ -34,7 +34,7 @@ def jensens_alpha(expected_return: float,
     """
     return (actual_return-expected_return)
   
-def calculate_portfolio_beta_ols(market: pd.DataFrame, 
+def calculate_portfolio_beta(market: pd.DataFrame, 
                                  portfolio: pd.DataFrame, 
                                  portfolio_weights: pd.DataFrame,
                                  market_name: str):
