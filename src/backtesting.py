@@ -170,6 +170,9 @@ def backtesting(strategy,
     cumulative_portfolio_return_list = []
 
     i = 0
+    start_date = pd.to_datetime(start_date).tz_localize(None)
+    end_date = pd.to_datetime(end_date).tz_localize(None)
+    prices.index = pd.to_datetime(prices.index).tz_localize(None)
 
     if monthly_or_yearly_rebalancing == 'yearly':
         delta = relativedelta(years=rebalancing_freq)
